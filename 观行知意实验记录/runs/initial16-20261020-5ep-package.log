@@ -1,0 +1,19 @@
+{"passed": true, "python_network_connections_blocked": true, "score_count": 40, "finite": true, "parameters": 63514700, "device": "cuda", "predicted_class": 0, "linux_verified": false, "scope": "Windows Python连接拦截回归检查；非系统级网络隔离"}
+{
+  "demo": false,
+  "formal_submission_ready": false,
+  "code_and_weights_checked": true,
+  "remaining_manual_materials": [
+    "技术报告PDF",
+    "网页说明",
+    "团队信息和QQ权重发送",
+    "Linux参考环境复现"
+  ],
+  "code_zip_bytes": 29641,
+  "files": 20,
+  "unpacked_bytes": 64022,
+  "code_zip_sha256": "bc0ce2224627cabe638b1742232800867ff98a77fdc93904dc1d6b64b8fc1aa1",
+  "weights_sha256": "790eb423cb22b46b0dcfcc1c28171e2018c114a56cb337875ed3f24ff5008538",
+  "weights_file": "model.pt",
+  "linux_verified": false
+}

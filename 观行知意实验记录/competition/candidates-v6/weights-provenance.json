@@ -1,0 +1,38 @@
+[
+  {
+    "name": "x3d_m",
+    "url": "https://dl.fbaipublicfiles.com/pytorchvideo/model_zoo/kinetics/X3D_M.pyth",
+    "path": "<项目目录>\\weights\\x3d_m-k400-v6.pth",
+    "bytes": 30779313,
+    "sha256": "eb9583d5f5a988a5c5f06f75760b070a5c9715794bd3b0536b78bd30595dcf67",
+    "training_data": "generic Kinetics400 checkpoint; not CUHK-X",
+    "use": "initialization only; competition fine-tuning uses provided depth and IR"
+  },
+  {
+    "name": "uniformer_s",
+    "url": "https://huggingface.co/Sense-X/uniformer_video/resolve/main/uniformer_small_k400_16x8.pth",
+    "path": "<项目目录>\\weights\\uniformer_s-k400-v6.pth",
+    "bytes": 85735325,
+    "sha256": "d5fd7b0c49ee6a5422ef5d0c884d962c742003bfbd900747485eb99fa269d0db",
+    "training_data": "generic Kinetics400 checkpoint; not CUHK-X",
+    "use": "initialization only; competition fine-tuning uses provided depth and IR"
+  },
+  {
+    "name": "mvit_v2_s",
+    "url": "https://download.pytorch.org/models/mvit_v2_s-ae3be167.pth",
+    "path": "<项目目录>\\weights\\mvit_v2_s-k400-v6.pth",
+    "bytes": 138290087,
+    "sha256": "ae3be16733081f6d1cd40e4ab980ca23d6df6dc6486d15ada05a5e8ab8c9b975",
+    "training_data": "generic Kinetics400 checkpoint; not CUHK-X",
+    "use": "initialization only; competition fine-tuning uses provided depth and IR"
+  },
+  {
+    "name": "tsm_r50",
+    "url": "https://hanlab18.mit.edu/projects/tsm/models/TSM_kinetics_RGB_resnet50_shift8_blockres_avg_segment8_e50.pth",
+    "path": "<项目目录>\\weights\\tsm_r50-k400-v6.pth",
+    "bytes": 97587673,
+    "sha256": "ac95538ce8e2e39af9743f7c13c04347af210874b148acb976f303e7e90c1fe2",
+    "training_data": "generic Kinetics400 checkpoint; not CUHK-X",
+    "use": "initialization only; competition fine-tuning uses provided depth and IR"
+  }
+]

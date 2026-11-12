@@ -1,0 +1,46 @@
+[
+  {
+    "path": "environment/requirements-lock-v6.txt",
+    "sha256": "a7e1cce545d0281b1d0dec761f278124966997efe2e980a9d0140ac53903c4cf"
+  },
+  {
+    "path": "optimized/candidate_models.py",
+    "sha256": "e0f6984b3f365d9cabfd4ef326d7afd508dccb410aa1c6d775144fd5874da17c"
+  },
+  {
+    "path": "optimized/download_candidates.py",
+    "sha256": "e5be7b4af08f86d5a5fb8c91d22d1b5473f5a27e6de02290f5e38e7d17ac7cec"
+  },
+  {
+    "path": "optimized/evaluate_candidates.py",
+    "sha256": "aebc2d70080005b7170949b9a37525bc8d47fc66e5cf45b6dcebbe1c52127340"
+  },
+  {
+    "path": "optimized/finalize_candidates_v6.py",
+    "sha256": "d583f504239ae045480d0b7068062824b97af247da110262fb5a3079f56c7975"
+  },
+  {
+    "path": "optimized/inference.py",
+    "sha256": "d13a50d721fc55e7b7c87ceef79c05f3baca723493543154d053cdf1c2030a7c"
+  },
+  {
+    "path": "optimized/probe_candidates.py",
+    "sha256": "9b682ac405d8a4646fd3b4b086487414bd5c03b388c1ac8982fcb16a620d8239"
+  },
+  {
+    "path": "optimized/run_candidates_v6.py",
+    "sha256": "a0f6782cb611e8bcfda3ea1c0806a2c459d2fb06551832141663a0678e3c0575"
+  },
+  {
+    "path": "optimized/temporal_shift_vendor.py",
+    "sha256": "90dfd7f97e82e31dd9f4044960061ecaadfca3ba939c6e49ee6d326c8cc718ea"
+  },
+  {
+    "path": "optimized/train_candidates.py",
+    "sha256": "3f2ea75353cc0f291b190c6352337e9576197cb4a665916480a8625f376b03a8"
+  },
+  {
+    "path": "optimized/uniformer_vendor.py",
+    "sha256": "bec3a92cb2a093f9ebe5a9f83433b93b9cd449e893108371b55c558e9f68e5c5"
+  }
+]

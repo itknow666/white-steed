@@ -1,0 +1,47 @@
+{
+  "architecture": "ensemble",
+  "components": [
+    {
+      "architecture": "x3d_m",
+      "frames": 16,
+      "size": 192,
+      "crop_scale": 1.4,
+      "flip_tta": false,
+      "weight": 0.25
+    },
+    {
+      "architecture": "r34",
+      "frames": 16,
+      "size": 128,
+      "crop_scale": 1.4,
+      "flip_tta": false,
+      "weight": 0.375
+    },
+    {
+      "architecture": "swin3dt",
+      "frames": 16,
+      "size": 192,
+      "crop_scale": 1.4,
+      "flip_tta": false,
+      "weight": 0.375
+    }
+  ],
+  "cache": "<项目目录>\\cache\\crop16-192-v3",
+  "input_frames": 16,
+  "person_crop": true,
+  "crop_scale": 1.4,
+  "total_parameters": 97079932,
+  "training_source": "optimized/train_candidates.py",
+  "source_runs": [
+    "<项目目录>\\runs\\x3d_m-v6-20261106",
+    "<项目目录>\\runs\\control16-v4-20261027",
+    "<项目目录>\\runs\\swin192-v3-20261025"
+  ],
+  "source_sha256": [
+    "220d3a0ca77786fa85b325828763b28be889d2ed513fa978b205d3eed2e1babf",
+    "4ba89a9b1616530cbe53b504958945f2602488d9f738012cef471ca7fc70df2d",
+    "67e2db6e7899d064e011e1494d264395251637acce7900870c55f96c6f3f8428"
+  ],
+  "selection": "preregistered fixed fusion weights; public validation only",
+  "test_accessed": false
+}

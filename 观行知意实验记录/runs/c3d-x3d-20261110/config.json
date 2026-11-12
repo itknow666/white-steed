@@ -1,0 +1,37 @@
+{
+  "architecture": "ensemble",
+  "components": [
+    {
+      "architecture": "c3d",
+      "frames": 16,
+      "size": 128,
+      "crop_scale": 1.4,
+      "flip_tta": false,
+      "weight": 0.25
+    },
+    {
+      "architecture": "x3d_m",
+      "frames": 16,
+      "size": 192,
+      "crop_scale": 1.4,
+      "flip_tta": false,
+      "weight": 0.75
+    }
+  ],
+  "cache": "<项目目录>\\cache\\crop16-v2",
+  "input_frames": 16,
+  "person_crop": true,
+  "crop_scale": 1.4,
+  "total_parameters": 83842314,
+  "training_source": "optimized/train_c3d.py",
+  "source_runs": [
+    "<项目目录>\\runs\\c3d-20261110",
+    "<项目目录>\\runs\\x3d_m-v6-20261106"
+  ],
+  "source_sha256": [
+    "2bc30ed351368dd79707e9e96b53b1b4ebac45f7adaacc3a21120186351a4ea1",
+    "220d3a0ca77786fa85b325828763b28be889d2ed513fa978b205d3eed2e1babf"
+  ],
+  "selection": "fixed weights 0.25/0.5/0.75; public validation only",
+  "test_accessed": false
+}

@@ -1,0 +1,118 @@
+[
+  {
+    "path": "competition/candidates-v6/adaptations.json",
+    "sha256": "b3eefaae58106f2ca49b887be53b0996d7f74e2d7a9129beb57c7dc6ef7fd91d"
+  },
+  {
+    "path": "competition/candidates-v6/PyTorchVideo-LICENSE",
+    "sha256": "eb2e7c520ac305e46ca8345c4efa1f77669a77779fd6f53acd3a9616f2144518"
+  },
+  {
+    "path": "competition/candidates-v6/TSM-LICENSE",
+    "sha256": "681e9ae4afcf6ab7a3ee5871871f634cf6bd291bf521971c9dbb5d2110755d6c"
+  },
+  {
+    "path": "competition/candidates-v6/TSM-models-source.py",
+    "sha256": "ed2637f88024f29df3fda87fc8f7f2877877ccf5da86dd1465f310fd72207446"
+  },
+  {
+    "path": "competition/candidates-v6/TSM-models.py",
+    "sha256": "ed2637f88024f29df3fda87fc8f7f2877877ccf5da86dd1465f310fd72207446"
+  },
+  {
+    "path": "competition/candidates-v6/TSM-README.md",
+    "sha256": "5e263ef3175794cf3e7563fc5ac6c861d970c4a7d6493c01bc32c9f1965eb800"
+  },
+  {
+    "path": "competition/candidates-v6/TSM-temporal_shift.py",
+    "sha256": "90dfd7f97e82e31dd9f4044960061ecaadfca3ba939c6e49ee6d326c8cc718ea"
+  },
+  {
+    "path": "competition/candidates-v6/UniFormer-HF-README.md",
+    "sha256": "9427aacf82b72426c1b99085439319936df9537e0fa444f74f494bb87d3b0fa6"
+  },
+  {
+    "path": "competition/candidates-v6/UniFormer-LICENSE",
+    "sha256": "a3bae0ae5b5df47101f0eaa3d562bd99ca6d3588cae266b27bb6b3783fef1011"
+  },
+  {
+    "path": "competition/candidates-v6/uniformer.py",
+    "sha256": "bec3a92cb2a093f9ebe5a9f83433b93b9cd449e893108371b55c558e9f68e5c5"
+  },
+  {
+    "path": "competition/candidates-v6/weights-provenance.json",
+    "sha256": "28a30ed301a81a763717c75995693d1b2f0ad554518be5b44baaa1399776658a"
+  },
+  {
+    "path": "runs/mvit_v2_s-v6-20261106/config.json",
+    "sha256": "65adf9af9f2d904726f2c7030d4f99bf18014fec5ca6cc52d20362f939767ef7"
+  },
+  {
+    "path": "runs/tsm_r50-v6-20261106/config.json",
+    "sha256": "97cfb2b970eef089bd73c72cd6d30a99adbf84e5313f15893fd6305115b997af"
+  },
+  {
+    "path": "runs/uniformer_s-v6-20261106/config.json",
+    "sha256": "6f3a3f4c235b83dbc3f551571edbcb4e384d7527d6be0853e2abf3ebeb740de4"
+  },
+  {
+    "path": "runs/x3d_m-v6-20261106/config.json",
+    "sha256": "cb3c29fc7dac9275102b200bb5b8332864206c7eeca679b01e0db663ad5f41fd"
+  },
+  {
+    "path": "environment/requirements-lock-v6.txt",
+    "sha256": "a7e1cce545d0281b1d0dec761f278124966997efe2e980a9d0140ac53903c4cf"
+  },
+  {
+    "path": "optimized/candidate_models.py",
+    "sha256": "e0f6984b3f365d9cabfd4ef326d7afd508dccb410aa1c6d775144fd5874da17c"
+  },
+  {
+    "path": "optimized/check_candidate_boundary.py",
+    "sha256": "f2b49d60bff7f67ff09f1158d6a32f8d99a1059749ed4e06f8ab81b1e0166a33"
+  },
+  {
+    "path": "optimized/check_fusion_boundary.py",
+    "sha256": "283ac1dde6e523202d743bc6d48c5cae95d849f751e5934dcec7b4d2db0663bf"
+  },
+  {
+    "path": "optimized/download_candidates.py",
+    "sha256": "e5be7b4af08f86d5a5fb8c91d22d1b5473f5a27e6de02290f5e38e7d17ac7cec"
+  },
+  {
+    "path": "optimized/evaluate_candidates.py",
+    "sha256": "aebc2d70080005b7170949b9a37525bc8d47fc66e5cf45b6dcebbe1c52127340"
+  },
+  {
+    "path": "optimized/finalize_candidates_v6.py",
+    "sha256": "34259bdf2fcce49457bd638cf95db8322510a5007405ddce6fc2290334a8a389"
+  },
+  {
+    "path": "optimized/inference.py",
+    "sha256": "d13a50d721fc55e7b7c87ceef79c05f3baca723493543154d053cdf1c2030a7c"
+  },
+  {
+    "path": "optimized/probe_candidates.py",
+    "sha256": "9b682ac405d8a4646fd3b4b086487414bd5c03b388c1ac8982fcb16a620d8239"
+  },
+  {
+    "path": "optimized/run_candidates_v6.py",
+    "sha256": "a0f6782cb611e8bcfda3ea1c0806a2c459d2fb06551832141663a0678e3c0575"
+  },
+  {
+    "path": "optimized/status_candidates.py",
+    "sha256": "d8051b3a2d1ae0fcfbed0d45b7e8cb61427dd21ee3eed157399b906120744a7d"
+  },
+  {
+    "path": "optimized/temporal_shift_vendor.py",
+    "sha256": "90dfd7f97e82e31dd9f4044960061ecaadfca3ba939c6e49ee6d326c8cc718ea"
+  },
+  {
+    "path": "optimized/train_candidates.py",
+    "sha256": "3f2ea75353cc0f291b190c6352337e9576197cb4a665916480a8625f376b03a8"
+  },
+  {
+    "path": "optimized/uniformer_vendor.py",
+    "sha256": "bec3a92cb2a093f9ebe5a9f83433b93b9cd449e893108371b55c558e9f68e5c5"
+  }
+]

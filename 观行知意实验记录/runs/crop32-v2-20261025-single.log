@@ -1,0 +1,11 @@
+{"run": "crop32-v2-20261025", "mode": "single", "predicted": 50, "total": 466}
+{"run": "crop32-v2-20261025", "mode": "single", "predicted": 100, "total": 466}
+{"run": "crop32-v2-20261025", "mode": "single", "predicted": 150, "total": 466}
+{"run": "crop32-v2-20261025", "mode": "single", "predicted": 200, "total": 466}
+{"run": "crop32-v2-20261025", "mode": "single", "predicted": 250, "total": 466}
+{"run": "crop32-v2-20261025", "mode": "single", "predicted": 300, "total": 466}
+{"run": "crop32-v2-20261025", "mode": "single", "predicted": 350, "total": 466}
+{"run": "crop32-v2-20261025", "mode": "single", "predicted": 400, "total": 466}
+{"run": "crop32-v2-20261025", "mode": "single", "predicted": 450, "total": 466}
+{"passed": true, "python_network_connections_blocked": true, "score_count": 40, "finite": true, "parameters": 66138780, "device": "cuda", "predicted_class": 0, "linux_verified": false, "scope": "Windows Python连接拦截回归检查；非系统级网络隔离"}
+{"package": "<项目目录>\\submission\\crop32-single-v2-20261025", "metrics": {"accuracy": 65.23605150214593, "macro_f1": 59.22758355405615}, "latency_ms": 257.45721075267653, "parameters": 66138780}

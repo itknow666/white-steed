@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-25",
+  "sources": [
+    {
+      "project": "PyTorch/torchvision",
+      "use": "CUDA BF16 training, inference autocast, R(2+1)D architecture",
+      "url": "https://github.com/pytorch/vision",
+      "license": "BSD-3-Clause"
+    },
+    {
+      "project": "timm",
+      "use": "ModelEmaV3",
+      "url": "https://github.com/huggingface/pytorch-image-models",
+      "license": "Apache-2.0"
+    },
+    {
+      "project": "Ultralytics 8.3.228",
+      "use": "official bundled YOLO11n; IR person boxes; shared crop across depth/IR",
+      "url": "https://github.com/ultralytics/ultralytics/tree/v8.3.228",
+      "license": "AGPL-3.0"
+    },
+    {
+      "project": "TSN",
+      "use": "reference on batch-normalization and discriminative optimizer policies; no TSN weights used",
+      "url": "https://github.com/yjxiong/tsn-pytorch",
+      "license": "BSD-2-Clause"
+    },
+    {
+      "project": "IG65M-PyTorch",
+      "use": "same generic pretrained R34 as v1; v2 starts from team v1 trained on provided train split",
+      "url": "https://github.com/moabitcoin/ig65m-pytorch",
+      "license": "MIT"
+    }
+  ],
+  "detector_sha256": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1",
+  "external_cuhk_weights": false,
+  "extra_modalities": false,
+  "selection": "validation accuracy, macro F1 tie-break; choose one model; no 2xR34 ensemble above100M"
+}

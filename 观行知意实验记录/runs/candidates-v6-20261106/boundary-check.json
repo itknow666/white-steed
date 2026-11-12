@@ -1,0 +1,14 @@
+{
+  "sample_id": "c3445bfa0b2862039c84e795dcafd3db.npy",
+  "input_exact_match": true,
+  "single_cached_raw_scores_exact_match": true,
+  "training_eval_batch_prediction": 6,
+  "single_prediction": 7,
+  "label": 8,
+  "max_probability_difference": 0.0009488761425018311,
+  "cached_top2": [
+    0.3454757332801819,
+    0.3454757332801819
+  ],
+  "finding": "FP16 batch/layout dependent rounding at exactly tied cached top scores; both predictions incorrect"
+}

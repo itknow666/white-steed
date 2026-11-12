@@ -1,0 +1,7 @@
+{
+  "url": "https://download.openmmlab.com/mmaction/v1.0/recognition/c3d/c3d_sports1m-pretrained_8xb30-16x1x1-45e_ucf101-rgb/c3d_sports1m-pretrained_8xb30-16x1x1-45e_ucf101-rgb_20220811-31723200.pth",
+  "sha256": "31723200e6efc2707cde59c9206303e25db1b96ec99bd685707c095bb4d74e77",
+  "source": "OpenMMLab C3D, Sports1M pretrained and UCF101 fine-tuned",
+  "classes": "replace UCF101 classification head with 40-class head",
+  "data_restrictions": "only supplied depth/IR in contest fine tuning and inference"
+}

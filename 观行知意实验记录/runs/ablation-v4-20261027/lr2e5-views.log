@@ -1,0 +1,2 @@
+{"run": "<项目目录>/runs/lr2e5-v4-20261027", "flip_tta": false, "accuracy": 64.16309012875537, "macro_f1": 57.4324357712776}
+{"run": "<项目目录>/runs/lr2e5-v4-20261027", "flip_tta": true, "accuracy": 63.30472103004292, "macro_f1": 56.08574967828383}

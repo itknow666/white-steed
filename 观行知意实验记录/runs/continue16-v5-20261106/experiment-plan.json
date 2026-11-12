@@ -1,0 +1,19 @@
+{
+  "purpose": "Continue best R34 for six epochs with lower learning rate; compare original/flip views and fixed Swin fusion weights before promotion",
+  "epochs": 6,
+  "initial": "runs/control16-v4-20261027/best_ema.pt",
+  "lr": 5e-06,
+  "head_multiplier": 5,
+  "seed": 42,
+  "fusion_weights": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "swin": "runs/swin192-v3-20261025",
+  "validation_role": "evaluation and model selection only",
+  "test_accessed": false,
+  "prior_best_accuracy": 68.24034334763948,
+  "promotion": "Only after full raw-image evaluation and offline package test; accuracy then macro F1",
+  "linux_verified": false
+}

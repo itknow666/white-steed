@@ -1,0 +1,45 @@
+{
+  "training": {
+    "best_epoch": 2,
+    "epochs_completed": 6,
+    "accuracy": 66.95278969957081,
+    "macro_f1": 60.142351696857766,
+    "steps": 1500,
+    "parameters": 66138780,
+    "elapsed_sec": 466.03228282928467,
+    "peak_gpu_mib": 6557.1767578125,
+    "stopped_early": false,
+    "linux_verified": false
+  },
+  "fusion_metrics": {
+    "accuracy": 68.24034334763948,
+    "macro_f1": 62.27173268856601
+  },
+  "previous_best": {
+    "run": "runs/fusion-control16-v4-20261027",
+    "package": "submission/ablation-v4-fusion-20261027",
+    "weights": "submission/ablation-v4-fusion-20261027/model.pt",
+    "inference_config": "submission/ablation-v4-fusion-20261027/code/config.json",
+    "predictions": "submission/ablation-v4-fusion-20261027/validation.csv",
+    "accuracy": 68.24034334763948,
+    "macro_f1": 63.037892305203215,
+    "weights_sha256": "cac267050000180cc2af936c7ae7c17c0c319569bdcfae013a5be72b1cf69b10",
+    "smoke": false
+  },
+  "promoted": false,
+  "raw_cached_predictions_match": true,
+  "validation_rows": 466,
+  "offline_check": {
+    "passed": true,
+    "python_network_connections_blocked": true,
+    "score_count": 40,
+    "finite": true,
+    "parameters": 94023082,
+    "device": "cuda",
+    "predicted_class": 0,
+    "linux_verified": false,
+    "scope": "Windows Python连接拦截回归检查；非系统级网络隔离"
+  },
+  "package": "<项目目录>\\submission\\continue-v5-20261106",
+  "linux_verified": false
+}

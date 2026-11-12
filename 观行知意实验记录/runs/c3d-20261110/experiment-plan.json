@@ -1,0 +1,18 @@
+{
+  "name": "C3D Sports1M then UCF101 finetuned initialization",
+  "initial": "weights/c3d-sports1m-ucf101-openmmlab.pth",
+  "depth_ir": "four channels; RGB weights scaled .75 and IR initialized from RGB mean; same synchronized crop",
+  "input": "16 frames resized from existing 128x128 cache to112x112, normalized by original RGB mean values; IR uses mean",
+  "epochs_max": 12,
+  "min_epochs": 8,
+  "patience": 4,
+  "batch": 4,
+  "encoder_lr": 1e-05,
+  "head_multiplier": 10,
+  "seed": 42,
+  "validation": "466 public clips for evaluation and model selection only",
+  "hidden_test": "not accessed",
+  "candidate_fusion": "C3D and previously trained X3D-M fixed C3D weights 0.25,0.5,0.75, only if <=100M",
+  "final_comparison": "use full raw-image inference metrics; keep previous best unless strictly improved",
+  "note": "pretrained from Sports1M then UCF101; no extra CUHK training; training/validation do not use RGB from contest data"
+}

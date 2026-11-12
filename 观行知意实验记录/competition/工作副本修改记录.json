@@ -1,0 +1,61 @@
+{
+  "changes": [
+    "关键代码中文注释",
+    "训练和推理均按帧号严格核对Depth/IR同步",
+    "训练元数据记录实际person_crop和输入形状，去除固定YOLO描述",
+    "工作默认配置选择best_ema相对路径",
+    "2026-10-20：完整训练保留尾批，确保每轮1995段均参与；FP16初始缩放128；仅成功更新时更新EMA；逐批进度和每轮权重保存；摘要按best EMA标注"
+  ],
+  "files": [
+    {
+      "file": "build_cache.py",
+      "original_sha256": "2bdc6df39c38f6f3e4bf6b4bfec9d68a72ed881243561d1b1bb94a77bc22601c",
+      "working_sha256": "b2343cfb35f34ddbb57a20a6a501626597d0ef646a628a33998285b7641b25ed"
+    },
+    {
+      "file": "config.json",
+      "original_sha256": "00f564d2b5ef2f61b60921648e2370bb32cefbd3325c1649366642cd4a60c365",
+      "working_sha256": "bb5595fc1ae77ddf2f50b85ad7cad4ab9289def15783f985487d029c32b28840"
+    },
+    {
+      "file": "depth_ir_io.py",
+      "original_sha256": "b738be4fa61ae419704c14f8467715e900eb9121607f2b0837d183c089cc097b",
+      "working_sha256": "71363b667a1477bebb72082d1b64cd8d22062cc13328890cb3e1b34473888fed"
+    },
+    {
+      "file": "inference.py",
+      "original_sha256": "c1446b8795233efd36f77d6ab74e628b15979b371642ec35c43a910c612ce7bc",
+      "working_sha256": "279e6ae05e25ad4a9f20a7f734376022c0e92ae4e26cc685500a6f37b52cfd2c"
+    },
+    {
+      "file": "raw_model.py",
+      "original_sha256": "3d96f9a71b1b6c9bcd78fc3253f3faf832c32acc8ffbdeacf19af7cf95752157",
+      "working_sha256": "37ff9550c075a343fb4080d127e8fc419a1d68e88a35acae8a98d5ca480cd09e"
+    },
+    {
+      "file": "training/build_cache.py",
+      "original_sha256": "2bdc6df39c38f6f3e4bf6b4bfec9d68a72ed881243561d1b1bb94a77bc22601c",
+      "working_sha256": "b2343cfb35f34ddbb57a20a6a501626597d0ef646a628a33998285b7641b25ed"
+    },
+    {
+      "file": "training/depth_ir_io.py",
+      "original_sha256": "b738be4fa61ae419704c14f8467715e900eb9121607f2b0837d183c089cc097b",
+      "working_sha256": "71363b667a1477bebb72082d1b64cd8d22062cc13328890cb3e1b34473888fed"
+    },
+    {
+      "file": "training/prepare_training_manifest.py",
+      "original_sha256": "6d6bde61d23dd6b2fc5823aa8deabe30e440e30b2f4d486485225d7ccd28734a",
+      "working_sha256": "7e68d1b4104b5416465da9a1e7ca7877301dcb865957ab1acd6815890aedc384"
+    },
+    {
+      "file": "training/raw_model.py",
+      "original_sha256": "3d96f9a71b1b6c9bcd78fc3253f3faf832c32acc8ffbdeacf19af7cf95752157",
+      "working_sha256": "37ff9550c075a343fb4080d127e8fc419a1d68e88a35acae8a98d5ca480cd09e"
+    },
+    {
+      "file": "training/train_raw.py",
+      "original_sha256": "2aec5d27361e4e7a03c00633672a7ef84f96738a28b749373ab188ac4b6f4980",
+      "working_sha256": "49ee2ecab20cc27dbcdbbc0e22e888411b1fdc502030054a276466b26522166e"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+{
+  "weights_file": "best_ema.pt",
+  "selection": "公开验证集准确率最高的EMA检查点；相同准确率保留较早轮次"
+}

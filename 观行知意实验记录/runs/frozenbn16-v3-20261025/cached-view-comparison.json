@@ -1,0 +1,14 @@
+[
+  {
+    "run": "runs/frozenbn16-v3-20261025",
+    "flip_tta": false,
+    "accuracy": 64.5922746781116,
+    "macro_f1": 56.71502045307296
+  },
+  {
+    "run": "runs/frozenbn16-v3-20261025",
+    "flip_tta": true,
+    "accuracy": 65.02145922746782,
+    "macro_f1": 57.83112374168559
+  }
+]

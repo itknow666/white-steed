@@ -1,0 +1,46 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "sample_id": "dea1181a1a54590fe6636ed8505aad58.npy",
+      "crop_scale": 1.4,
+      "max_abs_error": 0.0
+    },
+    {
+      "sample_id": "dea1181a1a54590fe6636ed8505aad58.npy",
+      "crop_scale": 1.8,
+      "max_abs_error": 0.0
+    },
+    {
+      "sample_id": "c2dffdf5d5313ac6e03e4f8d1495a1d0.npy",
+      "crop_scale": 1.4,
+      "max_abs_error": 0.0
+    },
+    {
+      "sample_id": "c2dffdf5d5313ac6e03e4f8d1495a1d0.npy",
+      "crop_scale": 1.8,
+      "max_abs_error": 0.0
+    },
+    {
+      "sample_id": "431859798af24135ec57c0bfbbb3b249.npy",
+      "crop_scale": 1.4,
+      "max_abs_error": 0.0
+    },
+    {
+      "sample_id": "431859798af24135ec57c0bfbbb3b249.npy",
+      "crop_scale": 1.8,
+      "max_abs_error": 0.0
+    },
+    {
+      "sample_id": "97ad9f4ccd9cbe802c75456971c522fb.npy",
+      "crop_scale": 1.4,
+      "max_abs_error": 0.0
+    },
+    {
+      "sample_id": "97ad9f4ccd9cbe802c75456971c522fb.npy",
+      "crop_scale": 1.8,
+      "max_abs_error": 0.0
+    }
+  ],
+  "scope": "Real images with cached IR detections injected; actual detector checked at final evaluation"
+}

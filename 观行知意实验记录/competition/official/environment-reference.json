@@ -1,0 +1,1 @@
+{"python": "3.10.20 (main, Jun 11 2026, 15:17:37) [GCC 14.3.0]", "packages": {"torch": "2.5.1+cu118", "torchvision": "0.20.1+cu118", "numpy": "2.2.6", "Pillow": "12.2.0", "ultralytics": "8.3.228", "opencv-python-headless": "4.13.0.92", "timm": "1.0.27"}, "cv2": "4.13.0"}

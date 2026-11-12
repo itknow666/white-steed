@@ -1,0 +1,11 @@
+{
+  "num_classes": 40,
+  "input_version": 2,
+  "channels": 4,
+  "depth_mode": "color",
+  "person_crop": false,
+  "frames": 16,
+  "size": 128,
+  "weights_file": "model.pt",
+  "weights_format": "pytorch"
+}

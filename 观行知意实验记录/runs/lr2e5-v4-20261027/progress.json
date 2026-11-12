@@ -1,0 +1,15 @@
+{
+  "epoch": 6,
+  "epochs": 6,
+  "batch": 250,
+  "batches": 250,
+  "seen": 1995,
+  "train_loss": 0.5104863124981261,
+  "train_accuracy": 97.4937343358396,
+  "early_frozen": false,
+  "trainable_parameters": 63514700,
+  "elapsed_sec": 503.6584858894348,
+  "lr": 1.0000300035815862e-06,
+  "grad_norm": 9.439948081970215,
+  "peak_gpu_mib": 6557.1767578125
+}

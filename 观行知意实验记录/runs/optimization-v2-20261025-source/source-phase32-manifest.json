@@ -1,0 +1,21 @@
+{
+  "optimized/evaluate.py": "8acb85c0031c4e741f3a4eab65eabe4e9d344c98a878b70fc6b86362f7ae8a8a",
+  "optimized/finalize.py": "a23a12a4fc8d81a5e03474dcd88f661e32eb5b6e8d19c5eb42407dd8a42cbb12",
+  "optimized/gpu_benchmark.py": "73bf03985b9f8ba9be734d1c160eb00d3395acf6d863082062d7c7b346787f94",
+  "optimized/inference.py": "dae4da84b8810dfe4fca201e4de294e1fc75b1d3020492a0c20f3214382b994b",
+  "optimized/train.py": "416c40ec477d84aa7ff40af0e8af0ee0989854b2581d2d728662dfb54de671d9",
+  "baseline/analyze_predictions.py": "e9ee3213728e37126dcc325bf3fc735fc205fcb3e529e66a486a1cf9ef96bb39",
+  "baseline/build_cache.py": "b2343cfb35f34ddbb57a20a6a501626597d0ef646a628a33998285b7641b25ed",
+  "baseline/check_environment.py": "929dcf91619acc23232cf1c8eb037ff55d9f89895f94f7f2eaf04bc118937e15",
+  "baseline/depth_ir_io.py": "71363b667a1477bebb72082d1b64cd8d22062cc13328890cb3e1b34473888fed",
+  "baseline/download_pretrained.py": "a2eba1b084ce643b9145601eaa42e87d8f89f918411656700435e911efcb4e90",
+  "baseline/ig65m_backbone.py": "ebe9c5fe4ba1b6301fc279f1915aeb941fb9e8ce6d767c2ef693fe1af4bc289b",
+  "baseline/inference.py": "279e6ae05e25ad4a9f20a7f734376022c0e92ae4e26cc685500a6f37b52cfd2c",
+  "baseline/install_classification_v2_data.py": "3ea5974a426fb0722d794ad65869f415a19db9a2aca0ff9e81819be8910f220a",
+  "baseline/install_classification_v2_shards.py": "dfeed7b44ad3c46c037873faf9ecb69a364171fe85ee81bad949f94ac5ed682f",
+  "baseline/predict.py": "bde6e372314a3326029ea3ef94c7b968addccb582481d5db6433691aaa3c9652",
+  "baseline/preview_sample.py": "00bc477eb355e628c26a67113d06bc646ca66c6af4c3a7ff2249a2c2a4baf749",
+  "baseline/raw_model.py": "37ff9550c075a343fb4080d127e8fc419a1d68e88a35acae8a98d5ca480cd09e",
+  "environment/requirements-v2-lock.txt": "e4f293c35c876d361c5ebc3a5029e76c726eb295292ed33bd7b30cb0dd33615f",
+  "competition/optimization-v2-sources.json": "f64cbc8aa6de3aa72639eab22350e72c521415ef058ee6b347d2e8be0ba7e89d"
+}

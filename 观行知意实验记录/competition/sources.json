@@ -1,0 +1,10 @@
+{
+  "official_devkit": {
+    "url": "https://uestcai.top/api/markdown-assets/cf37e5ba-69c8-4f3e-b9ae-db59c518f61c",
+    "sha256": "f25c41522523b58c1de04e122b8fd5d018128824a9d2fe95fa660c5041616e59"
+  },
+  "dataset_source": "D:/桌面文件/cvpr/wujie-classification-depth-ir-data.zip/wujie-classification-depth-ir-data",
+  "template_source": "E:/DOWNLOAD/通用技术报告模板.docx",
+  "rules_source": "用户本次对话提供的详细规则",
+  "early_pdf_source": "D:/桌面文件/cvpr/观行知意_赛题说明.pdf"
+}

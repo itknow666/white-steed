@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "samples": [
+    {
+      "sample_id": "dea1181a1a54590fe6636ed8505aad58.npy",
+      "max_abs_error": 0.0
+    },
+    {
+      "sample_id": "c2dffdf5d5313ac6e03e4f8d1495a1d0.npy",
+      "max_abs_error": 0.0
+    },
+    {
+      "sample_id": "431859798af24135ec57c0bfbbb3b249.npy",
+      "max_abs_error": 0.0
+    }
+  ]
+}

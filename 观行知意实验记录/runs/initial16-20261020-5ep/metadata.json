@@ -1,0 +1,32 @@
+{
+  "args": {
+    "cache": "<项目目录>\\cache\\full16",
+    "pretrained": "<项目目录>\\weights\\pretrained.pth",
+    "output": "<项目目录>\\runs\\initial16-20261020-5ep",
+    "batch": 4,
+    "epochs": 5,
+    "workers": 0,
+    "lr": 5e-05,
+    "seed": 42,
+    "device": "cuda",
+    "smoke": false
+  },
+  "parameters": 63514700,
+  "inference_pipeline_parameters": 63514700,
+  "pretrained_sha256": "ade133f18548b59da3a36d6a70d44a4a7cc4b90460654c338cb8a023e9a3e0e1",
+  "cache_manifest_sha256": "8e8af5b8fc5b6ca05f9d54b08dfec15d2b0b8a0b2b6ae7679687b2e119468c86",
+  "train_samples": 1995,
+  "validation_samples": 466,
+  "test_accessed": false,
+  "selection": "best validation accuracy EMA; earlier epoch wins ties",
+  "recipe": "R34 IG65M-K400; dropout .3; AdamW wd1e-4; warmup2 cosine; EMA.99; synchronous flip/crop",
+  "person_crop": false,
+  "input_shape": [
+    4,
+    16,
+    128,
+    128
+  ],
+  "gpu": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+  "torch": "2.9.1+cu128"
+}

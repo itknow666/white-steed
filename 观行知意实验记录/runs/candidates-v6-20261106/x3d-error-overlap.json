@@ -1,0 +1,7 @@
+{
+  "new_correct": 267,
+  "old_correct": 318,
+  "new_correct_old_wrong": 20,
+  "new_wrong_old_correct": 71,
+  "note": "error complementarity only, not achieved ensemble accuracy"
+}

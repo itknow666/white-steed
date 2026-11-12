@@ -1,0 +1,11 @@
+{"run": "control16-v4-20261027", "mode": "single", "predicted": 50, "total": 466}
+{"run": "control16-v4-20261027", "mode": "single", "predicted": 100, "total": 466}
+{"run": "control16-v4-20261027", "mode": "single", "predicted": 150, "total": 466}
+{"run": "control16-v4-20261027", "mode": "single", "predicted": 200, "total": 466}
+{"run": "control16-v4-20261027", "mode": "single", "predicted": 250, "total": 466}
+{"run": "control16-v4-20261027", "mode": "single", "predicted": 300, "total": 466}
+{"run": "control16-v4-20261027", "mode": "single", "predicted": 350, "total": 466}
+{"run": "control16-v4-20261027", "mode": "single", "predicted": 400, "total": 466}
+{"run": "control16-v4-20261027", "mode": "single", "predicted": 450, "total": 466}
+{"passed": true, "python_network_connections_blocked": true, "score_count": 40, "finite": true, "parameters": 66138780, "device": "cuda", "predicted_class": 0, "linux_verified": false, "scope": "Windows Python连接拦截回归检查；非系统级网络隔离"}
+{"package": "<项目目录>\\submission\\ablation-v4-single-20261027", "metrics": {"accuracy": 66.30901287553648, "macro_f1": 61.21368318978422}, "latency_ms": 177.3530735484054, "parameters": 66138780}

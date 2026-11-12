@@ -1,0 +1,8 @@
+{
+  "resumed_from_epoch": 5,
+  "checkpoint_steps": 2495,
+  "source_matches_snapshot": true,
+  "checkpoint_sha256_verified": true,
+  "recorded_elapsed_before_pause": 557.5706913471222,
+  "note": "Includes recorded discarded partial epoch; excludes stopped wall-clock time"
+}

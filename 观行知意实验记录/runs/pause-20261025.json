@@ -1,0 +1,27 @@
+{
+  "status": "completed_after_resume",
+  "reason": "明天再来，我先睡觉",
+  "checkpoint_epoch": 5,
+  "checkpoint_steps": 2495,
+  "checkpoint_load_verified": true,
+  "interrupted_epoch": 6,
+  "partial_epoch_discarded": true,
+  "queued_ir_training_started": false,
+  "queued_fusion_started": false,
+  "best_available_package": "submission/optimized-20261025",
+  "best_available_accuracy": 66.30901287553648,
+  "best_available_macro_f1": 59.88386682988018,
+  "checkpoint_sha256": "4304a598ed3e5503c38c683c727ad2eb31cba3b91cd0ece2b8aac3b5ae096fdf",
+  "completed_before_pause": [
+    "frozenbn16-v3-20261025",
+    "temporal16-v3-20261025",
+    "detail192-v3-20261025"
+  ],
+  "pending": [],
+  "linux_verified": false,
+  "resumed_from_epoch": 5,
+  "resumed_on": "2026-10-25",
+  "final_package": "submission/optimized-generalize-20261025",
+  "final_accuracy": 67.38197424892704,
+  "final_macro_f1": 61.5485557812842
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "run": "runs/crop32-v2-20261025",
+    "flip_tta": false,
+    "accuracy": 65.23605150214593,
+    "macro_f1": 59.22758355405616
+  },
+  {
+    "run": "runs/crop32-v2-20261025",
+    "flip_tta": true,
+    "accuracy": 66.30901287553648,
+    "macro_f1": 59.88386682988018
+  }
+]

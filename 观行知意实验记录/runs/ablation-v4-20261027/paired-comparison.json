@@ -1,0 +1,9 @@
+{
+  "old_correct": 314,
+  "new_correct": 318,
+  "fixed_old_errors": 21,
+  "lost_old_correct": 17,
+  "net_correct_gain": 4,
+  "sample_count": 466,
+  "not_independent_test": true
+}

@@ -1,0 +1,44 @@
+{
+  "num_classes": 40,
+  "input_version": 2,
+  "channels": 4,
+  "depth_mode": "color",
+  "frames": 16,
+  "size": 192,
+  "weights_file": "../best_ema.pt",
+  "weights_format": "pytorch",
+  "person_crop": true,
+  "flip_tta": false,
+  "amp": true,
+  "channels_last_3d": true,
+  "crop_scale": 1.4,
+  "architecture": "ensemble",
+  "ir_contrast": false,
+  "components": [
+    {
+      "architecture": "x3d_m",
+      "frames": 16,
+      "size": 192,
+      "crop_scale": 1.4,
+      "flip_tta": false,
+      "weight": 0.25
+    },
+    {
+      "architecture": "r34",
+      "frames": 16,
+      "size": 128,
+      "crop_scale": 1.4,
+      "flip_tta": false,
+      "weight": 0.375
+    },
+    {
+      "architecture": "swin3dt",
+      "frames": 16,
+      "size": 192,
+      "crop_scale": 1.4,
+      "flip_tta": false,
+      "weight": 0.375
+    }
+  ],
+  "detector_file": "yolo11n.pt"
+}

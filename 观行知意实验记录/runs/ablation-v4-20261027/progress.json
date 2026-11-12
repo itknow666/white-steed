@@ -1,0 +1,21 @@
+{
+  "stage": "training_complete",
+  "best": {
+    "name": "control16",
+    "run": "<项目目录>\\runs\\control16-v4-20261027",
+    "cache": "<项目目录>\\cache\\crop16-v2",
+    "frozen": 0,
+    "lr": 1e-05,
+    "best_epoch": 6,
+    "epochs_completed": 6,
+    "accuracy": 66.30901287553648,
+    "macro_f1": 61.213683189784206,
+    "steps": 1500,
+    "parameters": 66138780,
+    "elapsed_sec": 494.5509684085846,
+    "peak_gpu_mib": 6557.1767578125,
+    "stopped_early": false,
+    "linux_verified": false
+  },
+  "time": 1793103298.344192
+}

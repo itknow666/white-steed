@@ -1,0 +1,23 @@
+{
+  "name": "initial16-20261020-5ep",
+  "accuracy": 54.72103004291846,
+  "macro_f1": 43.44292042521557,
+  "best_ema_accuracy": 54.72103004291846,
+  "last_ema_accuracy": 54.72103004291846,
+  "last_flip_tta_accuracy": 56.86695278969957,
+  "parameters": 63514700,
+  "inference_pipeline_parameters": 63514700,
+  "epochs": 5,
+  "train_eval_sec": 725.5982027053833,
+  "peak_allocated_mib": 3198.9541015625,
+  "model_only_latency_ms_median": 17.261899998629815,
+  "cache_seconds": 237.22601509094238,
+  "test_accessed": false,
+  "best_epoch": 5,
+  "selected_epoch": 5,
+  "selected_checkpoint": "best_ema.pt",
+  "stop_reason": "epoch_budget",
+  "checkpoint_bytes": 254409699,
+  "successful_updates": 2495,
+  "skipped_updates": 0
+}

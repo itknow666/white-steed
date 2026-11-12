@@ -1,0 +1,34 @@
+[
+  {
+    "name": "x3d_m",
+    "weights": "<项目目录>\\runs\\x3d_m-v6-20261106\\best_ema.pt",
+    "sha256": "220d3a0ca77786fa85b325828763b28be889d2ed513fa978b205d3eed2e1babf",
+    "config": "<项目目录>\\runs\\x3d_m-v6-20261106\\config.json",
+    "accuracy_cached": 57.2961373390558,
+    "macro_f1_cached": 51.53945151896543
+  },
+  {
+    "name": "tsm_r50",
+    "weights": "<项目目录>\\runs\\tsm_r50-v6-20261106\\best_ema.pt",
+    "sha256": "850d06937d282f8d6a9a31c63f0358da2b07a4f20bb239098eb6dc6184fb2dda",
+    "config": "<项目目录>\\runs\\tsm_r50-v6-20261106\\config.json",
+    "accuracy_cached": 53.862660944206006,
+    "macro_f1_cached": 45.6429619897967
+  },
+  {
+    "name": "mvit_v2_s",
+    "weights": "<项目目录>\\runs\\mvit_v2_s-v6-20261106\\best_ema.pt",
+    "sha256": "94ed1e5e894a0285fdf47ae293937aea1534aa465b2fe937769b88c387cf8b6a",
+    "config": "<项目目录>\\runs\\mvit_v2_s-v6-20261106\\config.json",
+    "accuracy_cached": 60.94420600858369,
+    "macro_f1_cached": 57.004589060971256
+  },
+  {
+    "name": "uniformer_s",
+    "weights": "<项目目录>\\runs\\uniformer_s-v6-20261106\\best_ema.pt",
+    "sha256": "25ec4866ea2215d4bd7043a2a21ed2fd2c3252eebf799c6df2d63d663fdc46f7",
+    "config": "<项目目录>\\runs\\uniformer_s-v6-20261106\\config.json",
+    "accuracy_cached": 57.2961373390558,
+    "macro_f1_cached": 53.27523099985776
+  }
+]

@@ -1,0 +1,38 @@
+{
+  "architecture": "ensemble",
+  "components": [
+    {
+      "architecture": "r34",
+      "frames": 16,
+      "size": 128,
+      "crop_scale": 1.4,
+      "flip_tta": false,
+      "weight": 0.5
+    },
+    {
+      "architecture": "swin3dt",
+      "frames": 16,
+      "size": 192,
+      "crop_scale": 1.4,
+      "flip_tta": false,
+      "weight": 0.5
+    }
+  ],
+  "cache": "<项目目录>\\cache\\crop16-v2",
+  "input_frames": 16,
+  "person_crop": true,
+  "total_parameters": 94023082,
+  "crop_scale": 1.4,
+  "training_source": "optimized/combine_models.py",
+  "source_runs": [
+    "<项目目录>\\runs\\lr2e5-v4-20261027",
+    "<项目目录>\\runs\\swin192-v3-20261025"
+  ],
+  "source_sha256": [
+    "63dc0db92a9844a5041d5014a458d6ec0ba80ff5aef9a3a37bb4f6156598f376",
+    "67e2db6e7899d064e011e1494d264395251637acce7900870c55f96c6f3f8428"
+  ],
+  "selection": "validation only, fixed weights .25/.5/.75; R34 best same-weight view, Swin best same-weight view",
+  "test_accessed": false,
+  "extra_parameter_updates": 0
+}

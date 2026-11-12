@@ -1,0 +1,17 @@
+{
+  "optimized/combine_models.py": "cedf9f208183bb72b3fa2d1d14fd1e47c70609232d3d78ce556c58a1af17b691",
+  "optimized/compare_views.py": "db090ce8d4f354f44321fb99fa22b3d7a85aa3c8db95d44f8a83a0fa8957ed2d",
+  "optimized/evaluate.py": "ca29cc8c0812c023fd2e04d7ec5adbad0416b473df7df5af286f21733c36c636",
+  "optimized/finalize.py": "cca669273e3009ab01e4b9c32798f51d3f43a9dbdcc2ec21b7d145eaf55a369c",
+  "optimized/finalize_generalize.py": "b7a162412351453bd81db9d3626d76860786340c91bbf9812ee366781403f48e",
+  "optimized/finish_trials.py": "509aa3d91aa714f9380e0522b84a7e54756a664f353b682f707a0809a8364c24",
+  "optimized/gpu_benchmark.py": "73bf03985b9f8ba9be734d1c160eb00d3395acf6d863082062d7c7b346787f94",
+  "optimized/inference.py": "8eae325efbfd107c714ab6ffc457d7bede45bba4f8604dbe63e35208fda97f20",
+  "optimized/train.py": "416c40ec477d84aa7ff40af0e8af0ee0989854b2581d2d728662dfb54de671d9",
+  "optimized/train_generalize.py": "b45d1e847d3ea9e0fa6a28fef9b5890b56750a8a62d68add926c10f71d673f8a",
+  "optimized/train_swin.py": "e1aa9297a176c8232a2158e4f3f99e00aaaa5cee9836a9ff3a62061dd3cb0483",
+  "optimized/video_swin.py": "4ce1842a9e6facd5f170bdb7c06c80636e2470a61c6326594be324c61046e5a9",
+  "runs/optimization-v3-plan.json": "a339ea10f05ae499ea659eb9bba59571e7a6f90529eba7abbbef5f52db869f95",
+  "weights/swin3d_t-7615ae03.source.json": "4d59ab75306735a5f2c9f6bc4dc69cc4629771312c3d0047f45cd36db30ce8d8",
+  "competition/torchvision-LICENSE.txt": "6502f676851cfe25f8af75531dfb32375b7325b73c37e7b43741fa422893e71d"
+}

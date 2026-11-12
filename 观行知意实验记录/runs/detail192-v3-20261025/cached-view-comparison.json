@@ -1,0 +1,14 @@
+[
+  {
+    "run": "runs/detail192-v3-20261025",
+    "flip_tta": false,
+    "accuracy": 64.16309012875537,
+    "macro_f1": 56.119917214917
+  },
+  {
+    "run": "runs/detail192-v3-20261025",
+    "flip_tta": true,
+    "accuracy": 64.8068669527897,
+    "macro_f1": 57.12408800996995
+  }
+]

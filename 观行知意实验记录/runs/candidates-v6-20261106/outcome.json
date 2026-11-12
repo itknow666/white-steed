@@ -1,0 +1,106 @@
+{
+  "single": {
+    "run": "<项目目录>\\runs\\mvit_v2_s-v6-20261106",
+    "metrics": {
+      "accuracy": 60.94420600858369,
+      "macro_f1": 57.02498111861119
+    },
+    "parameters": 36899096,
+    "architecture": "mvit_v2_s",
+    "components": [],
+    "flip_tta": false,
+    "person_crop": true,
+    "frames": 16,
+    "latency_ms": 201.78990258054617,
+    "weights_sha256": "94ed1e5e894a0285fdf47ae293937aea1534aa465b2fe937769b88c387cf8b6a",
+    "code_sha256": "2feed971254e69c41ed4ab7830b0abdcdb3dcacba39d571b85c49b4f7b2e9863",
+    "report_file": "runs/mvit_v2_s-v6-20261106/validation-single-report.html",
+    "files": 36,
+    "code_bytes": 5108400,
+    "unpacked_bytes": 5827402,
+    "formal_submission_ready": false,
+    "linux_verified": false,
+    "cached_prediction_differences": [
+      {
+        "sample_id": "c3445bfa0b2862039c84e795dcafd3db.npy",
+        "cached": 6,
+        "actual": 7
+      }
+    ]
+  },
+  "fusion": {
+    "run": "<项目目录>\\runs\\fusion-candidates-v6-20261106",
+    "metrics": {
+      "accuracy": 68.02575107296137,
+      "macro_f1": 63.0282761039197
+    },
+    "parameters": 97079932,
+    "architecture": "ensemble",
+    "components": [
+      {
+        "architecture": "x3d_m",
+        "frames": 16,
+        "size": 192,
+        "crop_scale": 1.4,
+        "flip_tta": false,
+        "weight": 0.25
+      },
+      {
+        "architecture": "r34",
+        "frames": 16,
+        "size": 128,
+        "crop_scale": 1.4,
+        "flip_tta": false,
+        "weight": 0.375
+      },
+      {
+        "architecture": "swin3dt",
+        "frames": 16,
+        "size": 192,
+        "crop_scale": 1.4,
+        "flip_tta": false,
+        "weight": 0.375
+      }
+    ],
+    "flip_tta": false,
+    "person_crop": true,
+    "frames": 16,
+    "latency_ms": 296.02194301085706,
+    "weights_sha256": "574d9f1abd8d08a76fab47362ac5151cd0ca4cc4d8dfa24ad40c7c76e266ac49",
+    "code_sha256": "32ae6f145c9eb1bb6ad2b1cc81aa7f66247fe61c1a05ebacef90918588ecc8f6",
+    "report_file": "runs/fusion-candidates-v6-20261106/validation-single-report.html",
+    "files": 45,
+    "code_bytes": 5136373,
+    "unpacked_bytes": 5898623,
+    "formal_submission_ready": false,
+    "linux_verified": false,
+    "cached_prediction_differences": [
+      {
+        "sample_id": "93bb8a03e08e164fb483da993e6a9b2d.npy",
+        "cached": 37,
+        "actual": 1
+      }
+    ]
+  },
+  "previous": {
+    "run": "runs/fusion-control16-v4-20261027",
+    "package": "submission/ablation-v4-fusion-20261027",
+    "weights": "submission/ablation-v4-fusion-20261027/model.pt",
+    "inference_config": "submission/ablation-v4-fusion-20261027/code/config.json",
+    "predictions": "submission/ablation-v4-fusion-20261027/validation.csv",
+    "accuracy": 68.24034334763948,
+    "macro_f1": 63.037892305203215,
+    "weights_sha256": "cac267050000180cc2af936c7ae7c17c0c319569bdcfae013a5be72b1cf69b10",
+    "smoke": false
+  },
+  "promoted": false,
+  "paired": {
+    "old_correct": 318,
+    "new_correct": 317,
+    "fixed": 7,
+    "lost": 8
+  },
+  "actual_cached_match": false,
+  "offline_passed": true,
+  "linux_verified": false
+}

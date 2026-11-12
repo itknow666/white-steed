@@ -1,0 +1,53 @@
+WARNING Ultralytics settings reset to default values. This may be due to a possible problem with your settings or a recent ultralytics package update. 
+View Ultralytics Settings with 'yolo settings' or at '<用户目录>\AppData\Roaming\Ultralytics\settings.json'
+Update Settings with 'yolo settings key=value', i.e. 'yolo settings runs_dir=path/to/dir'. For help see https://docs.ultralytics.com/quickstart/#ultralytics-settings.
+{"cached": 50, "total": 2461, "seconds": 17.332809448242188}
+{"cached": 100, "total": 2461, "seconds": 27.744699001312256}
+{"cached": 150, "total": 2461, "seconds": 38.05505585670471}
+{"cached": 200, "total": 2461, "seconds": 48.73741292953491}
+{"cached": 250, "total": 2461, "seconds": 59.02132201194763}
+{"cached": 300, "total": 2461, "seconds": 70.01534509658813}
+{"cached": 350, "total": 2461, "seconds": 80.63252305984497}
+{"cached": 400, "total": 2461, "seconds": 91.13273191452026}
+{"cached": 450, "total": 2461, "seconds": 101.58570146560669}
+{"cached": 500, "total": 2461, "seconds": 112.08871531486511}
+{"cached": 550, "total": 2461, "seconds": 121.84992551803589}
+{"cached": 600, "total": 2461, "seconds": 132.62728333473206}
+{"cached": 650, "total": 2461, "seconds": 142.85067319869995}
+{"cached": 700, "total": 2461, "seconds": 152.8509669303894}
+{"cached": 750, "total": 2461, "seconds": 163.64463448524475}
+{"cached": 800, "total": 2461, "seconds": 174.3196837902069}
+{"cached": 850, "total": 2461, "seconds": 185.64141988754272}
+{"cached": 900, "total": 2461, "seconds": 196.1571729183197}
+{"cached": 950, "total": 2461, "seconds": 206.20167708396912}
+{"cached": 1000, "total": 2461, "seconds": 217.01355648040771}
+{"cached": 1050, "total": 2461, "seconds": 225.71570754051208}
+{"cached": 1100, "total": 2461, "seconds": 235.02075624465942}
+{"cached": 1150, "total": 2461, "seconds": 244.0063784122467}
+{"cached": 1200, "total": 2461, "seconds": 253.44298768043518}
+{"cached": 1250, "total": 2461, "seconds": 263.5944263935089}
+{"cached": 1300, "total": 2461, "seconds": 273.27411818504333}
+{"cached": 1350, "total": 2461, "seconds": 283.69034123420715}
+{"cached": 1400, "total": 2461, "seconds": 293.3328711986542}
+{"cached": 1450, "total": 2461, "seconds": 303.7518837451935}
+{"cached": 1500, "total": 2461, "seconds": 315.06651067733765}
+{"cached": 1550, "total": 2461, "seconds": 325.809104681015}
+{"cached": 1600, "total": 2461, "seconds": 337.46159291267395}
+{"cached": 1650, "total": 2461, "seconds": 349.0469436645508}
+{"cached": 1700, "total": 2461, "seconds": 359.9202971458435}
+{"cached": 1750, "total": 2461, "seconds": 371.3081259727478}
+{"cached": 1800, "total": 2461, "seconds": 381.31142234802246}
+{"cached": 1850, "total": 2461, "seconds": 390.4443185329437}
+{"cached": 1900, "total": 2461, "seconds": 397.58062839508057}
+{"cached": 1950, "total": 2461, "seconds": 406.3939702510834}
+{"cached": 2000, "total": 2461, "seconds": 413.8432528972626}
+{"cached": 2050, "total": 2461, "seconds": 422.9325587749481}
+{"cached": 2100, "total": 2461, "seconds": 432.609694480896}
+{"cached": 2150, "total": 2461, "seconds": 441.7096951007843}
+{"cached": 2200, "total": 2461, "seconds": 451.3607144355774}
+{"cached": 2250, "total": 2461, "seconds": 460.7449474334717}
+{"cached": 2300, "total": 2461, "seconds": 469.9139173030853}
+{"cached": 2350, "total": 2461, "seconds": 478.35225224494934}
+{"cached": 2400, "total": 2461, "seconds": 487.5773539543152}
+{"cached": 2450, "total": 2461, "seconds": 496.3072192668915}
+{"counts": {"train": 1995, "validation": 466}, "shape_per_sample": [4, 16, 128, 128], "manifest_sha256": "8fef5e4af4336848fc928dcf37486aab2436180fb10138876b27b3abe5790c32", "source_split_sha256": {"train": "b1da519efcaffea98e2b153f39a3195bfa902617826135e866bbca289380ed28", "validation": "6e5c15ff25b726d4925c4e58820204746db83551e10156a303571c0d84b6baa5"}, "depth_mode": "color", "include_ir": true, "person_crop": true, "detector_parameters": 2624080, "detector_sha256": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1", "crop_fallback_count": 40, "crop_reuse_manifest_sha256": null, "sampling": "independent uniform per modality, matching source baseline", "cache_seconds": 499.11038994789124, "test_accessed": false, "smoke": false}

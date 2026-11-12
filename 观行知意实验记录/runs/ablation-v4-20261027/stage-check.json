@@ -1,0 +1,11 @@
+{
+  "frozen_stem_has_no_gradient": true,
+  "frozen_bn_unchanged": true,
+  "head_has_finite_gradient": true,
+  "unfrozen_stem_has_finite_nonzero_gradient": true,
+  "unfrozen_bn_updates": true,
+  "trainable_frozen": 59498610,
+  "trainable_full": 63514700,
+  "device": "cpu",
+  "purpose": "stage boundary mechanics, not accuracy evidence"
+}

@@ -1,0 +1,1 @@
+run_name,日期,负责人,模型,预训练SHA256,帧数,尺寸,通道,batch,lr,seed,epochs,改变变量,accuracy,macro_f1,latency_ms,peak_gpu_mib,权重SHA256,结论

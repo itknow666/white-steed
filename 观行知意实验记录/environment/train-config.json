@@ -1,0 +1,8 @@
+{
+  "batch": 2,
+  "epochs": 30,
+  "workers": 0,
+  "lr": 5e-05,
+  "seed": 42,
+  "device": "cuda"
+}

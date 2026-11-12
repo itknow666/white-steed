@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-25",
+  "sources": [
+    {
+      "url": "https://github.com/yjxiong/tsn-pytorch/blob/master/models.py",
+      "use": "BN freezing inspiration; ours freezes all BN running statistics while affine parameters remain trainable, distinct from exact TSN partialBN",
+      "license": "BSD-2-Clause"
+    },
+    {
+      "url": "https://pytorchvideo.org/docs/tutorial_classification",
+      "use": "Training temporal/spatial augmentation versus deterministic validation",
+      "license": "Apache-2.0 (project code; no new model downloaded)"
+    },
+    {
+      "url": "https://pytorch.org/blog/how-to-train-state-of-the-art-models-using-torchvision-latest-primitives/",
+      "use": "Mixup, low-probability erasing and resolution tuning as hypotheses, not transferable accuracy claims"
+    },
+    {
+      "url": "https://github.com/pytorch/vision/blob/main/torchvision/models/video/swin_transformer.py",
+      "use": "Official Video Swin-T architecture and generic Kinetics400 weights; adapt only first projection and classification head",
+      "license": "BSD-3-Clause",
+      "weight_source": {
+        "model": "torchvision swin3d_t KINETICS400_V1",
+        "source": "https://download.pytorch.org/models/swin3d_t-7615ae03.pth",
+        "sha256": "7615ae035996b65eb38dad437ae533d2dfcd36f9f89d28c0f0fa7bfb8e6b3130",
+        "license": "BSD-3-Clause (TorchVision implementation)",
+        "pretraining_data": "ImageNet-1K and Kinetics-400; official Video Swin-T weights, no CUHK fine-tuning",
+        "use": "public generic initialization only; adapt 4-channel patch embedding and replace 400-class head with 40 classes",
+        "torchvision": "0.24.1+cu128"
+      }
+    }
+  ],
+  "actual_extra_architecture": "torchvision Video Swin-T",
+  "not_trained": [
+    "TSM"
+  ],
+  "new_external_pretrained": "weights/swin3d_t-7615ae03.source.json",
+  "inference_extra_modalities": false,
+  "CUHK_external_weights_used": false
+}

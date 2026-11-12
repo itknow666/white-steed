@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-20",
+  "name": "initial16-20261020-5ep",
+  "epochs": 5,
+  "batch": 4,
+  "workers": 0,
+  "lr": 5e-05,
+  "seed": 42,
+  "frames": 16,
+  "size": 128,
+  "channels": 4,
+  "person_crop": false,
+  "training_set": 1995,
+  "validation_set": 466,
+  "selection": "highest validation accuracy EMA; earliest epoch on tie",
+  "train_source_sha256": "49ee2ecab20cc27dbcdbbc0e22e888411b1fdc502030054a276466b26522166e",
+  "purpose": "初版模型；完整训练集微调，不是smoke"
+}

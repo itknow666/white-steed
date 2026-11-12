@@ -1,0 +1,8 @@
+{
+  "smoke": false,
+  "parameters": 66138780,
+  "recipe": "v3_frozen_bn_temporal_or_resolution_regularization",
+  "initial_sha256": "dcb6eadbb02ce3f7f2e1da1a950f72fd7b463a4e7e529cc912ed67c329965277",
+  "test_accessed": false,
+  "person_crop": true
+}

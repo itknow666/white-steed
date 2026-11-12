@@ -1,0 +1,8 @@
+{
+  "smoke": false,
+  "parameters": 80785464,
+  "recipe": "c3d_sports1m_ucf101_finetune_depth_ir",
+  "initial_sha256": "31723200e6efc2707cde59c9206303e25db1b96ec99bd685707c095bb4d74e77",
+  "test_accessed": false,
+  "person_crop": true
+}

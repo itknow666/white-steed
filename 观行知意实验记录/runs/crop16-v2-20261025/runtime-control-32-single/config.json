@@ -1,0 +1,15 @@
+{
+  "num_classes": 40,
+  "input_version": 2,
+  "channels": 4,
+  "depth_mode": "color",
+  "frames": 32,
+  "size": 128,
+  "weights_file": "../best_ema.pt",
+  "weights_format": "pytorch",
+  "person_crop": true,
+  "flip_tta": false,
+  "amp": true,
+  "channels_last_3d": true,
+  "detector_file": "yolo11n.pt"
+}

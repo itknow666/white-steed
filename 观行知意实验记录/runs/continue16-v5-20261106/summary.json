@@ -1,0 +1,12 @@
+{
+  "best_epoch": 2,
+  "epochs_completed": 6,
+  "accuracy": 66.95278969957081,
+  "macro_f1": 60.142351696857766,
+  "steps": 1500,
+  "parameters": 66138780,
+  "elapsed_sec": 466.03228282928467,
+  "peak_gpu_mib": 6557.1767578125,
+  "stopped_early": false,
+  "linux_verified": false
+}

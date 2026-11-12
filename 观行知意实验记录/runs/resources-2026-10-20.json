@@ -1,0 +1,89 @@
+{
+  "timestamp": "2026-10-20T12:53:19.284806",
+  "os": {
+    "system": "Windows",
+    "release": "10",
+    "version": "10.0.26200",
+    "machine": "",
+    "python_version": "3.10.21"
+  },
+  "cpu": {
+    "physical_cores": 24,
+    "logical_cores": 24,
+    "max_frequency_mhz": 2700.0,
+    "architecture": "",
+    "processor": "",
+    "current_frequency_mhz": 2700.0
+  },
+  "memory": {
+    "total_gb": 31.38,
+    "available_gb": 13.24,
+    "used_gb": 18.14,
+    "percent_used": 57.8,
+    "swap_total_gb": 2.0,
+    "swap_available_gb": 1.92
+  },
+  "disk": {
+    "path": "<项目目录>",
+    "total_gb": 1907.71,
+    "available_gb": 1104.7,
+    "used_gb": 803.01,
+    "percent_used": 42.1
+  },
+  "gpu": {
+    "nvidia_gpus": [
+      {
+        "index": 0,
+        "name": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+        "memory_total_mb": 12227.0,
+        "memory_free_mb": 10416.0,
+        "driver_version": "610.74",
+        "compute_capability": "12.0",
+        "type": "NVIDIA",
+        "backend": "CUDA"
+      }
+    ],
+    "amd_gpus": [],
+    "apple_silicon": null,
+    "total_gpus": 1,
+    "available_backends": [
+      "CUDA"
+    ]
+  },
+  "recommendations": {
+    "parallel_processing": {
+      "strategy": "high_parallelism",
+      "suggested_workers": 22,
+      "libraries": [
+        "joblib",
+        "multiprocessing",
+        "dask"
+      ]
+    },
+    "memory_strategy": {
+      "strategy": "moderate_memory",
+      "libraries": [
+        "dask",
+        "zarr"
+      ],
+      "note": "Consider chunking for datasets > 2GB"
+    },
+    "gpu_acceleration": {
+      "available": true,
+      "backends": [
+        "CUDA"
+      ],
+      "suggested_libraries": [
+        "pytorch",
+        "tensorflow",
+        "jax",
+        "cupy",
+        "rapids"
+      ]
+    },
+    "large_data_handling": {
+      "strategy": "disk_abundant",
+      "note": "Sufficient space for large intermediate files"
+    }
+  }
+}

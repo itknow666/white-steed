@@ -1,0 +1,29 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "调试数据预览",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/project.py",
+      "args": [
+        "preview"
+      ],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "调试GPU自检",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/project.py",
+      "args": [
+        "check-env"
+      ],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    }
+  ]
+}

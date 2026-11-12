@@ -1,0 +1,15 @@
+{
+  "name": "x3d_m",
+  "passed": true,
+  "batch": 2,
+  "loss": 3.4609375,
+  "gradient_norm": 7.911208152770996,
+  "peak_mib": 688.79833984375,
+  "seconds": 1.3118982315063477,
+  "classifier_parameters": 3056850,
+  "inference_parameters": 5680930,
+  "real_train_samples": true,
+  "strict_pretrain_load": true,
+  "reload_match": true,
+  "torch": "2.9.1+cu128"
+}

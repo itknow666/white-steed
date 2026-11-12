@@ -1,0 +1,362 @@
+{
+  "best": {
+    "name": "x3d_m",
+    "sources": [
+      "<项目目录>\\runs\\x3d_m-v6-20261106",
+      "<项目目录>\\runs\\control16-v4-20261027",
+      "<项目目录>\\runs\\swin192-v3-20261025"
+    ],
+    "weights": [
+      0.25,
+      0.375,
+      0.375
+    ],
+    "parameters": 97079932,
+    "accuracy": 68.02575107296137,
+    "macro_f1": 63.08894460208817
+  },
+  "trials": [
+    {
+      "name": "x3d_m",
+      "sources": [
+        "<项目目录>\\runs\\x3d_m-v6-20261106",
+        "<项目目录>\\runs\\control16-v4-20261027"
+      ],
+      "weights": [
+        0.25,
+        0.75
+      ],
+      "parameters": 69195630,
+      "accuracy": 65.87982832618026,
+      "macro_f1": 60.027513803614816
+    },
+    {
+      "name": "x3d_m",
+      "sources": [
+        "<项目目录>\\runs\\x3d_m-v6-20261106",
+        "<项目目录>\\runs\\control16-v4-20261027"
+      ],
+      "weights": [
+        0.5,
+        0.5
+      ],
+      "parameters": 69195630,
+      "accuracy": 66.95278969957081,
+      "macro_f1": 61.37199973353715
+    },
+    {
+      "name": "x3d_m",
+      "sources": [
+        "<项目目录>\\runs\\x3d_m-v6-20261106",
+        "<项目目录>\\runs\\control16-v4-20261027"
+      ],
+      "weights": [
+        0.75,
+        0.25
+      ],
+      "parameters": 69195630,
+      "accuracy": 61.802575107296136,
+      "macro_f1": 56.37872465030396
+    },
+    {
+      "name": "x3d_m",
+      "sources": [
+        "<项目目录>\\runs\\x3d_m-v6-20261106",
+        "<项目目录>\\runs\\swin192-v3-20261025"
+      ],
+      "weights": [
+        0.25,
+        0.75
+      ],
+      "parameters": 33565232,
+      "accuracy": 59.227467811158796,
+      "macro_f1": 54.11624793246324
+    },
+    {
+      "name": "x3d_m",
+      "sources": [
+        "<项目目录>\\runs\\x3d_m-v6-20261106",
+        "<项目目录>\\runs\\swin192-v3-20261025"
+      ],
+      "weights": [
+        0.5,
+        0.5
+      ],
+      "parameters": 33565232,
+      "accuracy": 58.798283261802574,
+      "macro_f1": 53.63405349799655
+    },
+    {
+      "name": "x3d_m",
+      "sources": [
+        "<项目目录>\\runs\\x3d_m-v6-20261106",
+        "<项目目录>\\runs\\swin192-v3-20261025"
+      ],
+      "weights": [
+        0.75,
+        0.25
+      ],
+      "parameters": 33565232,
+      "accuracy": 58.58369098712446,
+      "macro_f1": 53.111047789982656
+    },
+    {
+      "name": "x3d_m",
+      "sources": [
+        "<项目目录>\\runs\\x3d_m-v6-20261106",
+        "<项目目录>\\runs\\control16-v4-20261027",
+        "<项目目录>\\runs\\swin192-v3-20261025"
+      ],
+      "weights": [
+        0.25,
+        0.375,
+        0.375
+      ],
+      "parameters": 97079932,
+      "accuracy": 68.02575107296137,
+      "macro_f1": 63.08894460208817
+    },
+    {
+      "name": "x3d_m",
+      "sources": [
+        "<项目目录>\\runs\\x3d_m-v6-20261106",
+        "<项目目录>\\runs\\control16-v4-20261027",
+        "<项目目录>\\runs\\swin192-v3-20261025"
+      ],
+      "weights": [
+        0.5,
+        0.25,
+        0.25
+      ],
+      "parameters": 97079932,
+      "accuracy": 65.02145922746782,
+      "macro_f1": 59.34739089668749
+    },
+    {
+      "name": "x3d_m",
+      "sources": [
+        "<项目目录>\\runs\\x3d_m-v6-20261106",
+        "<项目目录>\\runs\\control16-v4-20261027",
+        "<项目目录>\\runs\\swin192-v3-20261025"
+      ],
+      "weights": [
+        0.75,
+        0.125,
+        0.125
+      ],
+      "parameters": 97079932,
+      "accuracy": 60.08583690987125,
+      "macro_f1": 54.35401260646231
+    },
+    {
+      "name": "tsm_r50",
+      "sources": [
+        "<项目目录>\\runs\\tsm_r50-v6-20261106",
+        "<项目目录>\\runs\\control16-v4-20261027"
+      ],
+      "weights": [
+        0.25,
+        0.75
+      ],
+      "parameters": 89731908,
+      "accuracy": 65.87982832618026,
+      "macro_f1": 59.97972499112013
+    },
+    {
+      "name": "tsm_r50",
+      "sources": [
+        "<项目目录>\\runs\\tsm_r50-v6-20261106",
+        "<项目目录>\\runs\\control16-v4-20261027"
+      ],
+      "weights": [
+        0.5,
+        0.5
+      ],
+      "parameters": 89731908,
+      "accuracy": 66.95278969957081,
+      "macro_f1": 61.96333181199132
+    },
+    {
+      "name": "tsm_r50",
+      "sources": [
+        "<项目目录>\\runs\\tsm_r50-v6-20261106",
+        "<项目目录>\\runs\\control16-v4-20261027"
+      ],
+      "weights": [
+        0.75,
+        0.25
+      ],
+      "parameters": 89731908,
+      "accuracy": 60.94420600858369,
+      "macro_f1": 53.839249584525305
+    },
+    {
+      "name": "tsm_r50",
+      "sources": [
+        "<项目目录>\\runs\\tsm_r50-v6-20261106",
+        "<项目目录>\\runs\\swin192-v3-20261025"
+      ],
+      "weights": [
+        0.25,
+        0.75
+      ],
+      "parameters": 54101510,
+      "accuracy": 59.44206008583691,
+      "macro_f1": 52.80030914473992
+    },
+    {
+      "name": "tsm_r50",
+      "sources": [
+        "<项目目录>\\runs\\tsm_r50-v6-20261106",
+        "<项目目录>\\runs\\swin192-v3-20261025"
+      ],
+      "weights": [
+        0.5,
+        0.5
+      ],
+      "parameters": 54101510,
+      "accuracy": 59.012875536480685,
+      "macro_f1": 52.663260094795184
+    },
+    {
+      "name": "tsm_r50",
+      "sources": [
+        "<项目目录>\\runs\\tsm_r50-v6-20261106",
+        "<项目目录>\\runs\\swin192-v3-20261025"
+      ],
+      "weights": [
+        0.75,
+        0.25
+      ],
+      "parameters": 54101510,
+      "accuracy": 55.36480686695279,
+      "macro_f1": 48.81913044527929
+    },
+    {
+      "name": "mvit_v2_s",
+      "sources": [
+        "<项目目录>\\runs\\mvit_v2_s-v6-20261106",
+        "<项目目录>\\runs\\swin192-v3-20261025"
+      ],
+      "weights": [
+        0.25,
+        0.75
+      ],
+      "parameters": 64783398,
+      "accuracy": 60.51502145922747,
+      "macro_f1": 55.18916458024148
+    },
+    {
+      "name": "mvit_v2_s",
+      "sources": [
+        "<项目目录>\\runs\\mvit_v2_s-v6-20261106",
+        "<项目目录>\\runs\\swin192-v3-20261025"
+      ],
+      "weights": [
+        0.5,
+        0.5
+      ],
+      "parameters": 64783398,
+      "accuracy": 61.802575107296136,
+      "macro_f1": 57.77341660457985
+    },
+    {
+      "name": "mvit_v2_s",
+      "sources": [
+        "<项目目录>\\runs\\mvit_v2_s-v6-20261106",
+        "<项目目录>\\runs\\swin192-v3-20261025"
+      ],
+      "weights": [
+        0.75,
+        0.25
+      ],
+      "parameters": 64783398,
+      "accuracy": 62.01716738197425,
+      "macro_f1": 58.57158009950423
+    },
+    {
+      "name": "uniformer_s",
+      "sources": [
+        "<项目目录>\\runs\\uniformer_s-v6-20261106",
+        "<项目目录>\\runs\\control16-v4-20261027"
+      ],
+      "weights": [
+        0.25,
+        0.75
+      ],
+      "parameters": 87357572,
+      "accuracy": 65.87982832618026,
+      "macro_f1": 60.04089091181951
+    },
+    {
+      "name": "uniformer_s",
+      "sources": [
+        "<项目目录>\\runs\\uniformer_s-v6-20261106",
+        "<项目目录>\\runs\\control16-v4-20261027"
+      ],
+      "weights": [
+        0.5,
+        0.5
+      ],
+      "parameters": 87357572,
+      "accuracy": 66.09442060085837,
+      "macro_f1": 60.95062868211292
+    },
+    {
+      "name": "uniformer_s",
+      "sources": [
+        "<项目目录>\\runs\\uniformer_s-v6-20261106",
+        "<项目目录>\\runs\\control16-v4-20261027"
+      ],
+      "weights": [
+        0.75,
+        0.25
+      ],
+      "parameters": 87357572,
+      "accuracy": 61.1587982832618,
+      "macro_f1": 57.52294377284846
+    },
+    {
+      "name": "uniformer_s",
+      "sources": [
+        "<项目目录>\\runs\\uniformer_s-v6-20261106",
+        "<项目目录>\\runs\\swin192-v3-20261025"
+      ],
+      "weights": [
+        0.25,
+        0.75
+      ],
+      "parameters": 51727174,
+      "accuracy": 59.227467811158796,
+      "macro_f1": 54.38067145852261
+    },
+    {
+      "name": "uniformer_s",
+      "sources": [
+        "<项目目录>\\runs\\uniformer_s-v6-20261106",
+        "<项目目录>\\runs\\swin192-v3-20261025"
+      ],
+      "weights": [
+        0.5,
+        0.5
+      ],
+      "parameters": 51727174,
+      "accuracy": 60.30042918454936,
+      "macro_f1": 56.11121580495002
+    },
+    {
+      "name": "uniformer_s",
+      "sources": [
+        "<项目目录>\\runs\\uniformer_s-v6-20261106",
+        "<项目目录>\\runs\\swin192-v3-20261025"
+      ],
+      "weights": [
+        0.75,
+        0.25
+      ],
+      "parameters": 51727174,
+      "accuracy": 59.44206008583691,
+      "macro_f1": 55.31997225137684
+    }
+  ]
+}

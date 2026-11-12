@@ -1,0 +1,21 @@
+{
+  "optimized/combine_models.py": "cedf9f208183bb72b3fa2d1d14fd1e47c70609232d3d78ce556c58a1af17b691",
+  "optimized/compare_views.py": "db090ce8d4f354f44321fb99fa22b3d7a85aa3c8db95d44f8a83a0fa8957ed2d",
+  "optimized/evaluate.py": "f92e8456012ee02748d0d73d035caee6c42f09775d2047722fb255d2099718ec",
+  "optimized/finalize.py": "cca669273e3009ab01e4b9c32798f51d3f43a9dbdcc2ec21b7d145eaf55a369c",
+  "optimized/finalize_generalize.py": "d081671a391e53a07b07ce47ab8b8cea763ca084737e8c385fdf43a84ef38218",
+  "optimized/finish_trials.py": "90b3d62101a1fce17e642f494ec861568d073a7c3fb0e8506e2338f8012258b9",
+  "optimized/gpu_benchmark.py": "73bf03985b9f8ba9be734d1c160eb00d3395acf6d863082062d7c7b346787f94",
+  "optimized/inference.py": "8d3e7cda58865c7b1267f6e353ab080521e135fea14d26f37f78c2f5925a0e9b",
+  "optimized/ir_contrast.py": "04e6433868f78dcfcfbd9111db174adde56668c987a60328207e45baed150404",
+  "optimized/train.py": "416c40ec477d84aa7ff40af0e8af0ee0989854b2581d2d728662dfb54de671d9",
+  "optimized/train_generalize.py": "b45d1e847d3ea9e0fa6a28fef9b5890b56750a8a62d68add926c10f71d673f8a",
+  "optimized/train_ir.py": "8c11eaa4b35399b9b22b5fa7c7db5a1c6ee3aecf096a7e8dc2024a8e2fbef123",
+  "optimized/train_swin.py": "e1aa9297a176c8232a2158e4f3f99e00aaaa5cee9836a9ff3a62061dd3cb0483",
+  "optimized/video_swin.py": "4ce1842a9e6facd5f170bdb7c06c80636e2470a61c6326594be324c61046e5a9",
+  "optimized/README.md": "e996d9773e7338f2c4a148f2916a2521792c6128e161f2540d9b17fcba80a364",
+  "runs/optimization-v3-plan.json": "a5b286cadfda93f184234b6d33d25b03a05627ba6260f0cc2efa2591b0ee87a5",
+  "competition/optimization-v3-sources.json": "f4cb0b799e294f080838ecf0f6ad21cfc65de781ad4ef4cbb24324815558b53f",
+  "runs/delivery-verified-20261025.json": "f7ea398dd04b03cb9c345db61ad892b14c7833aed97a26c5695a185d0340ef50",
+  "environment/requirements-v2-lock.txt": "e4f293c35c876d361c5ebc3a5029e76c726eb295292ed33bd7b30cb0dd33615f"
+}

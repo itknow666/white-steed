@@ -1,0 +1,14 @@
+[
+  {
+    "run": "<项目目录>/runs/continue16-v5-20261106",
+    "flip_tta": false,
+    "accuracy": 66.95278969957081,
+    "macro_f1": 60.142351696857766
+  },
+  {
+    "run": "<项目目录>/runs/continue16-v5-20261106",
+    "flip_tta": true,
+    "accuracy": 65.87982832618026,
+    "macro_f1": 59.33732998680308
+  }
+]

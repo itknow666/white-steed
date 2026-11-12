@@ -1,0 +1,14 @@
+[
+  {
+    "run": "runs/ircontrast16-v3-20261025",
+    "flip_tta": false,
+    "accuracy": 66.30901287553648,
+    "macro_f1": 61.12847774875585
+  },
+  {
+    "run": "runs/ircontrast16-v3-20261025",
+    "flip_tta": true,
+    "accuracy": 66.09442060085837,
+    "macro_f1": 60.85792725845669
+  }
+]

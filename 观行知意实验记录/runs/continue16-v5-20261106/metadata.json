@@ -1,0 +1,8 @@
+{
+  "smoke": false,
+  "parameters": 66138780,
+  "recipe": "v4_controlled_crop_and_staged_finetune",
+  "initial_sha256": "4ba89a9b1616530cbe53b504958945f2602488d9f738012cef471ca7fc70df2d",
+  "test_accessed": false,
+  "person_crop": true
+}

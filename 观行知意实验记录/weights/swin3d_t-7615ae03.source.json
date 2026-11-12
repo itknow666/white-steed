@@ -1,0 +1,9 @@
+{
+  "model": "torchvision swin3d_t KINETICS400_V1",
+  "source": "https://download.pytorch.org/models/swin3d_t-7615ae03.pth",
+  "sha256": "7615ae035996b65eb38dad437ae533d2dfcd36f9f89d28c0f0fa7bfb8e6b3130",
+  "license": "BSD-3-Clause (TorchVision implementation)",
+  "pretraining_data": "ImageNet-1K and Kinetics-400; official Video Swin-T weights, no CUHK fine-tuning",
+  "use": "public generic initialization only; adapt 4-channel patch embedding and replace 400-class head with 40 classes",
+  "torchvision": "0.24.1+cu128"
+}

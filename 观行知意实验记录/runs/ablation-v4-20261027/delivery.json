@@ -1,0 +1,44 @@
+{
+  "old": {
+    "accuracy": 67.38197424892704,
+    "macro_f1": 61.5485557812842
+  },
+  "single": {
+    "accuracy": 66.30901287553648,
+    "macro_f1": 61.21368318978422
+  },
+  "fusion": {
+    "accuracy": 68.24034334763948,
+    "macro_f1": 63.037892305203215
+  },
+  "new_best_improved": true,
+  "new_candidate": "<项目目录>\\submission\\ablation-v4-fusion-20261027",
+  "all466_live_cached_predictions_identical": true,
+  "csv_ids_classes_valid": true,
+  "offline_zip_reload_passed": true,
+  "parameters": 94023082,
+  "crop_policies": [
+    {
+      "architecture": "r34",
+      "frames": 16,
+      "size": 128,
+      "crop_scale": 1.4,
+      "flip_tta": false,
+      "weight": 0.5
+    },
+    {
+      "architecture": "swin3dt",
+      "frames": 16,
+      "size": 192,
+      "crop_scale": 1.4,
+      "flip_tta": false,
+      "weight": 0.5
+    }
+  ],
+  "linux_verified": false,
+  "test_accessed": false,
+  "desktop_archive": "D:\\桌面文件\\观行知意_第四轮模型与源码_20261027.zip",
+  "bytes": 370462404,
+  "all_file_hashes_verified": true,
+  "model_sha256": "cac267050000180cc2af936c7ae7c17c0c319569bdcfae013a5be72b1cf69b10"
+}

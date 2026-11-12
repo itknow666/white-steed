@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-25",
+  "baseline": {
+    "run": "initial16-20261020-5ep",
+    "accuracy": 54.72103004291846,
+    "macro_f1": 43.44292042521556,
+    "flip_tta_accuracy": 56.86695278969957
+  },
+  "experiments": [
+    {
+      "name": "stable16-v2-20261025",
+      "cache": "cache/full16",
+      "person_crop": false
+    },
+    {
+      "name": "crop16-v2-20261025",
+      "cache": "cache/crop16-v2",
+      "person_crop": true
+    }
+  ],
+  "common": {
+    "epochs_max": 12,
+    "patience": 4,
+    "minimum_epochs": 6,
+    "batch": 8,
+    "lr_backbone": 2e-05,
+    "lr_head": 0.0002,
+    "bn_momentum": 0.01,
+    "dropout": 0.5,
+    "class_weight_power": 0.25,
+    "label_smoothing": 0.05,
+    "amp": "bfloat16",
+    "weight_decay": 0.01,
+    "ema_decay": 0.99,
+    "seed": 42,
+    "initial_weights": "runs/initial16-20261020-5ep/best_ema.pt",
+    "channels_last_3d": true
+  },
+  "selection": "validation accuracy; macro F1 tie-break; compare final single/flip runtimes; no test data; maintain original baseline",
+  "limitations": "Combined recipe comparison does not isolate each regularizer; fixed466 validation used for development only. Only one classifier plus optional detector deployed, <=100M.",
+  "profiling": {
+    "batch8_NCDHW_step_sec": 0.47028,
+    "batch8_channels_last_3d_step_sec": 0.21738,
+    "batch12_step_sec": 0.6948,
+    "batch16_step_sec": 0.92236,
+    "choice": "batch8 + channels_last_3d; speed and memory margin"
+  },
+  "additional_experiment": {
+    "name": "crop32-v2-20261025",
+    "cache": "cache/crop32-v2",
+    "frames": 32,
+    "size": 128,
+    "batch": 4,
+    "lr_backbone": 1e-05,
+    "lr_head": 0.0001,
+    "epochs_max": 8,
+    "patience": 3,
+    "initial": "runs/crop16-v2-20261025/best_ema.pt",
+    "reason": "Crop16 surpassed both raw16 and initial model; test more temporal context with reused fixed person boxes",
+    "crop_cache_uses_cpu_only": true
+  }
+}

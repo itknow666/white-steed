@@ -1,0 +1,15 @@
+{
+  "best_epoch": 11,
+  "epochs_completed": 12,
+  "accuracy": 58.798283261802574,
+  "macro_f1": 53.67345162344685,
+  "steps": 5988,
+  "parameters": 30508382,
+  "elapsed_sec": 1248.2227189540863,
+  "peak_gpu_mib": 4851.302734375,
+  "stopped_early": false,
+  "linux_verified": false,
+  "elapsed_sec_resumed_session": 690.6520276069641,
+  "resumed_from_epoch": 5,
+  "elapsed_scope": "Recorded active time across sessions, includes discarded partial epoch, excludes stopped wall-clock time"
+}

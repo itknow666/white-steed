@@ -1,0 +1,25 @@
+{
+  "python": "3.10.21 (main, Aug 14 2026, 15:34:01) [MSC v.1944 64 bit (AMD64)]",
+  "executable": "<项目目录>\\.venv\\Scripts\\python.exe",
+  "torch": "2.9.1+cu128",
+  "torchvision": "0.24.1+cu128",
+  "numpy": "2.2.6",
+  "Pillow": "12.2.0",
+  "cuda_runtime": "12.8",
+  "cuda_available": true,
+  "gpu": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+  "capability": [
+    12,
+    0
+  ],
+  "architectures": [
+    "sm_70",
+    "sm_75",
+    "sm_80",
+    "sm_86",
+    "sm_90",
+    "sm_100",
+    "sm_120"
+  ],
+  "cuda_forward_backward_passed": true
+}

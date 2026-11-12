@@ -1,0 +1,13 @@
+{
+  "epoch": 5,
+  "epochs": 5,
+  "batch": 499,
+  "batches": 499,
+  "seen": 1995,
+  "samples": 1995,
+  "train_loss": 0.9446767391118788,
+  "elapsed_sec": 716.0085165500641,
+  "successful_updates": 2495,
+  "skipped_updates": 0,
+  "grad_scale": 256.0
+}

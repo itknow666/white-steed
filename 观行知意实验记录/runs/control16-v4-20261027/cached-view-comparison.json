@@ -1,0 +1,14 @@
+[
+  {
+    "run": "<项目目录>/runs/control16-v4-20261027",
+    "flip_tta": false,
+    "accuracy": 66.30901287553648,
+    "macro_f1": 61.213683189784206
+  },
+  {
+    "run": "<项目目录>/runs/control16-v4-20261027",
+    "flip_tta": true,
+    "accuracy": 66.09442060085837,
+    "macro_f1": 60.51515339998373
+  }
+]

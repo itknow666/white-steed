@@ -1,0 +1,96 @@
+{
+  "training": {
+    "best_epoch": 10,
+    "epochs_completed": 12,
+    "accuracy": 47.42489270386266,
+    "macro_f1": 39.36294630050366,
+    "steps": 5988,
+    "parameters": 80785464,
+    "elapsed_sec": 498.4477729797363,
+    "peak_gpu_mib": 2083.9658203125,
+    "stopped_early": false,
+    "linux_verified": false
+  },
+  "single": {
+    "run": "<项目目录>\\runs\\c3d-20261110",
+    "metrics": {
+      "accuracy": 47.42489270386266,
+      "macro_f1": 39.362946300503665
+    },
+    "parameters": 80785464,
+    "architecture": "c3d",
+    "components": [],
+    "flip_tta": false,
+    "person_crop": true,
+    "frames": 16,
+    "latency_ms": 139.3458980645054,
+    "weights_sha256": "2bc30ed351368dd79707e9e96b53b1b4ebac45f7adaacc3a21120186351a4ea1",
+    "code_sha256": "9dbc26fe49d9479c948cb2a89f152ed6a2db4244930723694bf4cc4dffd67cdc",
+    "report_file": "runs/c3d-20261110/validation-single-report.html",
+    "files": 40,
+    "code_bytes": 5115326,
+    "unpacked_bytes": 5846872,
+    "formal_submission_ready": false,
+    "linux_verified": false
+  },
+  "fusion": {
+    "run": "<项目目录>\\runs\\c3d-x3d-20261110",
+    "metrics": {
+      "accuracy": 56.223175965665234,
+      "macro_f1": 50.253979477559234
+    },
+    "parameters": 83842314,
+    "architecture": "ensemble",
+    "components": [
+      {
+        "architecture": "c3d",
+        "frames": 16,
+        "size": 128,
+        "crop_scale": 1.4,
+        "flip_tta": false,
+        "weight": 0.25
+      },
+      {
+        "architecture": "x3d_m",
+        "frames": 16,
+        "size": 192,
+        "crop_scale": 1.4,
+        "flip_tta": false,
+        "weight": 0.75
+      }
+    ],
+    "flip_tta": false,
+    "person_crop": true,
+    "frames": 16,
+    "latency_ms": 302.65929935487037,
+    "weights_sha256": "021b8ebc0f1c5d8886adb69485970156481f6b27aaf4a3afdbddaefa8cdc2c04",
+    "code_sha256": "9dcf5af4dc4adfd982077cb603ac8e2d23503dd1af8a2413d600e5bd7bd870c0",
+    "report_file": "runs/c3d-x3d-20261110/validation-single-report.html",
+    "files": 49,
+    "code_bytes": 5142541,
+    "unpacked_bytes": 5916110,
+    "formal_submission_ready": false,
+    "linux_verified": false
+  },
+  "previous": {
+    "run": "runs/fusion-control16-v4-20261027",
+    "package": "submission/ablation-v4-fusion-20261027",
+    "weights": "submission/ablation-v4-fusion-20261027/model.pt",
+    "inference_config": "submission/ablation-v4-fusion-20261027/code/config.json",
+    "predictions": "submission/ablation-v4-fusion-20261027/validation.csv",
+    "accuracy": 68.24034334763948,
+    "macro_f1": 63.037892305203215,
+    "weights_sha256": "cac267050000180cc2af936c7ae7c17c0c319569bdcfae013a5be72b1cf69b10",
+    "smoke": false
+  },
+  "paired": {
+    "old_correct": 318,
+    "new_correct": 262,
+    "fixed": 17,
+    "lost": 73
+  },
+  "promoted": false,
+  "raw_image_validation_samples": 466,
+  "offline_python_connection_blocked": true,
+  "linux_verified": false
+}

@@ -1,0 +1,20 @@
+{
+  "epochs_each": 6,
+  "seed": 42,
+  "initial": "runs/crop16-v2-20261025/best_ema.pt",
+  "initial_sha256": "dcb6eadbb02ce3f7f2e1da1a950f72fd7b463a4e7e529cc912ed67c329965277",
+  "groups": [
+    "control crop1.4 full lr1e-5",
+    "wide crop1.8 full lr1e-5",
+    "selected crop staged2+4 lr1e-5 then factor0.5",
+    "selected crop/strategy lr5e-6",
+    "selected crop/strategy lr2e-5"
+  ],
+  "selection": "accuracy then fixed40 macroF1; ties keep simpler control",
+  "common": "16frames128, batch8, dropout0.5, smoothing0.05, classpower0.25, BNmomentum0.01, EMA0.99; no mixup/erase",
+  "unfreeze": "freeze stem/layer1/layer2 parameters and BN statistics for first2 epochs; all trainable last4; global cosine times0.5 after unfreeze",
+  "validation_role": "evaluation and selection only, no gradient/BN/weights training",
+  "test_accessed": false,
+  "previous_best_preserved": true,
+  "linux_verified": false
+}

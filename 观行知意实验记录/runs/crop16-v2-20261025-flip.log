@@ -1,0 +1,11 @@
+{"run": "crop16-v2-20261025", "mode": "flip", "predicted": 50, "total": 466}
+{"run": "crop16-v2-20261025", "mode": "flip", "predicted": 100, "total": 466}
+{"run": "crop16-v2-20261025", "mode": "flip", "predicted": 150, "total": 466}
+{"run": "crop16-v2-20261025", "mode": "flip", "predicted": 200, "total": 466}
+{"run": "crop16-v2-20261025", "mode": "flip", "predicted": 250, "total": 466}
+{"run": "crop16-v2-20261025", "mode": "flip", "predicted": 300, "total": 466}
+{"run": "crop16-v2-20261025", "mode": "flip", "predicted": 350, "total": 466}
+{"run": "crop16-v2-20261025", "mode": "flip", "predicted": 400, "total": 466}
+{"run": "crop16-v2-20261025", "mode": "flip", "predicted": 450, "total": 466}
+{"passed": true, "python_network_connections_blocked": true, "score_count": 40, "finite": true, "parameters": 66138780, "device": "cuda", "predicted_class": 0, "linux_verified": false, "scope": "Windows Python连接拦截回归检查；非系统级网络隔离"}
+{"package": "<项目目录>\\submission\\crop16-flip-v2-20261025", "metrics": {"accuracy": 66.09442060085837, "macro_f1": 58.27049435006866}, "latency_ms": 185.74974129030605, "parameters": 66138780}

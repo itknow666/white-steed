@@ -1,0 +1,12 @@
+{
+  "registered_before_new_fusion_scores": true,
+  "r34_candidates": "five v4 runs, each selects its best recorded single/flip view",
+  "swin_candidate": "unchanged swin192-v3-20261025, recorded best single view",
+  "swin_weights": [0.25, 0.5, 0.75],
+  "total_probability_fusions": 15,
+  "selection": "validation accuracy then fixed40 macro_f1; preserve earlier candidate on tie",
+  "final_verification": "best standalone and best fusion independently infer all466 real clips and reload actual codeZIP offline",
+  "extra_parameter_updates": 0,
+  "test_accessed": false,
+  "note": "Added during staged training, before calculating any new fusion scores; disclose all15 to account for additional validation selection."
+}

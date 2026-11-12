@@ -1,0 +1,8 @@
+{
+  "smoke": false,
+  "parameters": 66138780,
+  "recipe": "stable_bn+discriminative_lr+mild_class_weights+label_smoothing+EMA",
+  "initial_sha256": "790eb423cb22b46b0dcfcc1c28171e2018c114a56cb337875ed3f24ff5008538",
+  "test_accessed": false,
+  "person_crop": true
+}

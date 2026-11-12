@@ -1,0 +1,15 @@
+{
+  "name": "tsm_r50",
+  "passed": true,
+  "batch": 2,
+  "loss": 3.6796875,
+  "gradient_norm": 14.319632530212402,
+  "peak_mib": 1066.44775390625,
+  "seconds": 1.4402961730957031,
+  "classifier_parameters": 23593128,
+  "inference_parameters": 26217208,
+  "real_train_samples": true,
+  "strict_pretrain_load": true,
+  "reload_match": true,
+  "torch": "2.9.1+cu128"
+}

@@ -1,0 +1,38 @@
+{
+  "groups": [
+    [
+      "x3d_m",
+      8,
+      0.0002
+    ],
+    [
+      "tsm_r50",
+      8,
+      0.0001
+    ],
+    [
+      "mvit_v2_s",
+      4,
+      5e-05
+    ],
+    [
+      "uniformer_s",
+      4,
+      0.0001
+    ]
+  ],
+  "epochs_each": 6,
+  "seed": 42,
+  "cache": "cache/crop16-192-v3",
+  "frames": 16,
+  "architecture_specific": "TSM subsamples 8 frames; MViT resizes cached192 to224 inside model; other models16x192",
+  "head_lr_multiplier": 10,
+  "validation": "466 public clips, evaluation/model selection only",
+  "training": "1995 provided train clips only",
+  "extra_modalities": false,
+  "test_accessed": false,
+  "fusion_plan": "single view only; each new candidate with old R34 or Swin, new weight .25/.5/.75; also X3D with old ensemble if total<=100M",
+  "selection": "accuracy then fixed40 macroF1; raw-image and offline checks before promotion",
+  "scope": "six epoch initial screening, not final architecture ranking; different initial pretraining from old baseline",
+  "linux_verified": false
+}

@@ -1,0 +1,34 @@
+{
+  "sample_id": "93bb8a03e08e164fb483da993e6a9b2d.npy",
+  "training_eval_batch_prediction": 37,
+  "single_prediction": 1,
+  "label": 19,
+  "input_exact_match": true,
+  "single_cached_raw_scores_exact_match": true,
+  "max_probability_difference": 0.00023880600929260254,
+  "components": [
+    {
+      "architecture": "x3d_m",
+      "input_exact_match": true,
+      "single_cached_raw_scores_exact_match": true,
+      "max_probability_difference": 0.0011126995086669922
+    },
+    {
+      "architecture": "r34",
+      "input_exact_match": true,
+      "single_cached_raw_scores_exact_match": true,
+      "max_probability_difference": 0.0004993975162506104
+    },
+    {
+      "architecture": "swin3dt",
+      "input_exact_match": true,
+      "single_cached_raw_scores_exact_match": true,
+      "max_probability_difference": 0.00019118189811706543
+    }
+  ],
+  "cached_top2": [
+    0.1661374568939209,
+    0.16604620218276978
+  ],
+  "finding": "FP16 batch/layout rounding near decision boundary; both predictions incorrect"
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "run": "runs/swin192-v3-20261025",
+    "flip_tta": false,
+    "accuracy": 58.798283261802574,
+    "macro_f1": 53.67345162344685
+  },
+  {
+    "run": "runs/swin192-v3-20261025",
+    "flip_tta": true,
+    "accuracy": 58.58369098712446,
+    "macro_f1": 52.48778370181911
+  }
+]

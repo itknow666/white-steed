@@ -1,0 +1,8 @@
+{
+  "smoke": false,
+  "parameters": 26217208,
+  "recipe": "v6_four_public_k400_backbones_screening",
+  "initial_sha256": "ac95538ce8e2e39af9743f7c13c04347af210874b148acb976f303e7e90c1fe2",
+  "test_accessed": false,
+  "person_crop": true
+}

@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "package": "submission/optimized-generalize-20261025",
+  "accuracy": 67.38197424892704,
+  "macro_f1": 61.5485557812842,
+  "validation_rows": 466,
+  "fixed_40_class_order_verified": true,
+  "weights_sha256": "f752745af1d63a0c546d8f70d430234dd0de6bbc6a6fc5c83b2b3161d45d793d",
+  "detector_sha256": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1",
+  "code_sha256": "4489adbbc3c747f0f464c0893ab74b668d4efd22e5e237c3ed5cd69eb20cb0e3",
+  "code_files": 29,
+  "code_bytes": 5091459,
+  "unpacked_code_bytes": 5774740,
+  "parameters": 94023082,
+  "training_and_inference_source_matches_planned_snapshot": true,
+  "linux_verified": false
+}

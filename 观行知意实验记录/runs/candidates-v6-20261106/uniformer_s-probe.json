@@ -1,0 +1,15 @@
+{
+  "name": "uniformer_s",
+  "passed": true,
+  "batch": 2,
+  "loss": 3.65625,
+  "gradient_norm": 9.335931777954102,
+  "peak_mib": 1796.7509765625,
+  "seconds": 1.2595491409301758,
+  "classifier_parameters": 21218792,
+  "inference_parameters": 23842872,
+  "real_train_samples": true,
+  "strict_pretrain_load": true,
+  "reload_match": true,
+  "torch": "2.9.1+cu128"
+}

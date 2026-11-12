@@ -1,0 +1,11 @@
+{"run": "crop16-v2-20261025", "mode": "single-frames32-control", "predicted": 50, "total": 466}
+{"run": "crop16-v2-20261025", "mode": "single-frames32-control", "predicted": 100, "total": 466}
+{"run": "crop16-v2-20261025", "mode": "single-frames32-control", "predicted": 150, "total": 466}
+{"run": "crop16-v2-20261025", "mode": "single-frames32-control", "predicted": 200, "total": 466}
+{"run": "crop16-v2-20261025", "mode": "single-frames32-control", "predicted": 250, "total": 466}
+{"run": "crop16-v2-20261025", "mode": "single-frames32-control", "predicted": 300, "total": 466}
+{"run": "crop16-v2-20261025", "mode": "single-frames32-control", "predicted": 350, "total": 466}
+{"run": "crop16-v2-20261025", "mode": "single-frames32-control", "predicted": 400, "total": 466}
+{"run": "crop16-v2-20261025", "mode": "single-frames32-control", "predicted": 450, "total": 466}
+{"passed": true, "python_network_connections_blocked": true, "score_count": 40, "finite": true, "parameters": 66138780, "device": "cuda", "predicted_class": 0, "linux_verified": false, "scope": "Windows Python连接拦截回归检查；非系统级网络隔离"}
+{"package": "<项目目录>\\submission\\crop32-transfer-single-v2-20261025", "metrics": {"accuracy": 64.8068669527897, "macro_f1": 56.457821796041664}, "latency_ms": 229.986200430123, "parameters": 66138780}

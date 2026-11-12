@@ -1,0 +1,1 @@
+{"best": {"swin_weight": 0.5, "accuracy": 65.87982832618026, "macro_f1": 59.47804972454384}, "parameters": 94023082, "output": "<项目目录>\\runs\\fusion-lr2e5-v4-20261027"}

@@ -1,0 +1,58 @@
+[
+  {
+    "name": "x3d_m",
+    "run": "<项目目录>\\runs\\x3d_m-v6-20261106",
+    "best_epoch": 6,
+    "epochs_completed": 6,
+    "accuracy": 57.2961373390558,
+    "macro_f1": 51.53945151896543,
+    "steps": 1500,
+    "parameters": 5680930,
+    "elapsed_sec": 490.7528557777405,
+    "peak_gpu_mib": 2652.9521484375,
+    "stopped_early": false,
+    "linux_verified": false
+  },
+  {
+    "name": "tsm_r50",
+    "run": "<项目目录>\\runs\\tsm_r50-v6-20261106",
+    "best_epoch": 6,
+    "epochs_completed": 6,
+    "accuracy": 53.862660944206006,
+    "macro_f1": 45.6429619897967,
+    "steps": 1500,
+    "parameters": 26217208,
+    "elapsed_sec": 300.24744057655334,
+    "peak_gpu_mib": 3062.3642578125,
+    "stopped_early": false,
+    "linux_verified": false
+  },
+  {
+    "name": "mvit_v2_s",
+    "run": "<项目目录>\\runs\\mvit_v2_s-v6-20261106",
+    "best_epoch": 6,
+    "epochs_completed": 6,
+    "accuracy": 60.94420600858369,
+    "macro_f1": 57.004589060971256,
+    "steps": 2994,
+    "parameters": 36899096,
+    "elapsed_sec": 1029.492079257965,
+    "peak_gpu_mib": 5299.7080078125,
+    "stopped_early": false,
+    "linux_verified": false
+  },
+  {
+    "name": "uniformer_s",
+    "run": "<项目目录>\\runs\\uniformer_s-v6-20261106",
+    "best_epoch": 6,
+    "epochs_completed": 6,
+    "accuracy": 57.2961373390558,
+    "macro_f1": 53.27523099985776,
+    "steps": 2994,
+    "parameters": 23842872,
+    "elapsed_sec": 670.1586306095123,
+    "peak_gpu_mib": 3346.333984375,
+    "stopped_early": false,
+    "linux_verified": false
+  }
+]

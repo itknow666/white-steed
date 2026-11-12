@@ -1,0 +1,34 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "sample_id": "dea1181a1a54590fe6636ed8505aad58.npy",
+      "raw_ir_mean": 66.02211380004883,
+      "enhanced_ir_mean": 75.22711181640625,
+      "depth_unchanged": true,
+      "cache_recompute_exact": true
+    },
+    {
+      "sample_id": "507219818e0cb6443e7873780851946a.npy",
+      "raw_ir_mean": 23.577449798583984,
+      "enhanced_ir_mean": 81.99652099609375,
+      "depth_unchanged": true,
+      "cache_recompute_exact": true
+    },
+    {
+      "sample_id": "409dbcba8c345dbcd67f9bb99399360a.npy",
+      "raw_ir_mean": 85.45004653930664,
+      "enhanced_ir_mean": 85.45004653930664,
+      "depth_unchanged": true,
+      "cache_recompute_exact": true
+    },
+    {
+      "sample_id": "431859798af24135ec57c0bfbbb3b249.npy",
+      "raw_ir_mean": 24.118080139160156,
+      "enhanced_ir_mean": 81.00033569335938,
+      "depth_unchanged": true,
+      "cache_recompute_exact": true
+    }
+  ],
+  "black_clip_finite": true
+}

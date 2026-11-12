@@ -1,0 +1,22 @@
+{
+  "x3d_m": {
+    "code": "pytorchvideo 0.1.5",
+    "license": "Apache-2.0",
+    "adaptation": "4channel stem; 40-class head; 16x192 pool; no softmax inside network"
+  },
+  "tsm_r50": {
+    "code": "torchvision ResNet50 and MIT Han Lab temporal_shift.py",
+    "license": "BSD-3-Clause backbone / MIT temporal shift",
+    "adaptation": "official blockres shifts; 8frames; 4channel stem; new40class head; strict key conversion"
+  },
+  "mvit_v2_s": {
+    "code": "torchvision 0.24.1",
+    "license": "BSD-3-Clause",
+    "adaptation": "4channel stem; 40class head; 16frames; internal192->224 resize"
+  },
+  "uniformer_s": {
+    "code": "Sense-X/uniformer_video official HuggingFace uniformer.py",
+    "license": "HF repository declares MIT; GitHub upstream LICENSE Apache-2.0 saved; both attribution recorded",
+    "adaptation": "unmodified vendor module; wrapper changes first projection to4channels and head to40classes"
+  }
+}

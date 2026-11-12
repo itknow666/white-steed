@@ -1,0 +1,14 @@
+[
+  {
+    "run": "runs/temporal16-v3-20261025",
+    "flip_tta": false,
+    "accuracy": 63.73390557939914,
+    "macro_f1": 56.48070608483804
+  },
+  {
+    "run": "runs/temporal16-v3-20261025",
+    "flip_tta": true,
+    "accuracy": 62.8755364806867,
+    "macro_f1": 55.66627544131586
+  }
+]

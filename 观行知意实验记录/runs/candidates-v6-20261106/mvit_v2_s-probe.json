@@ -1,0 +1,15 @@
+{
+  "name": "mvit_v2_s",
+  "passed": true,
+  "batch": 2,
+  "loss": 3.484375,
+  "gradient_norm": 11.84249210357666,
+  "peak_mib": 2849.41259765625,
+  "seconds": 1.5908732414245605,
+  "classifier_parameters": 34275016,
+  "inference_parameters": 36899096,
+  "real_train_samples": true,
+  "strict_pretrain_load": true,
+  "reload_match": true,
+  "torch": "2.9.1+cu128"
+}

@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "batch": 4,
+  "loss": 3.564453125,
+  "grad_norm": 321.6606140136719,
+  "peak_mib": 1697.07763671875,
+  "inference_parameters_including_detector": 80785464,
+  "training_dataset": "4 samples, smoke only",
+  "reload_passed": true
+}

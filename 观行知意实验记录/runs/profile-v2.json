@@ -1,0 +1,15 @@
+{
+  "batch": 8,
+  "amp": "bfloat16",
+  "finite_gradients": true,
+  "peak_gpu_mib_without_ema": 4948.96923828125,
+  "step_seconds_mean_after_warmup": 0.4702818999999181,
+  "losses": [
+    4.1171875,
+    2.583984375,
+    1.61181640625,
+    0.89129638671875
+  ],
+  "synthetic_inputs_for_performance_only": true,
+  "published_weights": false
+}

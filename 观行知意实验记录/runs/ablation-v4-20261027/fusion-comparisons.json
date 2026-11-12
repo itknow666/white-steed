@@ -1,0 +1,142 @@
+[
+  {
+    "group": "control16",
+    "run": "<项目目录>\\runs\\fusion-control16-v4-20261027",
+    "source_run": "<项目目录>\\runs\\control16-v4-20261027",
+    "best": {
+      "swin_weight": 0.5,
+      "accuracy": 68.24034334763948,
+      "macro_f1": 63.037892305203215
+    },
+    "comparisons": [
+      {
+        "swin_weight": 0.25,
+        "accuracy": 65.66523605150215,
+        "macro_f1": 59.623762761628484
+      },
+      {
+        "swin_weight": 0.5,
+        "accuracy": 68.24034334763948,
+        "macro_f1": 63.037892305203215
+      },
+      {
+        "swin_weight": 0.75,
+        "accuracy": 61.37339055793991,
+        "macro_f1": 55.802140729414894
+      }
+    ],
+    "parameters": 94023082
+  },
+  {
+    "group": "wide16",
+    "run": "<项目目录>\\runs\\fusion-wide16-v4-20261027",
+    "source_run": "<项目目录>\\runs\\wide16-v4-20261027",
+    "best": {
+      "swin_weight": 0.25,
+      "accuracy": 66.52360515021459,
+      "macro_f1": 60.585007329902275
+    },
+    "comparisons": [
+      {
+        "swin_weight": 0.25,
+        "accuracy": 66.52360515021459,
+        "macro_f1": 60.585007329902275
+      },
+      {
+        "swin_weight": 0.5,
+        "accuracy": 65.45064377682404,
+        "macro_f1": 59.62150090936896
+      },
+      {
+        "swin_weight": 0.75,
+        "accuracy": 60.51502145922747,
+        "macro_f1": 54.66730043399238
+      }
+    ],
+    "parameters": 94023082
+  },
+  {
+    "group": "staged16",
+    "run": "<项目目录>\\runs\\fusion-staged16-v4-20261027",
+    "source_run": "<项目目录>\\runs\\staged16-v4-20261027",
+    "best": {
+      "swin_weight": 0.5,
+      "accuracy": 67.16738197424893,
+      "macro_f1": 60.531178295961574
+    },
+    "comparisons": [
+      {
+        "swin_weight": 0.25,
+        "accuracy": 66.09442060085837,
+        "macro_f1": 58.92128389002337
+      },
+      {
+        "swin_weight": 0.5,
+        "accuracy": 67.16738197424893,
+        "macro_f1": 60.531178295961574
+      },
+      {
+        "swin_weight": 0.75,
+        "accuracy": 61.37339055793991,
+        "macro_f1": 55.587499316345124
+      }
+    ],
+    "parameters": 94023082
+  },
+  {
+    "group": "lr5e6",
+    "run": "<项目目录>\\runs\\fusion-lr5e6-v4-20261027",
+    "source_run": "<项目目录>\\runs\\lr5e6-v4-20261027",
+    "best": {
+      "swin_weight": 0.5,
+      "accuracy": 67.59656652360515,
+      "macro_f1": 61.20214220209397
+    },
+    "comparisons": [
+      {
+        "swin_weight": 0.25,
+        "accuracy": 66.30901287553648,
+        "macro_f1": 59.25941161631363
+      },
+      {
+        "swin_weight": 0.5,
+        "accuracy": 67.59656652360515,
+        "macro_f1": 61.20214220209397
+      },
+      {
+        "swin_weight": 0.75,
+        "accuracy": 61.587982832618025,
+        "macro_f1": 55.98849324119129
+      }
+    ],
+    "parameters": 94023082
+  },
+  {
+    "group": "lr2e5",
+    "run": "<项目目录>\\runs\\fusion-lr2e5-v4-20261027",
+    "source_run": "<项目目录>\\runs\\lr2e5-v4-20261027",
+    "best": {
+      "swin_weight": 0.5,
+      "accuracy": 65.87982832618026,
+      "macro_f1": 59.47804972454384
+    },
+    "comparisons": [
+      {
+        "swin_weight": 0.25,
+        "accuracy": 64.37768240343348,
+        "macro_f1": 57.395884308128764
+      },
+      {
+        "swin_weight": 0.5,
+        "accuracy": 65.87982832618026,
+        "macro_f1": 59.47804972454384
+      },
+      {
+        "swin_weight": 0.75,
+        "accuracy": 62.01716738197425,
+        "macro_f1": 56.09658676564842
+      }
+    ],
+    "parameters": 94023082
+  }
+]

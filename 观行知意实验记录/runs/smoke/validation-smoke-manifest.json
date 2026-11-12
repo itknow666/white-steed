@@ -1,0 +1,68 @@
+{
+  "version": 2,
+  "classes": [
+    "0_Wash_face",
+    "1_Brush_teeth",
+    "2_Comb_hair",
+    "3_Take_off_clothes",
+    "4_Wipe_hands",
+    "5_Put_on_clothes",
+    "6_Drink_water",
+    "7_Eat_food",
+    "8_Take_and_use_tableware",
+    "9_Pour_drinks",
+    "10_Stir_drinks",
+    "11_Peel_fruits",
+    "12_Sweep_the_floor",
+    "13_Mop_the_floor",
+    "14_Wipe_bowls",
+    "15_Wipe_windows_and_tables",
+    "16_Fold_clothes",
+    "17_Tap_the_keyboard",
+    "18_Write",
+    "19_Make_a_phone_call",
+    "20_Check_the_time",
+    "21_Read_documents",
+    "22_Turn_pages",
+    "23_Listen_to_music_with_headphones",
+    "24_Use_a_mobile_phone",
+    "25_Watch_TV",
+    "26_Play_games",
+    "27_Take_a_selfie",
+    "28_Jog_in_place",
+    "29_Do_squats",
+    "30_Do_jumping_jacks",
+    "31_Do_stretching_exercises",
+    "32_Stand_up",
+    "33_Lie_down",
+    "34_Sit_down",
+    "35_Do_lunges",
+    "36_Walk",
+    "37_Take_medicine",
+    "38_Massage_oneself",
+    "39_Take_body_temperature"
+  ],
+  "modality": "depth_ir",
+  "samples": [
+    {
+      "file": "dea1181a1a54590fe6636ed8505aad58",
+      "label": 0,
+      "sha256": "ced5b6decb49eaf173f98e322aadfd616123e14dfab922ed734c517bf771f59a"
+    },
+    {
+      "file": "9715d55cc07a7155d2cd9c476bd15d1f",
+      "label": 12,
+      "sha256": "8c3243f1083b2cf0448ba4b4794510228b28808f77f02bad1d98ea8d64f882f0"
+    },
+    {
+      "file": "1623abc0ff636830e4aa787c51e990d5",
+      "label": 28,
+      "sha256": "935dc34c2e6d7f676a37e458d65dbb1a6e2838cc3f72339838ef9d10cbb814a0"
+    },
+    {
+      "file": "06f9d628485fa3ef54c78038b58f1bb9",
+      "label": 6,
+      "sha256": "a54db540dd56568b84cc87dee3edba882e0cbe047e88c9a9aafb4e3e02161512"
+    }
+  ]
+}

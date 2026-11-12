@@ -1,0 +1,29 @@
+{
+  "smoke": true,
+  "formal_submission_ready": false,
+  "steps": 3,
+  "seed": 42,
+  "batch": 1,
+  "workers": 0,
+  "losses": [
+    4.16015625,
+    4.43359375,
+    4.24609375
+  ],
+  "gradient_norms": [
+    23.623050689697266,
+    24.093238830566406,
+    24.300716400146484
+  ],
+  "head_parameters_changed": true,
+  "parameters": 63514700,
+  "pretrained_sha256": "ade133f18548b59da3a36d6a70d44a4a7cc4b90460654c338cb8a023e9a3e0e1",
+  "checkpoint_sha256": "34e11148d513871ff810abfd0ecec2831dde6e66fe8096fe18cb62fb087a873f",
+  "cache_manifest_sha256": "be5a11bc344ec9b7073f243bcb96fe4a63944f52f26277a5e9b3e16c426ce5be",
+  "peak_gpu_mib": 1462.56787109375,
+  "seconds": 2.1136598587036133,
+  "torch": "2.9.1+cu128",
+  "amp_dtype": "float16",
+  "grad_scaler_initial_scale": 128,
+  "note": "仅用于工程流程验证；不代表识别效果，不可作为最终比赛权重"
+}
