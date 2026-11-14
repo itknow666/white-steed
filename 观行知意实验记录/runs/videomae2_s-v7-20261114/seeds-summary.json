@@ -1,0 +1,27 @@
+{
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "accuracy": [
+    70.60085836909872,
+    71.88841201716738,
+    71.45922746781116
+  ],
+  "macro_f1": [
+    66.53831320857844,
+    68.3913397466018,
+    67.69585960365744
+  ],
+  "best_epoch": [
+    12,
+    21,
+    21
+  ],
+  "acc_mean": 71.31616595135908,
+  "acc_sd": 0.6555902281767995,
+  "f1_mean": 67.54183751961256,
+  "f1_sd": 0.9360656704712831,
+  "note": "cache-level validation; best epoch selected on public validation; only seed42 verified on raw images"
+}

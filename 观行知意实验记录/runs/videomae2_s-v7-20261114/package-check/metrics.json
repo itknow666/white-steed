@@ -1,0 +1,22 @@
+{
+  "run": "runs\\videomae2_s-v7-20261114",
+  "metrics": {
+    "accuracy": 70.60085836909872,
+    "macro_f1": 66.53831320857844
+  },
+  "parameters": 24716024,
+  "architecture": "videomae2_s",
+  "components": [],
+  "flip_tta": false,
+  "person_crop": true,
+  "frames": 16,
+  "latency_ms": 179.80101698924767,
+  "weights_sha256": "60357e8dfabc1d7ed2223b05abd11a42a90c720f1f8c03f9372ab2aabffbdfe1",
+  "code_sha256": "7cb3a9746daa146ad6a4068f163b529f7089b68151374e5383a57ca5f451365c",
+  "report_file": "runs/videomae2_s-v7-20261114/validation-single-report.html",
+  "files": 42,
+  "code_bytes": 5125493,
+  "unpacked_bytes": 5870463,
+  "formal_submission_ready": false,
+  "linux_verified": false
+}

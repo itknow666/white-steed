@@ -1,0 +1,11 @@
+{
+  "run": "runs/fusion-control16-v4-20261027",
+  "package": "submission/ablation-v4-fusion-20261027",
+  "weights": "submission/ablation-v4-fusion-20261027/model.pt",
+  "inference_config": "submission/ablation-v4-fusion-20261027/code/config.json",
+  "predictions": "submission/ablation-v4-fusion-20261027/validation.csv",
+  "accuracy": 68.24034334763948,
+  "macro_f1": 63.037892305203215,
+  "weights_sha256": "cac267050000180cc2af936c7ae7c17c0c319569bdcfae013a5be72b1cf69b10",
+  "smoke": false
+}

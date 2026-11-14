@@ -1,0 +1,12 @@
+{
+  "model": "VideoMAE V2 ViT-S/16, distilled from ViT-g, fine-tuned on Kinetics-710 (vit_s_k710_dl_from_giant)",
+  "source": "https://huggingface.co/OpenGVLab/VideoMAE2/resolve/main/distill/vit_s_k710_dl_from_giant.pth",
+  "paper": "Wang et al., VideoMAE V2: Scaling Video Masked Autoencoders with Dual Masking, CVPR 2023",
+  "license": "apache-2.0 (Hugging Face repo card OpenGVLab/VideoMAE2); 上游代码仓库 OpenGVLab/VideoMAEv2 许可证需在报告前再次核对",
+  "pretraining_data": "UnlabeledHybrid(自监督) + Kinetics-710 有标签微调；通用公开数据，不含 CUHK-X",
+  "local_file": "weights/videomae2_vit_s_k710_dl_from_giant.pth",
+  "sha256": "24fb71687fa3671b8387cadfbcbab0f72af695692e93cf1ecc82caa888626172",
+  "bytes": 44334609,
+  "downloaded": "2026-11-14 (UTC+8)",
+  "adaptation": "patch_embed 3->4通道（RGB权重x0.75，IR通道取均值x0.75）；去掉710类头，新建40类线性头"
+}

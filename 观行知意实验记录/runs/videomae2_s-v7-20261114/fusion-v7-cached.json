@@ -1,0 +1,160 @@
+{
+  "single": {
+    "videomae2_s": {
+      "accuracy": 70.60085836909872,
+      "macro_f1": 66.53831320857844
+    },
+    "r34": {
+      "accuracy": 66.30901287553648,
+      "macro_f1": 61.213683189784206
+    },
+    "swin3dt": {
+      "accuracy": 58.798283261802574,
+      "macro_f1": 53.67345162344685
+    },
+    "x3d_m": {
+      "accuracy": 57.2961373390558,
+      "macro_f1": 51.53945151896543
+    }
+  },
+  "pairs": [
+    {
+      "accuracy": 65.87982832618026,
+      "macro_f1": 60.66735505794727,
+      "components": [
+        "videomae2_s",
+        "r34"
+      ],
+      "videomae_weight": 0.25,
+      "parameters": 88230724
+    },
+    {
+      "accuracy": 70.60085836909872,
+      "macro_f1": 66.79197263684941,
+      "components": [
+        "videomae2_s",
+        "r34"
+      ],
+      "videomae_weight": 0.5,
+      "parameters": 88230724
+    },
+    {
+      "accuracy": 71.88841201716738,
+      "macro_f1": 68.3295762194897,
+      "components": [
+        "videomae2_s",
+        "r34"
+      ],
+      "videomae_weight": 0.75,
+      "parameters": 88230724
+    },
+    {
+      "accuracy": 61.587982832618025,
+      "macro_f1": 57.5651244149648,
+      "components": [
+        "videomae2_s",
+        "swin3dt"
+      ],
+      "videomae_weight": 0.25,
+      "parameters": 52600326
+    },
+    {
+      "accuracy": 69.74248927038627,
+      "macro_f1": 65.02443715082539,
+      "components": [
+        "videomae2_s",
+        "swin3dt"
+      ],
+      "videomae_weight": 0.5,
+      "parameters": 52600326
+    },
+    {
+      "accuracy": 71.24463519313305,
+      "macro_f1": 67.36729844912209,
+      "components": [
+        "videomae2_s",
+        "swin3dt"
+      ],
+      "videomae_weight": 0.75,
+      "parameters": 52600326
+    },
+    {
+      "accuracy": 63.30472103004292,
+      "macro_f1": 58.77568042783983,
+      "components": [
+        "videomae2_s",
+        "x3d_m"
+      ],
+      "videomae_weight": 0.25,
+      "parameters": 27772874
+    },
+    {
+      "accuracy": 68.45493562231759,
+      "macro_f1": 64.31700586393494,
+      "components": [
+        "videomae2_s",
+        "x3d_m"
+      ],
+      "videomae_weight": 0.5,
+      "parameters": 27772874
+    },
+    {
+      "accuracy": 70.1716738197425,
+      "macro_f1": 66.071604957877,
+      "components": [
+        "videomae2_s",
+        "x3d_m"
+      ],
+      "videomae_weight": 0.75,
+      "parameters": 27772874
+    }
+  ],
+  "triples": [
+    {
+      "accuracy": 70.3862660944206,
+      "macro_f1": 65.81088629768115,
+      "components": [
+        "videomae2_s",
+        "r34",
+        "x3d_m"
+      ],
+      "weights": [
+        0.375,
+        0.375,
+        0.25
+      ],
+      "parameters": 91287574
+    },
+    {
+      "accuracy": 71.45922746781116,
+      "macro_f1": 67.52489154828035,
+      "components": [
+        "videomae2_s",
+        "r34",
+        "x3d_m"
+      ],
+      "weights": [
+        0.5,
+        0.25,
+        0.25
+      ],
+      "parameters": 91287574
+    },
+    {
+      "accuracy": 68.24034334763948,
+      "macro_f1": 63.415739362961176,
+      "components": [
+        "videomae2_s",
+        "r34",
+        "x3d_m"
+      ],
+      "weights": [
+        0.25,
+        0.5,
+        0.25
+      ],
+      "parameters": 91287574
+    }
+  ],
+  "note": "cache-level only; public validation used for selection; not verified on raw images; params of swin/x3d from earlier run totals minus detector"
+}

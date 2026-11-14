@@ -1,11 +1,16 @@
 {
-  "run": "runs/fusion-control16-v4-20261027",
-  "package": "submission/ablation-v4-fusion-20261027",
-  "weights": "submission/ablation-v4-fusion-20261027/model.pt",
-  "inference_config": "submission/ablation-v4-fusion-20261027/code/config.json",
-  "predictions": "submission/ablation-v4-fusion-20261027/validation.csv",
-  "accuracy": 68.24034334763948,
-  "macro_f1": 63.037892305203215,
-  "weights_sha256": "cac267050000180cc2af936c7ae7c17c0c319569bdcfae013a5be72b1cf69b10",
-  "smoke": false
+    "run":  "runs/fusion-videomae2-r34-v7-20261114",
+    "package":  "submission/fusion-videomae2-r34-v7-20261114",
+    "weights":  "submission/fusion-videomae2-r34-v7-20261114/model.pt",
+    "inference_config":  "submission/fusion-videomae2-r34-v7-20261114/code/config.json",
+    "code_zip":  "submission/fusion-videomae2-r34-v7-20261114/code.zip",
+    "predictions":  "submission/fusion-videomae2-r34-v7-20261114/validation.csv",
+    "accuracy":  71.888412017167383,
+    "macro_f1":  68.3295762194897,
+    "parameters":  88230724,
+    "weights_sha256":  "4d4e2295d7b1f024382ef423ad4bf991f0354685e78c8882a65a40075f4a3508",
+    "smoke":  false,
+    "linux_verified":  false,
+    "selected_on":  "2026-11-14",
+    "previous":  "runs/latest-model.before-v7-20261114.json"
 }

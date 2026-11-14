@@ -1,0 +1,8 @@
+{
+  "smoke": false,
+  "parameters": 24716024,
+  "recipe": "v7_videomae2_vit_s_k710_distilled_layer_decay",
+  "initial_sha256": "24fb71687fa3671b8387cadfbcbab0f72af695692e93cf1ecc82caa888626172",
+  "test_accessed": false,
+  "person_crop": true
+}

@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "python_network_connections_blocked": true,
+  "score_count": 40,
+  "finite": true,
+  "parameters": 24716024,
+  "device": "cuda",
+  "predicted_class": 0,
+  "linux_verified": false,
+  "scope": "Windows Python连接拦截回归检查；非系统级网络隔离"
+}

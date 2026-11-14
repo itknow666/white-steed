@@ -1,0 +1,39 @@
+{
+  "run": "runs\\fusion-videomae2-r34-v7-20261114",
+  "metrics": {
+    "accuracy": 71.88841201716738,
+    "macro_f1": 68.3295762194897
+  },
+  "parameters": 88230724,
+  "architecture": "ensemble",
+  "components": [
+    {
+      "architecture": "videomae2_s",
+      "frames": 16,
+      "size": 192,
+      "crop_scale": 1.4,
+      "flip_tta": false,
+      "weight": 0.75
+    },
+    {
+      "architecture": "r34",
+      "frames": 16,
+      "size": 128,
+      "crop_scale": 1.4,
+      "flip_tta": false,
+      "weight": 0.25
+    }
+  ],
+  "flip_tta": false,
+  "person_crop": true,
+  "frames": 16,
+  "latency_ms": 259.58534258064003,
+  "weights_sha256": "4d4e2295d7b1f024382ef423ad4bf991f0354685e78c8882a65a40075f4a3508",
+  "code_sha256": "ffc62e7393c28d9adc392ee04033d28dbd705423264f3ddfb0399fbe00e771ad",
+  "report_file": "runs/fusion-videomae2-r34-v7-20261114/validation-single-report.html",
+  "files": 50,
+  "code_bytes": 5147198,
+  "unpacked_bytes": 5923829,
+  "formal_submission_ready": false,
+  "linux_verified": false
+}

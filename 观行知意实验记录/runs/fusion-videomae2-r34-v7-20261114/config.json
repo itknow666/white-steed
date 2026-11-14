@@ -1,0 +1,38 @@
+{
+  "architecture": "ensemble",
+  "components": [
+    {
+      "architecture": "videomae2_s",
+      "frames": 16,
+      "size": 192,
+      "crop_scale": 1.4,
+      "flip_tta": false,
+      "weight": 0.75
+    },
+    {
+      "architecture": "r34",
+      "frames": 16,
+      "size": 128,
+      "crop_scale": 1.4,
+      "flip_tta": false,
+      "weight": 0.25
+    }
+  ],
+  "cache": "<项目目录>\\cache\\crop16-192-v3",
+  "input_frames": 16,
+  "person_crop": true,
+  "total_parameters": 88230724,
+  "crop_scale": 1.4,
+  "training_source": "optimized/build_fusion_v7.py",
+  "source_runs": [
+    "runs/videomae2_s-v7-20261114",
+    "runs/control16-v4-20261027"
+  ],
+  "source_sha256": [
+    "60357e8dfabc1d7ed2223b05abd11a42a90c720f1f8c03f9372ab2aabffbdfe1",
+    "4ba89a9b1616530cbe53b504958945f2602488d9f738012cef471ca7fc70df2d"
+  ],
+  "selection": "validation only, fixed grid .25/.5/.75 for VideoMAE weight (fusion-v7-cached.json)",
+  "test_accessed": false,
+  "extra_parameter_updates": 0
+}
