@@ -1,0 +1,70 @@
+{
+  "comparison": [
+    {
+      "accuracy": 69.95708154506438,
+      "macro_f1": 66.07725632210995,
+      "mode": "control",
+      "fusion": false
+    },
+    {
+      "accuracy": 71.24463519313305,
+      "macro_f1": 68.6473666578832,
+      "mode": "control",
+      "fusion": true
+    },
+    {
+      "accuracy": 70.3862660944206,
+      "macro_f1": 66.58382715698521,
+      "mode": "dual",
+      "fusion": false
+    },
+    {
+      "accuracy": 72.3175965665236,
+      "macro_f1": 69.50177787180394,
+      "mode": "dual",
+      "fusion": true
+    },
+    {
+      "accuracy": 69.74248927038627,
+      "macro_f1": 64.80300040314002,
+      "mode": "lora",
+      "fusion": false
+    },
+    {
+      "accuracy": 70.60085836909872,
+      "macro_f1": 66.73058877296612,
+      "mode": "lora",
+      "fusion": true
+    },
+    {
+      "accuracy": 70.81545064377683,
+      "macro_f1": 66.68054824331942,
+      "mode": "staged",
+      "fusion": false
+    },
+    {
+      "accuracy": 72.1030042918455,
+      "macro_f1": 69.66606227949444,
+      "mode": "staged",
+      "fusion": true
+    },
+    {
+      "accuracy": 70.1716738197425,
+      "macro_f1": 66.63956723825133,
+      "mode": "ssl",
+      "fusion": false
+    },
+    {
+      "accuracy": 71.45922746781116,
+      "macro_f1": 68.87949463335852,
+      "mode": "ssl",
+      "fusion": true
+    }
+  ],
+  "selected_v8": {
+    "accuracy": 72.3175965665236,
+    "macro_f1": 69.50177787180394,
+    "mode": "dual",
+    "fusion": true
+  }
+}

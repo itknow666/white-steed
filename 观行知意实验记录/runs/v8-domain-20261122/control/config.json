@@ -1,0 +1,16 @@
+{
+  "mode": "control",
+  "seed": 42,
+  "batch": 8,
+  "epochs": 2,
+  "base_lr": 2e-05,
+  "layer_decay": 0.85,
+  "head_multiplier": 5,
+  "initial_sha256": "60357e8dfabc1d7ed2223b05abd11a42a90c720f1f8c03f9372ab2aabffbdfe1",
+  "cache_sha256": "b3f92fd6952b07fa0a88e53131bd663a3e39ba573b44ed26261c6819acf6be26",
+  "parameters": 22091944,
+  "initial_trainable": 22091944,
+  "train_samples": 1995,
+  "validation_samples": 466,
+  "test_accessed": false
+}

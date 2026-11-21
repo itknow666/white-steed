@@ -1,0 +1,6 @@
+{
+  "mode": "control",
+  "best_epoch": 2,
+  "accuracy": 69.95708154506438,
+  "macro_f1": 66.07725632210995
+}

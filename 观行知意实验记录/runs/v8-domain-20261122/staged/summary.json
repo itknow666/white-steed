@@ -1,0 +1,6 @@
+{
+  "mode": "staged",
+  "best_epoch": 1,
+  "accuracy": 70.81545064377683,
+  "macro_f1": 66.68054824331942
+}

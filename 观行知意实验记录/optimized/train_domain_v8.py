@@ -101,13 +101,15 @@ def main():
     write(a.output/'config.json', config)
     started = time.monotonic()
     if a.mode == 'ssl':
+        rng = (random.getstate(), np.random.get_state(), torch.get_rng_state(), torch.cuda.get_rng_state_all())
         ssl_loss = adapt_without_labels(model, tr)
         write(a.output/'ssl.json', {'training_clips': len(train), 'loss': ssl_loss, 'labels_used': False})
         print(json.dumps({'ssl_loss': ssl_loss}), flush=True)
-        # Repeat the supervised seed so the unlabeled pass does not change shuffling policy.
-        random.seed(a.seed)
-        np.random.seed(a.seed)
-        torch.manual_seed(a.seed)
+        # Keep the supervised random stream matched to the staged-only comparison.
+        random.setstate(rng[0])
+        np.random.set_state(rng[1])
+        torch.set_rng_state(rng[2])
+        torch.cuda.set_rng_state_all(rng[3])
     groups = model.layer_groups(2e-5, .85, 5, .05)
     # Latter four blocks are unfrozen after epoch one; retain their optimizer groups.
     delayed = [q for block in model.encoder.blocks[-4:] for q in block.parameters()] if a.mode in ('staged', 'ssl') else []
