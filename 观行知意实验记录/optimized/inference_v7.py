@@ -24,7 +24,8 @@ class Model:
         elif architecture == 'swin3dt':
             from video_swin import VideoSwin
             self.model = VideoSwin()
-        elif architecture in ['x3d_m','tsm_r50','mvit_v2_s','uniformer_s','c3d','videomae2_s']:
+        elif architecture in ['x3d_m','tsm_r50','mvit_v2_s','uniformer_s','c3d','videomae2_s',
+                              'videomae2_dual_v8','videomae2_lora_v8']:
             self.model = self._classifier(architecture)
         else:
             self.model = RawModel(channels=int(config.get('channels', 4)), pretrained=None)
@@ -55,6 +56,9 @@ class Model:
         if name == 'videomae2_s':
             from videomae_model import VideoMAEClassifier
             return VideoMAEClassifier(pretrained=None)
+        if name in ('videomae2_dual_v8', 'videomae2_lora_v8'):
+            from videomae_v8 import DomainVideoMAE
+            return DomainVideoMAE('lora' if name == 'videomae2_lora_v8' else 'dual')
         if name == 'c3d':
             from c3d_model import Candidate
             return Candidate('c3d')
