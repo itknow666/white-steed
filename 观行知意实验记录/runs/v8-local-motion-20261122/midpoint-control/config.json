@@ -1,0 +1,6 @@
+{
+  "training_run": "matched-control",
+  "mix": 0.5,
+  "initial_sha256": "a0b80e77ce54a6983ed0496a584aeff783fb1ffa9ef9cebd3a48b4490d61f440",
+  "trained_sha256": "ba9037e12f4af69492e22b88c7cc2f109618bf78bd838f81e4911e990f1f7bb0"
+}

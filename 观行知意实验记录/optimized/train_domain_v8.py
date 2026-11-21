@@ -18,6 +18,43 @@ from videomae_model import VideoMAEClassifier
 from videomae_v8 import DomainVideoMAE
 
 
+def local_alignment(x, depth, ir, sampling, rng):
+    """Match synchronized depth and IR tokens against distant tokens in each clip."""
+    with torch.no_grad():
+        if sampling in ('motion', 'motion-stratified'):
+            change = x.diff(dim=2).abs()
+            change = torch.cat((change[:, :, :1], change), dim=2)
+            depth_change = F.adaptive_avg_pool3d(change[:, :3].mean(dim=1, keepdim=True), (8, 14, 14)).flatten(1)
+            ir_change = F.adaptive_avg_pool3d(change[:, 3:4], (8, 14, 14)).flatten(1)
+            # Give both modalities equal weight even if their raw contrast differs.
+            depth_change /= depth_change.mean(1, keepdim=True).clamp_min(1e-5)
+            ir_change /= ir_change.mean(1, keepdim=True).clamp_min(1e-5)
+            weights = depth_change * ir_change
+        else:
+            weights = torch.rand(depth.shape[:2], device=x.device, generator=rng)
+        if sampling == 'motion-stratified':
+            per_time = weights.reshape(-1, 8, 196).topk(4, dim=2).indices
+            offsets = torch.arange(8, device=x.device).view(1, 8, 1) * 196
+            selected = (per_time + offsets).flatten(1)
+        else:
+            selected = weights.topk(32, dim=1).indices
+        time, row, column = selected // 196, selected // 14 % 14, selected % 14
+        close = (time[:, :, None] - time[:, None, :]).abs() <= 1
+        close &= (row[:, :, None] - row[:, None, :]).abs() <= 1
+        close &= (column[:, :, None] - column[:, None, :]).abs() <= 1
+        label = torch.arange(selected.shape[1], device=x.device)
+        close &= ~torch.eye(selected.shape[1], device=x.device, dtype=torch.bool)
+    indices = selected.unsqueeze(-1).expand(-1, -1, depth.size(-1))
+    depth_tokens = depth.gather(1, indices).float()
+    ir_tokens = ir.gather(1, indices).float()
+    depth_tokens = F.normalize(depth_tokens - depth_tokens.mean(-1, keepdim=True), dim=-1, eps=1e-6)
+    ir_tokens = F.normalize(ir_tokens - ir_tokens.mean(-1, keepdim=True), dim=-1, eps=1e-6)
+    similarity = (depth_tokens @ ir_tokens.transpose(1, 2)).float() / .1
+    similarity = similarity.masked_fill(close, -1e4)
+    target = label.expand(depth.size(0), -1)
+    return (F.cross_entropy(similarity, target) + F.cross_entropy(similarity.transpose(1, 2), target)) / 2
+
+
 def adapt_without_labels(model, loader):
     """Use one modality to predict the other's masked tubelet mean."""
     patch = model.encoder.patch_embed
@@ -81,6 +118,7 @@ def main():
     parser.add_argument('--domain-variant', choices=['plain', 'gate', 'temporal'], default='plain')
     parser.add_argument('--mask-rate', type=float, default=0.)
     parser.add_argument('--distill', type=float, default=0., help='KL weight for frozen clean-view V8 teacher')
+    parser.add_argument('--alignment', choices=['none', 'control', 'uniform', 'motion', 'motion-stratified'], default='none')
     a = parser.parse_args()
     if a.continue_dual and a.mode not in ('dual', 'staged'):
         parser.error('--continue-dual supports dual and staged')
@@ -90,6 +128,8 @@ def main():
         parser.error('--keep-blocks-frozen requires staged mode')
     if a.domain_variant != 'plain' and not a.continue_dual:
         parser.error('New domain variants require a V8 dual checkpoint')
+    if a.alignment != 'none' and (a.mode != 'dual' or not a.continue_dual or a.domain_variant != 'plain' or a.mask_rate):
+        parser.error('Local alignment requires an unmasked plain dual checkpoint')
     if not 0 <= a.mask_rate < 1 or a.distill < 0 or (a.distill and not (a.continue_dual and a.mask_rate)):
         parser.error('Distillation requires a V8 checkpoint and a positive mask rate')
     a.output.mkdir(parents=True)
@@ -134,6 +174,11 @@ def main():
               'initial_sha256': sha(a.initial), 'cache_sha256': sha(a.cache/'manifest.json'),
               'parameters': num_params, 'initial_trainable': initial_trainable,
               'train_samples': len(train), 'validation_samples': len(valid), 'test_accessed': False}
+    use_alignment_loss = a.alignment not in ('none', 'control')
+    if a.alignment != 'none':
+        config['alignment'] = a.alignment
+    if use_alignment_loss:
+        config.update(alignment=a.alignment, alignment_weight=.04, alignment_tokens=32, alignment_temperature=.1)
     write(a.output/'config.json', config)
     started = time.monotonic()
     if a.mode == 'ssl':
@@ -171,6 +216,7 @@ def main():
     best, best_epoch, step = (-1., -1.), 0, 0
     ir_rng = torch.Generator(device='cuda').manual_seed(a.seed + 397)
     mask_rng = torch.Generator(device='cuda').manual_seed(a.seed + 871)
+    align_rng = torch.Generator(device='cuda').manual_seed(a.seed + 1259)
     torch.cuda.reset_peak_memory_stats()
     for epoch in range(1, a.epochs + 1):
         if epoch == 2:
@@ -178,6 +224,7 @@ def main():
                 q.requires_grad_(True)
         model.train()
         seen, loss_sum = 0, 0.
+        alignment_sum = torch.zeros((), device='cuda')
         for x, y, _ in tr:
             x, y = x.cuda(non_blocking=True), y.cuda(non_blocking=True)
             if a.ir_jitter:
@@ -203,7 +250,10 @@ def main():
                 mask = torch.cat((~mask_ir.expand(-1, 3, -1, -1, -1), mask_ir), dim=1) & patches
                 x = torch.where(mask, model.mean, x)
             with torch.autocast('cuda', dtype=torch.bfloat16):
-                logits = model(x)
+                if a.alignment != 'none':
+                    logits, depth, ir = model.forward_with_streams(x)
+                else:
+                    logits = model(x)
                 loss = criterion(logits, y)
                 if perm is not None:
                     loss = mix * loss + (1. - mix) * criterion(logits, y[perm])
@@ -212,6 +262,10 @@ def main():
                         target = (teacher(clean).float() / 2).softmax(dim=1)
                     kl = F.kl_div((logits.float() / 2).log_softmax(dim=1), target, reduction='batchmean')
                     loss = loss + a.distill * 4 * kl
+                if use_alignment_loss:
+                    aux = local_alignment(x, depth, ir, a.alignment, align_rng)
+                    loss = loss + .04 * aux
+                    alignment_sum += aux.detach() * len(y)
             loss.backward()
             nn.utils.clip_grad_norm_(model.parameters(), 5., error_if_nonfinite=True)
             optimizer.step()
@@ -231,6 +285,8 @@ def main():
         row = dict(epoch=epoch, steps=step, seen=seen, loss=loss_sum/seen, accuracy=score[0], macro_f1=score[1],
                    trainable=sum(t.numel() for t in model.parameters() if t.requires_grad),
                    peak_mib=torch.cuda.max_memory_allocated()/2**20, elapsed=time.monotonic()-started)
+        if use_alignment_loss:
+            row['alignment_loss'] = float(alignment_sum) / seen
         with (a.output/'history.jsonl').open('a', encoding='utf-8') as f:
             f.write(json.dumps(row, allow_nan=False) + '\n')
         print(json.dumps(row), flush=True)

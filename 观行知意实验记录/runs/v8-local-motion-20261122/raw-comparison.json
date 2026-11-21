@@ -1,0 +1,127 @@
+{
+  "results": {
+    "initial": {
+      "mode": "anchor43-single",
+      "accuracy": 72.96137339055794,
+      "macro_f1": 69.40858694392253,
+      "parameters": 24767544,
+      "code_sha256": "c5e5a2d2b5a8c4986993f82bb95de9fa601d2eb1c56fea904fed602182816c99",
+      "weights_sha256": "7b9a43f3ed81a51da6d46e54cf30fb4800ac4507890bf3ceaa1c2e9c298d5aad"
+    },
+    "matched-control": {
+      "accuracy": 72.74678111587983,
+      "macro_f1": 69.48221684666552,
+      "mode": "matched-control",
+      "parameters": 24767544,
+      "corrected": 1,
+      "regressed": 2,
+      "scores_path": "validation.csv",
+      "weights_sha256": "c79b681e471dd5ca0e7974bcc4d7f29ce35da4fd5ea648db026bf58f4e38eb55",
+      "code_sha256": "9f49fbaf9ab03bb4a8ea4b603b5dd8bf5e32c0f654c0975bd9799503a57e2aa7",
+      "linux_verified": false,
+      "error_counts": [
+        4,
+        5,
+        5,
+        4,
+        3
+      ]
+    },
+    "uniform": {
+      "accuracy": 72.53218884120172,
+      "macro_f1": 69.1627462809993,
+      "mode": "uniform",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 2,
+      "scores_path": "validation.csv",
+      "weights_sha256": "6b535ddb2c47c7f477b5afd10c05634e7904c21e6cf781b8ed5a3d67eaa3a828",
+      "code_sha256": "603c4326d3dbb505c8bb66c8827b93788c87b521f14b76f1cae0621b656e821e",
+      "linux_verified": false,
+      "error_counts": [
+        5,
+        5,
+        5,
+        4,
+        3
+      ]
+    },
+    "motion": {
+      "accuracy": 72.3175965665236,
+      "macro_f1": 68.75048073686338,
+      "mode": "motion",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 3,
+      "scores_path": "validation.csv",
+      "weights_sha256": "b213df0a6e5e985f0a02f785a631837386771ed6cd1918f45667aeb24665dafa",
+      "code_sha256": "e0b38bb906ef6bc7d647a21d53f4986629ba1f565cee65e7eb2bbf76289cb3e9",
+      "linux_verified": false,
+      "error_counts": [
+        5,
+        5,
+        5,
+        4,
+        3
+      ]
+    },
+    "motion-stratified": {
+      "accuracy": 72.3175965665236,
+      "macro_f1": 68.88425789610376,
+      "mode": "motion-stratified",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 3,
+      "scores_path": "validation.csv",
+      "weights_sha256": "74f1caa3d5c4a0043f415bd0bd6a4a3ca62fccda264e68de8030d4b8e12a0fa5",
+      "code_sha256": "8f1af51f26cfdc72b55b17a6273d9fdb9068717f4b2d21de3f1ecfbe2c4f414d",
+      "linux_verified": false,
+      "error_counts": [
+        5,
+        4,
+        5,
+        4,
+        3
+      ]
+    },
+    "midpoint-control": {
+      "accuracy": 72.53218884120172,
+      "macro_f1": 69.18878274453576,
+      "mode": "midpoint-control",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 2,
+      "scores_path": "validation.csv",
+      "weights_sha256": "c4e390c5f68f7a245a6fd14e45aac8ed644d1f78208027cb82c895f6215fee03",
+      "code_sha256": "3388c19dcfffde9f6a8108ae90e875fefcbb71a7671534c3ef1e06322a446c54",
+      "linux_verified": false,
+      "error_counts": [
+        5,
+        5,
+        5,
+        4,
+        3
+      ]
+    },
+    "midpoint-motion": {
+      "accuracy": 72.3175965665236,
+      "macro_f1": 67.89381256386176,
+      "mode": "midpoint-motion",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 3,
+      "scores_path": "validation.csv",
+      "weights_sha256": "3a0b92f4f4717fd471f9010b39bf9849de4fd7862faf648e47d1c77198bb424a",
+      "code_sha256": "5032c7e19407ab065fc8e86622b0e48a4a14f7ad5932dad35eda983839224af2",
+      "linux_verified": false,
+      "error_counts": [
+        5,
+        4,
+        5,
+        4,
+        3
+      ]
+    }
+  },
+  "recommended": "initial"
+}

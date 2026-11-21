@@ -1,0 +1,31 @@
+{
+  "samples": 128,
+  "split": "validation",
+  "results": {
+    "initial": {
+      "uniform": 3.376565232872963,
+      "motion": 2.8678425550460815,
+      "motion-stratified": 2.784602850675583
+    },
+    "matched-control": {
+      "uniform": 3.372402861714363,
+      "motion": 2.9045209288597107,
+      "motion-stratified": 2.8263317346572876
+    },
+    "uniform": {
+      "uniform": 3.2436891198158264,
+      "motion": 2.78189517557621,
+      "motion-stratified": 2.6986277997493744
+    },
+    "motion": {
+      "uniform": 3.142874911427498,
+      "motion": 2.494772657752037,
+      "motion-stratified": 2.4192224740982056
+    },
+    "motion-stratified": {
+      "uniform": 2.9515345990657806,
+      "motion": 2.17948891967535,
+      "motion-stratified": 2.0680800527334213
+    }
+  }
+}

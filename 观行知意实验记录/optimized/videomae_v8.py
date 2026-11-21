@@ -114,8 +114,16 @@ class DomainVideoMAE(VideoMAEClassifier):
         x = self.normalized_clip(x)
         if not hasattr(self.encoder.blocks[3], 'temporal_adapter'):
             return self.head(self.encoder(x))
+        return self.classify_tokens(self.encoder.patch_embed(x))
+
+    def forward_with_streams(self, x):
+        """Reuse the two input streams for a training-only alignment loss."""
+        depth, ir = self.encoder.patch_embed.streams(self.normalized_clip(x))
+        return self.classify_tokens(depth + ir), depth, ir
+
+    def classify_tokens(self, tokens):
         encoder = self.encoder
-        x = encoder.patch_embed(x) + encoder.pos_embed.to(x.dtype)
+        x = tokens + encoder.pos_embed.to(tokens.dtype)
         for block in encoder.blocks:
             x = block(x)
             if hasattr(block, 'temporal_adapter'):

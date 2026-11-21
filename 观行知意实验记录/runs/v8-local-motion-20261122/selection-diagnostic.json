@@ -1,0 +1,8 @@
+{
+  "samples": 64,
+  "split": "train",
+  "motion_mean_temporal_bins": 5.59375,
+  "motion_median_peak_count": 11.5,
+  "uniform_mean_temporal_bins": 7.953125,
+  "motion_min_temporal_bins": 2
+}

@@ -1,0 +1,6 @@
+{
+  "training_run": "motion-stratified",
+  "mix": 0.5,
+  "initial_sha256": "a0b80e77ce54a6983ed0496a584aeff783fb1ffa9ef9cebd3a48b4490d61f440",
+  "trained_sha256": "a5febf0be8955d9402f7ab179d3a78bf5065e316e26f70d8ff83709368df37ff"
+}
