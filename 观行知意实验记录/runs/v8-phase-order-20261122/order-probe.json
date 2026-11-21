@@ -1,0 +1,23 @@
+{
+  "samples": 466,
+  "results": {
+    "normal": {
+      "accuracy": 72.96137339055794,
+      "macro_f1": 69.40858694392253,
+      "changed": 0,
+      "correct": 340
+    },
+    "reverse_two_frame_groups": {
+      "accuracy": 60.72961373390558,
+      "macro_f1": 57.16484975014817,
+      "changed": 116,
+      "correct": 283
+    },
+    "swap_middle_four_frame_groups": {
+      "accuracy": 66.09442060085837,
+      "macro_f1": 63.08371730100178,
+      "changed": 65,
+      "correct": 308
+    }
+  }
+}

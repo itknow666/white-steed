@@ -98,6 +98,9 @@ class DomainVideoMAE(VideoMAEClassifier):
             if variant == 'temporal':
                 for i in (3, 7, 11):
                     self.encoder.blocks[i].temporal_adapter = TemporalAdapter(self.encoder.num_features)
+            if variant == 'phase':
+                self.phase_head = nn.Linear(3 * self.encoder.num_features, 40, bias=False)
+                nn.init.zeros_(self.phase_head.weight)
         if mode == 'lora':
             for block in self.encoder.blocks:
                 block.attn = QVLoRA(block.attn)
@@ -112,9 +115,14 @@ class DomainVideoMAE(VideoMAEClassifier):
 
     def forward(self, x):
         x = self.normalized_clip(x)
-        if not hasattr(self.encoder.blocks[3], 'temporal_adapter'):
+        if not hasattr(self.encoder.blocks[3], 'temporal_adapter') and not hasattr(self, 'phase_head'):
             return self.head(self.encoder(x))
         return self.classify_tokens(self.encoder.patch_embed(x))
+
+    def forward_with_order_inputs(self, x):
+        # The auxiliary order head sees content before temporal position is added.
+        tokens = self.encoder.patch_embed(self.normalized_clip(x))
+        return self.classify_tokens(tokens), tokens
 
     def forward_with_streams(self, x):
         """Reuse the two input streams for a training-only alignment loss."""
@@ -128,4 +136,10 @@ class DomainVideoMAE(VideoMAEClassifier):
             x = block(x)
             if hasattr(block, 'temporal_adapter'):
                 x = block.temporal_adapter(x)
-        return self.head(encoder.fc_norm(x.mean(1)))
+        logits = self.head(encoder.fc_norm(x.mean(1)))
+        if hasattr(self, 'phase_head'):
+            phases = x.reshape(x.size(0), 4, -1, x.size(-1)).mean(dim=2)
+            phases = encoder.fc_norm(phases)
+            signed_changes = phases.diff(dim=1).flatten(1)
+            logits = logits + self.phase_head(signed_changes)
+        return logits

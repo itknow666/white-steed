@@ -115,10 +115,13 @@ def main():
     parser.add_argument('--keep-blocks-frozen', action='store_true', help='Keep staged Transformer blocks frozen for every epoch')
     parser.add_argument('--class-power', type=float, default=.25)
     parser.add_argument('--ir-jitter', action='store_true', help='Training-only clip-consistent IR gain and offset')
-    parser.add_argument('--domain-variant', choices=['plain', 'gate', 'temporal'], default='plain')
+    parser.add_argument('--domain-variant', choices=['plain', 'gate', 'temporal', 'phase'], default='plain')
     parser.add_argument('--mask-rate', type=float, default=0.)
     parser.add_argument('--distill', type=float, default=0., help='KL weight for frozen clean-view V8 teacher')
     parser.add_argument('--alignment', choices=['none', 'control', 'uniform', 'motion', 'motion-stratified'], default='none')
+    parser.add_argument('--order-weight', type=float, default=0., help='Auxiliary before/after prediction weight')
+    parser.add_argument('--phase-head-only', action='store_true', help='Freeze the starting model and train only the phase residual')
+    parser.add_argument('--pace-jitter', action='store_true', help='Synchronized monotonic time warp during training')
     a = parser.parse_args()
     if a.continue_dual and a.mode not in ('dual', 'staged'):
         parser.error('--continue-dual supports dual and staged')
@@ -130,6 +133,10 @@ def main():
         parser.error('New domain variants require a V8 dual checkpoint')
     if a.alignment != 'none' and (a.mode != 'dual' or not a.continue_dual or a.domain_variant != 'plain' or a.mask_rate):
         parser.error('Local alignment requires an unmasked plain dual checkpoint')
+    if a.order_weight < 0 or (a.order_weight and (a.domain_variant != 'phase' or a.mask_rate)):
+        parser.error('Auxiliary direction prediction requires an unmasked phase head')
+    if a.phase_head_only and (a.mode != 'dual' or a.domain_variant != 'phase' or a.order_weight):
+        parser.error('Phase-only fitting requires phase classification without auxiliary direction prediction')
     if not 0 <= a.mask_rate < 1 or a.distill < 0 or (a.distill and not (a.continue_dual and a.mask_rate)):
         parser.error('Distillation requires a V8 checkpoint and a positive mask rate')
     a.output.mkdir(parents=True)
@@ -150,14 +157,23 @@ def main():
     if a.continue_dual:
         model = DomainVideoMAE(variant=a.domain_variant)
         missing, extra = model.load_state_dict(state, strict=False)
-        new_keys = {key for key in model.state_dict() if 'sensor_gate' in key or 'temporal_adapter' in key}
+        new_keys = {key for key in model.state_dict() if any(
+            part in key for part in ('sensor_gate', 'temporal_adapter', 'phase_head'))}
         if set(missing) != new_keys or extra:
             raise ValueError(f'Unexpected V8 migration keys: {missing}, {extra}')
         if a.mode == 'staged':
             model.encoder.blocks.requires_grad_(False)
     else:
         model = make_model(a.mode, state)
+    if a.phase_head_only:
+        model.requires_grad_(False)
+        model.phase_head.requires_grad_(True)
     model.cuda()
+    order_head = None
+    if a.order_weight:
+        with torch.random.fork_rng(devices=[]):
+            order_head = nn.Linear(model.encoder.num_features, 1, bias=False).cuda()
+            nn.init.zeros_(order_head.weight)
     teacher = None
     if a.distill:
         with torch.random.fork_rng(devices=[]):
@@ -179,6 +195,12 @@ def main():
         config['alignment'] = a.alignment
     if use_alignment_loss:
         config.update(alignment=a.alignment, alignment_weight=.04, alignment_tokens=32, alignment_temperature=.1)
+    if order_head is not None:
+        config.update(order_weight=a.order_weight, order_training_parameters=order_head.in_features)
+    if a.phase_head_only:
+        config['phase_head_only'] = True
+    if a.pace_jitter:
+        config.update(pace_jitter_max=.13, pace_jitter_probability=.5)
     write(a.output/'config.json', config)
     started = time.monotonic()
     if a.mode == 'ssl':
@@ -196,6 +218,8 @@ def main():
     unfreeze_late = a.mode in ('staged', 'ssl') and not a.keep_blocks_frozen
     delayed = [q for block in model.encoder.blocks[-4:] for q in block.parameters()] if unfreeze_late else []
     eligible = {id(t) for t in model.parameters() if t.requires_grad} | {id(t) for t in delayed}
+    phase_parameters = list(model.phase_head.parameters()) if hasattr(model, 'phase_head') else []
+    eligible.difference_update(id(t) for t in phase_parameters)
     patch_ids = {id(t) for t in model.encoder.patch_embed.parameters()}
     patch_ids.update(id(t) for name, t in model.named_parameters() if 'temporal_adapter' in name)
     optimizer_groups = []
@@ -206,7 +230,12 @@ def main():
             if selected:
                 scale = 2.5 if is_patch and a.mode != 'control' else group['lr_scale']
                 optimizer_groups.append(dict(group, params=selected, lr_scale=scale))
+    if phase_parameters:
+        optimizer_groups.append({'params': phase_parameters, 'lr_scale': 5., 'weight_decay': .05})
+    if order_head is not None:
+        optimizer_groups.append({'params': list(order_head.parameters()), 'lr_scale': 10., 'weight_decay': .05})
     optimizer = torch.optim.AdamW(optimizer_groups)
+    gradient_parameters = list(model.parameters()) + (list(order_head.parameters()) if order_head is not None else [])
     ema = ModelEmaV3(model, decay=.99, device='cuda')
     counts = np.bincount([r['label'] for r in train.rows], minlength=40)
     if not np.all(counts > 0):
@@ -217,16 +246,26 @@ def main():
     ir_rng = torch.Generator(device='cuda').manual_seed(a.seed + 397)
     mask_rng = torch.Generator(device='cuda').manual_seed(a.seed + 871)
     align_rng = torch.Generator(device='cuda').manual_seed(a.seed + 1259)
+    pace_rng = torch.Generator(device='cuda').manual_seed(a.seed + 1597)
     torch.cuda.reset_peak_memory_stats()
     for epoch in range(1, a.epochs + 1):
         if epoch == 2:
             for q in delayed:
                 q.requires_grad_(True)
-        model.train()
+        model.train(not a.phase_head_only)
         seen, loss_sum = 0, 0.
         alignment_sum = torch.zeros((), device='cuda')
+        order_sum = torch.zeros((), device='cuda')
         for x, y, _ in tr:
             x, y = x.cuda(non_blocking=True), y.cuda(non_blocking=True)
+            if a.pace_jitter:
+                # Move the interior positions while retaining endpoints and frame order.
+                frame_time = torch.linspace(0., 1., x.size(2), device=x.device)
+                draws = torch.rand((len(y), 2), device=x.device, generator=pace_rng)
+                strength = (draws[:, :1] * .26 - .13) * (draws[:, 1:] < .5)
+                warped = frame_time + strength * torch.sin(math.pi * frame_time)
+                indices = (warped * (x.size(2) - 1)).round().long().clamp(0, x.size(2) - 1)
+                x = x.gather(2, indices[:, None, :, None, None].expand_as(x))
             if a.ir_jitter:
                 # One gain and offset per clip, with depth pixels and alignment preserved.
                 jitter = torch.rand((len(y), 2, 1, 1, 1), generator=ir_rng, device=x.device)
@@ -252,6 +291,8 @@ def main():
             with torch.autocast('cuda', dtype=torch.bfloat16):
                 if a.alignment != 'none':
                     logits, depth, ir = model.forward_with_streams(x)
+                elif order_head is not None:
+                    logits, order_tokens = model.forward_with_order_inputs(x)
                 else:
                     logits = model(x)
                 loss = criterion(logits, y)
@@ -266,8 +307,16 @@ def main():
                     aux = local_alignment(x, depth, ir, a.alignment, align_rng)
                     loss = loss + .04 * aux
                     alignment_sum += aux.detach() * len(y)
+                if order_head is not None:
+                    phases = order_tokens.reshape(len(y), 8, -1, order_tokens.size(-1)).mean(dim=2)
+                    phases = F.layer_norm(phases.float(), (phases.size(-1),))
+                    direction = phases[:, 2:] - phases[:, :-2]
+                    # Reversing each pair negates its score, so the two labels have equal loss.
+                    order_loss = F.softplus(-order_head(direction).float()).mean()
+                    loss = loss + a.order_weight * order_loss
+                    order_sum += order_loss.detach() * len(y)
             loss.backward()
-            nn.utils.clip_grad_norm_(model.parameters(), 5., error_if_nonfinite=True)
+            nn.utils.clip_grad_norm_(gradient_parameters, 5., error_if_nonfinite=True)
             optimizer.step()
             ema.update(model, step=step)
             step += 1
@@ -287,6 +336,8 @@ def main():
                    peak_mib=torch.cuda.max_memory_allocated()/2**20, elapsed=time.monotonic()-started)
         if use_alignment_loss:
             row['alignment_loss'] = float(alignment_sum) / seen
+        if order_head is not None:
+            row['order_loss'] = float(order_sum) / seen
         with (a.output/'history.jsonl').open('a', encoding='utf-8') as f:
             f.write(json.dumps(row, allow_nan=False) + '\n')
         print(json.dumps(row), flush=True)
