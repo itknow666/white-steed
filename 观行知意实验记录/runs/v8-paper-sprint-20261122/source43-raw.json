@@ -1,0 +1,8 @@
+{
+  "mode": "v7-source43",
+  "accuracy": 72.53218884120172,
+  "macro_f1": 69.26373734092711,
+  "parameters": 88230724,
+  "code_sha256": "cf2a45f3f7e636aa1039bb056269bae3c3c3f863d749236adfbba626f7802fc5",
+  "weights_sha256": "1bf6818c6c9ea26bc6c485a788c0960e9af89411f50cf0cbcd2afdd7cd5e915e"
+}

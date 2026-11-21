@@ -1,0 +1,51 @@
+{
+  "results": {
+    "v8-original": {
+      "clean": {
+        "accuracy": 70.3862660944206,
+        "macro_f1": 66.58382715698521
+      },
+      "dim_ir": {
+        "accuracy": 69.74248927038627,
+        "macro_f1": 66.16095257939443
+      },
+      "accuracy_drop_pp": 0.6437768240343331
+    },
+    "gate": {
+      "clean": {
+        "accuracy": 70.1716738197425,
+        "macro_f1": 66.66246068810257
+      },
+      "dim_ir": {
+        "accuracy": 69.95708154506438,
+        "macro_f1": 66.0670548957226
+      },
+      "accuracy_drop_pp": 0.21459227467811104
+    },
+    "masked": {
+      "clean": {
+        "accuracy": 70.3862660944206,
+        "macro_f1": 65.99932141706665
+      },
+      "dim_ir": {
+        "accuracy": 69.74248927038627,
+        "macro_f1": 65.11357074108722
+      },
+      "accuracy_drop_pp": 0.6437768240343331
+    },
+    "distill": {
+      "clean": {
+        "accuracy": 71.03004291845494,
+        "macro_f1": 66.56308853966752
+      },
+      "dim_ir": {
+        "accuracy": 70.1716738197425,
+        "macro_f1": 65.35489668469245
+      },
+      "accuracy_drop_pp": 0.8583690987124442
+    }
+  },
+  "multiplier": 0.55,
+  "samples": 466,
+  "evaluation": "cached single classifier"
+}

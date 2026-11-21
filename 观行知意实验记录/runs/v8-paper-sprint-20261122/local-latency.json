@@ -1,0 +1,16 @@
+{
+  "device": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+  "samples": 32,
+  "warmup_samples": 4,
+  "scope": "local Windows, full Model.predict including frame IO and detector, alternating order",
+  "times_ms": {
+    "fusion": {
+      "mean": 272.48549062574057,
+      "median": 273.6221499981184
+    },
+    "single": {
+      "mean": 184.2712656252843,
+      "median": 182.77965000015683
+    }
+  }
+}

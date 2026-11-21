@@ -1,0 +1,8 @@
+{
+  "mode": "v7-source-soup",
+  "accuracy": 72.96137339055794,
+  "macro_f1": 70.30495937480488,
+  "parameters": 88230724,
+  "code_sha256": "b6f2f7a439a341a1a8c94a41b21b67024753e20b331aa33ddd1302bdc4dfdc30",
+  "weights_sha256": "162cc5b042289b86abc7827a644281bc23dbd5a5554e465c409b4072f25d11df"
+}

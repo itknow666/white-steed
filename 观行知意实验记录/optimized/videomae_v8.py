@@ -32,6 +32,12 @@ class DualPatchEmbed(nn.Module):
 
     def forward(self, x):
         depth, ir = self.streams(x)
+        if hasattr(self, 'sensor_gate'):
+            # Residual reliability correction starts at the exact equal-sum solution.
+            a = F.layer_norm(depth, (depth.shape[-1],))
+            b = F.layer_norm(ir, (ir.shape[-1],))
+            gate = .5 * self.sensor_gate(torch.cat((a, b), dim=-1)).tanh()
+            return depth + ir + gate * (depth - ir)
         return depth + ir
 
 
@@ -58,12 +64,40 @@ class QVLoRA(nn.Module):
         return a.proj(value.transpose(1, 2).reshape(batch, tokens, dim))
 
 
+class TemporalAdapter(nn.Module):
+    """Local motion correction on the 8×14×14 VideoMAE tubelet grid."""
+    def __init__(self, dim, width=32):
+        super().__init__()
+        self.norm = nn.LayerNorm(dim)
+        self.down = nn.Linear(dim, width)
+        self.motion = nn.Conv3d(width, width, (3, 1, 1), padding=(1, 0, 0), groups=width)
+        self.up = nn.Linear(width, dim)
+        nn.init.zeros_(self.up.weight)
+        nn.init.zeros_(self.up.bias)
+
+    def forward(self, tokens):
+        b, n, _ = tokens.shape
+        feature = self.down(self.norm(tokens)).transpose(1, 2).reshape(b, -1, 8, 14, 14)
+        shifted = self.motion(feature).flatten(2).transpose(1, 2).reshape(b, n, -1)
+        return tokens + self.up(F.gelu(shifted))
+
+
 class DomainVideoMAE(VideoMAEClassifier):
-    def __init__(self, mode='dual', *, pretrained=None, warmstart=None):
+    def __init__(self, mode='dual', *, pretrained=None, warmstart=None, variant='plain'):
         super().__init__(pretrained=pretrained)
         if warmstart is not None:
             self.load_state_dict(warmstart, strict=True)
         self.encoder.patch_embed = DualPatchEmbed(self.encoder.patch_embed)
+        # Adding an optional module must not change the data shuffle or Mixup stream.
+        with torch.random.fork_rng(devices=[]):
+            if variant == 'gate':
+                gate = nn.Linear(2 * self.encoder.num_features, 1)
+                nn.init.zeros_(gate.weight)
+                nn.init.zeros_(gate.bias)
+                self.encoder.patch_embed.sensor_gate = gate
+            if variant == 'temporal':
+                for i in (3, 7, 11):
+                    self.encoder.blocks[i].temporal_adapter = TemporalAdapter(self.encoder.num_features)
         if mode == 'lora':
             for block in self.encoder.blocks:
                 block.attn = QVLoRA(block.attn)
@@ -77,4 +111,13 @@ class DomainVideoMAE(VideoMAEClassifier):
         return ((x - self.mean) / self.std).contiguous()
 
     def forward(self, x):
-        return self.head(self.encoder(self.normalized_clip(x)))
+        x = self.normalized_clip(x)
+        if not hasattr(self.encoder.blocks[3], 'temporal_adapter'):
+            return self.head(self.encoder(x))
+        encoder = self.encoder
+        x = encoder.patch_embed(x) + encoder.pos_embed.to(x.dtype)
+        for block in encoder.blocks:
+            x = block(x)
+            if hasattr(block, 'temporal_adapter'):
+                x = block.temporal_adapter(x)
+        return self.head(encoder.fc_norm(x.mean(1)))

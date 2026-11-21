@@ -1,0 +1,9 @@
+{"mode": "dual", "epoch": 1, "step": 1, "loss": 0.8960506916046143}
+{"mode": "dual", "epoch": 1, "step": 81, "loss": 0.6276669877546804}
+{"mode": "dual", "epoch": 1, "step": 161, "loss": 0.6272974373390956}
+{"mode": "dual", "epoch": 1, "step": 241, "loss": 0.6509188848907027}
+{"epoch": 1, "steps": 250, "seen": 1995, "loss": 0.6605570879197659, "accuracy": 70.1716738197425, "macro_f1": 66.66246068810257, "trainable": 22144233, "peak_mib": 2773.3720703125, "elapsed": 119.70300000000134}
+{"mode": "dual", "epoch": 2, "step": 321, "loss": 0.7538480892987318}
+{"mode": "dual", "epoch": 2, "step": 401, "loss": 0.722741352603925}
+{"mode": "dual", "epoch": 2, "step": 481, "loss": 0.7110666513959051}
+{"epoch": 2, "steps": 500, "seen": 1995, "loss": 0.7191541982175115, "accuracy": 69.31330472103004, "macro_f1": 66.24019510400879, "trainable": 22144233, "peak_mib": 2773.3720703125, "elapsed": 230.40600000000268}

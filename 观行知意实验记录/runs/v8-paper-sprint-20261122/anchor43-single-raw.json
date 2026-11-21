@@ -1,0 +1,8 @@
+{
+  "mode": "anchor43-single",
+  "accuracy": 72.96137339055794,
+  "macro_f1": 69.40858694392253,
+  "parameters": 24767544,
+  "code_sha256": "c5e5a2d2b5a8c4986993f82bb95de9fa601d2eb1c56fea904fed602182816c99",
+  "weights_sha256": "7b9a43f3ed81a51da6d46e54cf30fb4800ac4507890bf3ceaa1c2e9c298d5aad"
+}

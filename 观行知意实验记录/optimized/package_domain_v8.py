@@ -54,7 +54,8 @@ def compare(root):
 def package(run, package_dir, winner):
     package_dir.mkdir(parents=True)
     config = json.loads((V7/'code/config.json').read_text(encoding='utf-8'))
-    arch = 'videomae2_lora_v8' if winner['mode'] == 'lora' else 'videomae2_dual_v8'
+    default_arch = 'videomae2_lora_v8' if winner['mode'] == 'lora' else 'videomae2_dual_v8'
+    arch = winner.get('architecture', default_arch)
     config['components'][0]['architecture'] = arch
     state = torch.load(run/winner['mode']/'best_ema.pt', map_location='cpu', weights_only=True)
     if winner['fusion']:
@@ -69,6 +70,8 @@ def package(run, package_dir, winner):
                  'videomae_v8.py': ROOT/'optimized/videomae_v8.py',
                  'optimized/train_domain_v8.py': ROOT/'optimized/train_domain_v8.py',
                  'optimized/train_videomae.py': ROOT/'optimized/train_videomae.py'}
+    for name in winner.get('training_sources', ()):
+        additions[f'optimized/{name}'] = ROOT/'optimized'/name
     archive = package_dir/'code.zip'
     with zipfile.ZipFile(V7/'code.zip') as base, zipfile.ZipFile(archive, 'x', zipfile.ZIP_DEFLATED) as out:
         for name in base.namelist():
@@ -77,8 +80,11 @@ def package(run, package_dir, winner):
         for name, path in additions.items():
             out.write(path, name)
         out.writestr('config.json', json.dumps(config, indent=2))
-        out.writestr('README.md', 'V8 domain adaptation. Run predict.py with matching model.pt. '
-                     'Training: optimized/train_domain_v8.py with synchronized cache and V7 VideoMAE weight.\n')
+        readme = 'V8 domain adaptation. Run predict.py with matching model.pt.\n'
+        readme += 'Training: optimized/train_domain_v8.py with synchronized cache and V7 VideoMAE weight.\n'
+        if winner.get('training_sources'):
+            readme += f"Recipe selected for packaging: {winner['mode']}. See the direction A experiment guide.\n"
+        out.writestr('README.md', readme)
     with zipfile.ZipFile(archive) as z:
         assert z.testzip() is None and len(z.namelist()) == len(set(z.namelist())) <= 256
         assert sum(f.file_size for f in z.infolist()) <= 64*1024**2 and archive.stat().st_size <= 20*1024**2

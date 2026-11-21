@@ -1,0 +1,182 @@
+{
+  "scores": {
+    "v8-original": {
+      "single": {
+        "accuracy": 70.3862660944206,
+        "macro_f1": 66.58382715698521
+      },
+      "fusion": {
+        "accuracy": 72.3175965665236,
+        "macro_f1": 69.50177787180394
+      },
+      "epochs": 1
+    },
+    "v7-source-soup": {
+      "single": {
+        "accuracy": 72.3175965665236,
+        "macro_f1": 68.45159629344039
+      },
+      "fusion": {
+        "accuracy": 72.96137339055794,
+        "macro_f1": 70.30495937480485
+      },
+      "epochs": null
+    },
+    "v7-source43": {
+      "single": {
+        "accuracy": 71.88841201716738,
+        "macro_f1": 68.3913397466018
+      },
+      "fusion": {
+        "accuracy": 72.53218884120172,
+        "macro_f1": 69.26373734092708
+      },
+      "epochs": 21
+    },
+    "v7-source44": {
+      "single": {
+        "accuracy": 71.45922746781116,
+        "macro_f1": 67.69585960365744
+      },
+      "fusion": {
+        "accuracy": 71.45922746781116,
+        "macro_f1": 67.09213939217557
+      },
+      "epochs": 21
+    },
+    "transfer43": {
+      "single": {
+        "accuracy": 71.45922746781116,
+        "macro_f1": 68.07115228664597
+      },
+      "fusion": {
+        "accuracy": 72.53218884120172,
+        "macro_f1": 68.8498069104356
+      },
+      "epochs": 1
+    },
+    "transfer44": {
+      "single": {
+        "accuracy": 71.03004291845494,
+        "macro_f1": 67.87009027855733
+      },
+      "fusion": {
+        "accuracy": 71.67381974248927,
+        "macro_f1": 68.0749482446681
+      },
+      "epochs": 1
+    },
+    "staged43": {
+      "single": {
+        "accuracy": 72.53218884120172,
+        "macro_f1": 69.1779686427191
+      },
+      "fusion": {
+        "accuracy": 71.88841201716738,
+        "macro_f1": 68.27877868072906
+      },
+      "epochs": 1
+    },
+    "plain": {
+      "single": {
+        "accuracy": 70.3862660944206,
+        "macro_f1": 65.98227482592911
+      },
+      "fusion": {
+        "accuracy": 70.81545064377683,
+        "macro_f1": 67.39629830281932
+      },
+      "epochs": 1
+    },
+    "temporal": {
+      "single": {
+        "accuracy": 69.52789699570816,
+        "macro_f1": 64.79823466921124
+      },
+      "fusion": {
+        "accuracy": 71.24463519313305,
+        "macro_f1": 68.03802719701389
+      },
+      "epochs": 1
+    },
+    "gate": {
+      "single": {
+        "accuracy": 70.1716738197425,
+        "macro_f1": 66.66246068810257
+      },
+      "fusion": {
+        "accuracy": 70.60085836909872,
+        "macro_f1": 66.94744928258444
+      },
+      "epochs": 1
+    },
+    "masked": {
+      "single": {
+        "accuracy": 70.3862660944206,
+        "macro_f1": 65.99932141706665
+      },
+      "fusion": {
+        "accuracy": 71.67381974248927,
+        "macro_f1": 68.70458945505395
+      },
+      "epochs": 2
+    },
+    "distill": {
+      "single": {
+        "accuracy": 71.03004291845494,
+        "macro_f1": 66.56308853966752
+      },
+      "fusion": {
+        "accuracy": 71.88841201716738,
+        "macro_f1": 68.8965079714116
+      },
+      "epochs": 2
+    },
+    "soup43-v8": {
+      "single": {
+        "accuracy": 72.74678111587983,
+        "macro_f1": 68.71982672323223
+      },
+      "fusion": {
+        "accuracy": 72.53218884120172,
+        "macro_f1": 69.54638486673501
+      },
+      "epochs": null
+    },
+    "soup43-44": {
+      "single": {
+        "accuracy": 71.45922746781116,
+        "macro_f1": 68.13424222709877
+      },
+      "fusion": {
+        "accuracy": 72.53218884120172,
+        "macro_f1": 69.36965014645405
+      },
+      "epochs": null
+    },
+    "soup-three": {
+      "single": {
+        "accuracy": 72.3175965665236,
+        "macro_f1": 69.4739398323319
+      },
+      "fusion": {
+        "accuracy": 72.96137339055794,
+        "macro_f1": 70.31714937527569
+      },
+      "epochs": null
+    },
+    "anchor43-half": {
+      "single": {
+        "accuracy": 72.96137339055794,
+        "macro_f1": 69.40858694392253
+      },
+      "fusion": {
+        "accuracy": 72.53218884120172,
+        "macro_f1": 69.05944017114228
+      },
+      "epochs": null
+    }
+  },
+  "selected_for_raw_validation": "soup-three",
+  "incomplete": []
+}

@@ -1,0 +1,22 @@
+{
+  "mode": "dual",
+  "seed": 42,
+  "batch": 8,
+  "epochs": 2,
+  "base_lr": 1e-05,
+  "layer_decay": 0.85,
+  "head_multiplier": 5,
+  "continue_dual": true,
+  "class_power": 0.25,
+  "ir_jitter": false,
+  "domain_variant": "gate",
+  "mask_rate": 0.15,
+  "distill": 0.0,
+  "initial_sha256": "1a2424a5337c62982b2c77ac6d5d18f10465a9c4b736dcf600a43c3df8d86094",
+  "cache_sha256": "b3f92fd6952b07fa0a88e53131bd663a3e39ba573b44ed26261c6819acf6be26",
+  "parameters": 22144233,
+  "initial_trainable": 22144233,
+  "train_samples": 1995,
+  "validation_samples": 466,
+  "test_accessed": false
+}

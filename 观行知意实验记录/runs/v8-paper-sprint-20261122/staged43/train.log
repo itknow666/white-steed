@@ -1,0 +1,9 @@
+{"mode": "staged", "epoch": 1, "step": 1, "loss": 0.8770459890365601}
+{"mode": "staged", "epoch": 1, "step": 81, "loss": 0.6493490871823864}
+{"mode": "staged", "epoch": 1, "step": 161, "loss": 0.6489205789862212}
+{"mode": "staged", "epoch": 1, "step": 241, "loss": 0.6679594386910007}
+{"epoch": 1, "steps": 250, "seen": 1995, "loss": 0.6762037539541871, "accuracy": 72.53218884120172, "macro_f1": 69.1779686427191, "trainable": 854504, "peak_mib": 1919.51171875, "elapsed": 125.90600000000268}
+{"mode": "staged", "epoch": 2, "step": 321, "loss": 0.7114509423853645}
+{"mode": "staged", "epoch": 2, "step": 401, "loss": 0.6739703456297615}
+{"mode": "staged", "epoch": 2, "step": 481, "loss": 0.6586556254011212}
+{"epoch": 2, "steps": 500, "seen": 1995, "loss": 0.6634875620666303, "accuracy": 71.67381974248927, "macro_f1": 66.75639683103675, "trainable": 7950824, "peak_mib": 2159.609375, "elapsed": 241.35900000000402}

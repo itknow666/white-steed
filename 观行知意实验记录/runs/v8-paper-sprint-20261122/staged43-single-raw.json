@@ -1,0 +1,8 @@
+{
+  "mode": "staged43-single",
+  "accuracy": 72.3175965665236,
+  "macro_f1": 68.85621261507762,
+  "parameters": 24767544,
+  "code_sha256": "dc04a91b79b8311581941b47178fa87eb9d75ef3aab3a81f81ac7884fdf1e1e8",
+  "weights_sha256": "a9db2141363d0b6828c3ee437e6233dbb3af83af3031d522d0f5f27835daf853"
+}

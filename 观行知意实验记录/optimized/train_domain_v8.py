@@ -75,13 +75,23 @@ def main():
     parser.add_argument('--batch', type=int, default=8)
     parser.add_argument('--continue-dual', action='store_true', help='Initialize from a trained V8 dual checkpoint')
     parser.add_argument('--base-lr', type=float, default=2e-5)
+    parser.add_argument('--keep-blocks-frozen', action='store_true', help='Keep staged Transformer blocks frozen for every epoch')
     parser.add_argument('--class-power', type=float, default=.25)
     parser.add_argument('--ir-jitter', action='store_true', help='Training-only clip-consistent IR gain and offset')
+    parser.add_argument('--domain-variant', choices=['plain', 'gate', 'temporal'], default='plain')
+    parser.add_argument('--mask-rate', type=float, default=0.)
+    parser.add_argument('--distill', type=float, default=0., help='KL weight for frozen clean-view V8 teacher')
     a = parser.parse_args()
     if a.continue_dual and a.mode not in ('dual', 'staged'):
         parser.error('--continue-dual supports dual and staged')
     if a.base_lr <= 0 or a.class_power < 0:
         parser.error('Expected positive learning rate and nonnegative class exponent')
+    if a.keep_blocks_frozen and a.mode != 'staged':
+        parser.error('--keep-blocks-frozen requires staged mode')
+    if a.domain_variant != 'plain' and not a.continue_dual:
+        parser.error('New domain variants require a V8 dual checkpoint')
+    if not 0 <= a.mask_rate < 1 or a.distill < 0 or (a.distill and not (a.continue_dual and a.mask_rate)):
+        parser.error('Distillation requires a V8 checkpoint and a positive mask rate')
     a.output.mkdir(parents=True)
     torch.set_num_threads(4)
     random.seed(a.seed)
@@ -98,19 +108,29 @@ def main():
     va = DataLoader(valid, batch_size=a.batch, shuffle=False, pin_memory=True)
     state = torch.load(a.initial, map_location='cpu', weights_only=True)
     if a.continue_dual:
-        model = DomainVideoMAE()
-        model.load_state_dict(state, strict=True)
+        model = DomainVideoMAE(variant=a.domain_variant)
+        missing, extra = model.load_state_dict(state, strict=False)
+        new_keys = {key for key in model.state_dict() if 'sensor_gate' in key or 'temporal_adapter' in key}
+        if set(missing) != new_keys or extra:
+            raise ValueError(f'Unexpected V8 migration keys: {missing}, {extra}')
         if a.mode == 'staged':
             model.encoder.blocks.requires_grad_(False)
     else:
         model = make_model(a.mode, state)
     model.cuda()
+    teacher = None
+    if a.distill:
+        with torch.random.fork_rng(devices=[]):
+            teacher = DomainVideoMAE().cuda().eval().requires_grad_(False)
+        teacher.load_state_dict(state)
     del state
     num_params = sum(t.numel() for t in model.parameters())
     initial_trainable = sum(t.numel() for t in model.parameters() if t.requires_grad)
     config = {'mode': a.mode, 'seed': a.seed, 'batch': a.batch, 'epochs': a.epochs,
               'base_lr': a.base_lr, 'layer_decay': .85, 'head_multiplier': 5,
               'continue_dual': a.continue_dual, 'class_power': a.class_power, 'ir_jitter': a.ir_jitter,
+              'keep_blocks_frozen': a.keep_blocks_frozen,
+              'domain_variant': a.domain_variant, 'mask_rate': a.mask_rate, 'distill': a.distill,
               'initial_sha256': sha(a.initial), 'cache_sha256': sha(a.cache/'manifest.json'),
               'parameters': num_params, 'initial_trainable': initial_trainable,
               'train_samples': len(train), 'validation_samples': len(valid), 'test_accessed': False}
@@ -128,9 +148,11 @@ def main():
         torch.cuda.set_rng_state_all(rng[3])
     groups = model.layer_groups(a.base_lr, .85, 5, .05)
     # Latter four blocks are unfrozen after epoch one; retain their optimizer groups.
-    delayed = [q for block in model.encoder.blocks[-4:] for q in block.parameters()] if a.mode in ('staged', 'ssl') else []
+    unfreeze_late = a.mode in ('staged', 'ssl') and not a.keep_blocks_frozen
+    delayed = [q for block in model.encoder.blocks[-4:] for q in block.parameters()] if unfreeze_late else []
     eligible = {id(t) for t in model.parameters() if t.requires_grad} | {id(t) for t in delayed}
     patch_ids = {id(t) for t in model.encoder.patch_embed.parameters()}
+    patch_ids.update(id(t) for name, t in model.named_parameters() if 'temporal_adapter' in name)
     optimizer_groups = []
     for group in groups:
         chosen = [q for q in group['params'] if id(q) in eligible]
@@ -148,6 +170,7 @@ def main():
     criterion = nn.CrossEntropyLoss(weight=torch.tensor(weights / weights.mean(), device='cuda'), label_smoothing=.05)
     best, best_epoch, step = (-1., -1.), 0, 0
     ir_rng = torch.Generator(device='cuda').manual_seed(a.seed + 397)
+    mask_rng = torch.Generator(device='cuda').manual_seed(a.seed + 871)
     torch.cuda.reset_peak_memory_stats()
     for epoch in range(1, a.epochs + 1):
         if epoch == 2:
@@ -171,11 +194,24 @@ def main():
             mix = float(np.random.beta(.2, .2)) if perm is not None else 1.
             if perm is not None:
                 x = mix * x + (1. - mix) * x[perm]
+            if a.mask_rate:
+                clean = x
+                batch, _, frames, height, width = x.shape
+                patches = torch.rand((batch, 1, 8, 14, 14), generator=mask_rng, device=x.device) < a.mask_rate
+                patches = F.interpolate(patches.float(), (frames, height, width), mode='nearest').bool()
+                mask_ir = torch.rand((batch, 1, 1, 1, 1), generator=mask_rng, device=x.device) < .5
+                mask = torch.cat((~mask_ir.expand(-1, 3, -1, -1, -1), mask_ir), dim=1) & patches
+                x = torch.where(mask, model.mean, x)
             with torch.autocast('cuda', dtype=torch.bfloat16):
                 logits = model(x)
                 loss = criterion(logits, y)
                 if perm is not None:
                     loss = mix * loss + (1. - mix) * criterion(logits, y[perm])
+                if teacher is not None:
+                    with torch.no_grad():
+                        target = (teacher(clean).float() / 2).softmax(dim=1)
+                    kl = F.kl_div((logits.float() / 2).log_softmax(dim=1), target, reduction='batchmean')
+                    loss = loss + a.distill * 4 * kl
             loss.backward()
             nn.utils.clip_grad_norm_(model.parameters(), 5., error_if_nonfinite=True)
             optimizer.step()

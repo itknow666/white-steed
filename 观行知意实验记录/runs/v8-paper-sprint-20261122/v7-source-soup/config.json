@@ -1,0 +1,15 @@
+{
+  "domain_variant": "plain",
+  "method": "equal checkpoint averaging",
+  "inputs": [
+    "runs\\videomae2_s-v7-20261114\\best_ema.pt",
+    "runs\\videomae2_s-v7-seed43-20261114\\best_ema.pt",
+    "runs\\videomae2_s-v7-seed44-20261114\\best_ema.pt"
+  ],
+  "source_sha256": [
+    "60357e8dfabc1d7ed2223b05abd11a42a90c720f1f8c03f9372ab2aabffbdfe1",
+    "308a29560e6d44185edcb062f6a65f0ce2636f28330bbcc85da0377276d7d9ad",
+    "e65ce2820962613a9209e495ffaa7901082941b6db4a8ac4050e8cf28fc23009"
+  ],
+  "convert_first_to_dual": false
+}
