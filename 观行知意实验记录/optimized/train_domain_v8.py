@@ -73,7 +73,15 @@ def main():
     parser.add_argument('--epochs', type=int, default=2)
     parser.add_argument('--seed', type=int, default=42)
     parser.add_argument('--batch', type=int, default=8)
+    parser.add_argument('--continue-dual', action='store_true', help='Initialize from a trained V8 dual checkpoint')
+    parser.add_argument('--base-lr', type=float, default=2e-5)
+    parser.add_argument('--class-power', type=float, default=.25)
+    parser.add_argument('--ir-jitter', action='store_true', help='Training-only clip-consistent IR gain and offset')
     a = parser.parse_args()
+    if a.continue_dual and a.mode not in ('dual', 'staged'):
+        parser.error('--continue-dual supports dual and staged')
+    if a.base_lr <= 0 or a.class_power < 0:
+        parser.error('Expected positive learning rate and nonnegative class exponent')
     a.output.mkdir(parents=True)
     torch.set_num_threads(4)
     random.seed(a.seed)
@@ -89,12 +97,20 @@ def main():
     tr = DataLoader(train, batch_size=a.batch, shuffle=True, pin_memory=True)
     va = DataLoader(valid, batch_size=a.batch, shuffle=False, pin_memory=True)
     state = torch.load(a.initial, map_location='cpu', weights_only=True)
-    model = make_model(a.mode, state).cuda()
+    if a.continue_dual:
+        model = DomainVideoMAE()
+        model.load_state_dict(state, strict=True)
+        if a.mode == 'staged':
+            model.encoder.blocks.requires_grad_(False)
+    else:
+        model = make_model(a.mode, state)
+    model.cuda()
     del state
     num_params = sum(t.numel() for t in model.parameters())
     initial_trainable = sum(t.numel() for t in model.parameters() if t.requires_grad)
     config = {'mode': a.mode, 'seed': a.seed, 'batch': a.batch, 'epochs': a.epochs,
-              'base_lr': 2e-5, 'layer_decay': .85, 'head_multiplier': 5,
+              'base_lr': a.base_lr, 'layer_decay': .85, 'head_multiplier': 5,
+              'continue_dual': a.continue_dual, 'class_power': a.class_power, 'ir_jitter': a.ir_jitter,
               'initial_sha256': sha(a.initial), 'cache_sha256': sha(a.cache/'manifest.json'),
               'parameters': num_params, 'initial_trainable': initial_trainable,
               'train_samples': len(train), 'validation_samples': len(valid), 'test_accessed': False}
@@ -110,7 +126,7 @@ def main():
         np.random.set_state(rng[1])
         torch.set_rng_state(rng[2])
         torch.cuda.set_rng_state_all(rng[3])
-    groups = model.layer_groups(2e-5, .85, 5, .05)
+    groups = model.layer_groups(a.base_lr, .85, 5, .05)
     # Latter four blocks are unfrozen after epoch one; retain their optimizer groups.
     delayed = [q for block in model.encoder.blocks[-4:] for q in block.parameters()] if a.mode in ('staged', 'ssl') else []
     eligible = {id(t) for t in model.parameters() if t.requires_grad} | {id(t) for t in delayed}
@@ -128,9 +144,10 @@ def main():
     counts = np.bincount([r['label'] for r in train.rows], minlength=40)
     if not np.all(counts > 0):
         raise ValueError('A class is absent from training')
-    weights = counts.astype(np.float32) ** -.25
+    weights = counts.astype(np.float32) ** -a.class_power
     criterion = nn.CrossEntropyLoss(weight=torch.tensor(weights / weights.mean(), device='cuda'), label_smoothing=.05)
     best, best_epoch, step = (-1., -1.), 0, 0
+    ir_rng = torch.Generator(device='cuda').manual_seed(a.seed + 397)
     torch.cuda.reset_peak_memory_stats()
     for epoch in range(1, a.epochs + 1):
         if epoch == 2:
@@ -140,10 +157,15 @@ def main():
         seen, loss_sum = 0, 0.
         for x, y, _ in tr:
             x, y = x.cuda(non_blocking=True), y.cuda(non_blocking=True)
+            if a.ir_jitter:
+                # One gain and offset per clip, with depth pixels and alignment preserved.
+                jitter = torch.rand((len(y), 2, 1, 1, 1), generator=ir_rng, device=x.device)
+                gain, offset = .75 + .5*jitter[:, :1], -.05 + .1*jitter[:, 1:]
+                x[:, 3:4] = (x[:, 3:4] * gain + offset).clamp(0., 1.)
             frac = step / max(1, a.epochs * len(tr) - 1)
             schedule = min(1., .2 + 4. * frac) * (.15 + .85 * .5 * (1 + math.cos(math.pi * frac)))
             for group in optimizer.param_groups:
-                group['lr'] = 2e-5 * group['lr_scale'] * schedule
+                group['lr'] = a.base_lr * group['lr_scale'] * schedule
             optimizer.zero_grad(set_to_none=True)
             perm = torch.randperm(len(y), device='cuda') if random.random() < .5 else None
             mix = float(np.random.beta(.2, .2)) if perm is not None else 1.

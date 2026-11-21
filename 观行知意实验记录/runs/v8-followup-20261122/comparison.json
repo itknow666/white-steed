@@ -1,0 +1,55 @@
+{
+  "scores": {
+    "v8-original": {
+      "single": {
+        "accuracy": 70.3862660944206,
+        "macro_f1": 66.58382715698521
+      },
+      "fusion": {
+        "accuracy": 72.3175965665236,
+        "macro_f1": 69.50177787180394
+      }
+    },
+    "control": {
+      "single": {
+        "accuracy": 70.81545064377683,
+        "macro_f1": 66.93129961055678
+      },
+      "fusion": {
+        "accuracy": 71.03004291845494,
+        "macro_f1": 67.74439107086779
+      }
+    },
+    "ir-jitter": {
+      "single": {
+        "accuracy": 70.1716738197425,
+        "macro_f1": 66.14658048398067
+      },
+      "fusion": {
+        "accuracy": 71.24463519313305,
+        "macro_f1": 68.45622170359954
+      }
+    },
+    "adapter-only": {
+      "single": {
+        "accuracy": 69.31330472103004,
+        "macro_f1": 64.625943916094
+      },
+      "fusion": {
+        "accuracy": 70.81545064377683,
+        "macro_f1": 67.5142265979902
+      }
+    },
+    "class-weight": {
+      "single": {
+        "accuracy": 70.1716738197425,
+        "macro_f1": 66.11148757800193
+      },
+      "fusion": {
+        "accuracy": 70.60085836909872,
+        "macro_f1": 67.27232164196597
+      }
+    }
+  },
+  "selected": "ir-jitter"
+}

@@ -1,0 +1,16 @@
+{
+  "mode": "ir-jitter",
+  "raw_validation": {
+    "accuracy": 71.24463519313305,
+    "macro_f1": 68.45622170359954
+  },
+  "previous_raw_validation": {
+    "accuracy": 72.3175965665236,
+    "macro_f1": 69.50177787180394
+  },
+  "promote": false,
+  "parameters": 88282244,
+  "weights_sha256": "2ec73ec34b9c4f2209b379a69963b8ccf29a66d1b3d42305d6526c3030230018",
+  "code_sha256": "db72be4b5cb6b54d10d0ec582857cffa3e5186a7cc07fee78913ed3ee9e8641f",
+  "linux_verified": false
+}
