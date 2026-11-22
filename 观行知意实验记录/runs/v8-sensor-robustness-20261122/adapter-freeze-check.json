@@ -1,0 +1,12 @@
+{
+  "adapters": {
+    "changed_adapter_tensors": 12,
+    "unchanged_tensors": 165,
+    "trainable_parameters": 51520
+  },
+  "depth-adapters": {
+    "changed_adapter_tensors": 12,
+    "unchanged_tensors": 165,
+    "trainable_parameters": 51520
+  }
+}

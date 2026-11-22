@@ -69,6 +69,7 @@ def package(run, package_dir, winner):
     additions = {'inference.py': ROOT/'optimized/inference_v7.py',
                  'videomae_v8.py': ROOT/'optimized/videomae_v8.py',
                  'optimized/train_domain_v8.py': ROOT/'optimized/train_domain_v8.py',
+                 'optimized/sensor_corruption_v8.py': ROOT/'optimized/sensor_corruption_v8.py',
                  'optimized/train_videomae.py': ROOT/'optimized/train_videomae.py'}
     for name in winner.get('training_sources', ()):
         additions[f'optimized/{name}'] = ROOT/'optimized'/name

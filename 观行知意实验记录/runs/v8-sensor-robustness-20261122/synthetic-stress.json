@@ -1,0 +1,91 @@
+{
+  "samples": 466,
+  "ir_gain": 0.5,
+  "depth_gap_side_fraction": 0.4,
+  "results": {
+    "initial": {
+      "clean": {
+        "accuracy": 73.60515021459227,
+        "macro_f1": 70.11618033021175
+      },
+      "dark-ir": {
+        "accuracy": 72.96137339055794,
+        "macro_f1": 69.84684206634333
+      },
+      "depth-gap": {
+        "accuracy": 56.652360515021456,
+        "macro_f1": 49.68077533507399
+      }
+    },
+    "control": {
+      "clean": {
+        "accuracy": 72.74678111587983,
+        "macro_f1": 69.16209846914457
+      },
+      "dark-ir": {
+        "accuracy": 71.67381974248927,
+        "macro_f1": 68.02832040323071
+      },
+      "depth-gap": {
+        "accuracy": 56.652360515021456,
+        "macro_f1": 49.97832519408025
+      }
+    },
+    "augment": {
+      "clean": {
+        "accuracy": 72.53218884120172,
+        "macro_f1": 68.53576352090785
+      },
+      "dark-ir": {
+        "accuracy": 71.67381974248927,
+        "macro_f1": 68.07571339293061
+      },
+      "depth-gap": {
+        "accuracy": 57.081545064377686,
+        "macro_f1": 50.38959517763797
+      }
+    },
+    "consistency": {
+      "clean": {
+        "accuracy": 72.74678111587983,
+        "macro_f1": 69.38315822604946
+      },
+      "dark-ir": {
+        "accuracy": 71.88841201716738,
+        "macro_f1": 68.47255150801331
+      },
+      "depth-gap": {
+        "accuracy": 57.93991416309013,
+        "macro_f1": 51.090594631143205
+      }
+    },
+    "adapters": {
+      "clean": {
+        "accuracy": 73.60515021459227,
+        "macro_f1": 70.11618033021175
+      },
+      "dark-ir": {
+        "accuracy": 72.96137339055794,
+        "macro_f1": 69.87431459381585
+      },
+      "depth-gap": {
+        "accuracy": 56.652360515021456,
+        "macro_f1": 49.68077533507399
+      }
+    },
+    "depth-adapters": {
+      "clean": {
+        "accuracy": 73.60515021459227,
+        "macro_f1": 70.11618033021175
+      },
+      "dark-ir": {
+        "accuracy": 72.96137339055794,
+        "macro_f1": 69.87431459381585
+      },
+      "depth-gap": {
+        "accuracy": 56.652360515021456,
+        "macro_f1": 49.68077533507399
+      }
+    }
+  }
+}

@@ -16,6 +16,7 @@ from torch.utils.data import DataLoader
 from train_videomae import Clips, evaluate, save, sha, write
 from videomae_model import VideoMAEClassifier
 from videomae_v8 import DomainVideoMAE
+from sensor_corruption_v8 import corrupt_training_clip
 
 
 def offline_teacher_targets(path, rows, policy):
@@ -148,6 +149,9 @@ def main():
     parser.add_argument('--teacher-weight', type=float, default=.35, help='Weight on temperature-scaled offline KL')
     parser.add_argument('--adapter-only', action='store_true', help='Train only the two input residual adapters')
     parser.add_argument('--last-blocks', type=int, default=0, help='Train only the last N encoder blocks, normalization and head')
+    parser.add_argument('--sensor-augment', action='store_true', help='Darken IR or hide a local depth patch')
+    parser.add_argument('--sensor-consistency', action='store_true', help='Match a frozen clean-view teacher on perturbed samples')
+    parser.add_argument('--sensor-kind', choices=['mixed', 'depth-only'], default='mixed')
     a = parser.parse_args()
     if a.continue_dual and a.mode not in ('dual', 'staged'):
         parser.error('--continue-dual supports dual and staged')
@@ -171,6 +175,12 @@ def main():
         parser.error('A positive finite teacher weight requires offline teacher logits')
     if a.last_blocks < 0 or (a.last_blocks and (a.mode != 'dual' or not a.continue_dual or a.domain_variant != 'plain' or a.adapter_only)):
         parser.error('--last-blocks requires plain dual fine-tuning without adapter-only mode')
+    if a.sensor_consistency and not a.sensor_augment:
+        parser.error('--sensor-consistency requires --sensor-augment')
+    if a.sensor_kind != 'mixed' and not a.sensor_augment:
+        parser.error('--sensor-kind requires --sensor-augment')
+    if a.sensor_augment and (a.mode != 'dual' or not a.continue_dual or a.domain_variant != 'plain' or a.mask_rate or a.ir_jitter):
+        parser.error('Sensor augmentation requires plain dual continuation without other sensor corruption')
     if not 0 <= a.mask_rate < 1 or a.distill < 0 or (a.distill and not (a.continue_dual and a.mask_rate)):
         parser.error('Distillation requires a V8 checkpoint and a positive mask rate')
     a.output.mkdir(parents=True)
@@ -221,7 +231,7 @@ def main():
             order_head = nn.Linear(model.encoder.num_features, 1, bias=False).cuda()
             nn.init.zeros_(order_head.weight)
     teacher = None
-    if a.distill:
+    if a.distill or a.sensor_consistency:
         with torch.random.fork_rng(devices=[]):
             teacher = DomainVideoMAE().cuda().eval().requires_grad_(False)
         teacher.load_state_dict(state)
@@ -254,6 +264,9 @@ def main():
         config.update(adapter_only=True, adapter_lr_multiplier=10.)
     if a.last_blocks:
         config['train_last_blocks'] = a.last_blocks
+    if a.sensor_augment:
+        config.update(sensor_kind=a.sensor_kind, sensor_augment_probability=.55, ir_gain_range=[.55, .90], depth_gap_side_range=[.18, .34],
+                      sensor_consistency_weight=.20 if a.sensor_consistency else 0.)
     write(a.output/'config.json', config)
     started = time.monotonic()
     if a.mode == 'ssl':
@@ -300,6 +313,7 @@ def main():
     mask_rng = torch.Generator(device='cuda').manual_seed(a.seed + 871)
     align_rng = torch.Generator(device='cuda').manual_seed(a.seed + 1259)
     pace_rng = torch.Generator(device='cuda').manual_seed(a.seed + 1597)
+    sensor_rng = torch.Generator(device='cuda').manual_seed(a.seed + 1999)
     torch.cuda.reset_peak_memory_stats()
     for epoch in range(1, a.epochs + 1):
         if epoch == 2:
@@ -310,6 +324,7 @@ def main():
         alignment_sum = torch.zeros((), device='cuda')
         order_sum = torch.zeros((), device='cuda')
         teacher_sum = torch.zeros((), device='cuda')
+        consistency_sum = torch.zeros((), device='cuda')
         for x, y, indices in tr:
             x, y = x.cuda(non_blocking=True), y.cuda(non_blocking=True)
             if a.pace_jitter:
@@ -318,8 +333,8 @@ def main():
                 draws = torch.rand((len(y), 2), device=x.device, generator=pace_rng)
                 strength = (draws[:, :1] * .26 - .13) * (draws[:, 1:] < .5)
                 warped = frame_time + strength * torch.sin(math.pi * frame_time)
-                indices = (warped * (x.size(2) - 1)).round().long().clamp(0, x.size(2) - 1)
-                x = x.gather(2, indices[:, None, :, None, None].expand_as(x))
+                frame_indices = (warped * (x.size(2) - 1)).round().long().clamp(0, x.size(2) - 1)
+                x = x.gather(2, frame_indices[:, None, :, None, None].expand_as(x))
             if a.ir_jitter:
                 # One gain and offset per clip, with depth pixels and alignment preserved.
                 jitter = torch.rand((len(y), 2, 1, 1, 1), generator=ir_rng, device=x.device)
@@ -334,6 +349,9 @@ def main():
             mix = float(np.random.beta(.2, .2)) if perm is not None else 1.
             if perm is not None:
                 x = mix * x + (1. - mix) * x[perm]
+            if a.sensor_augment:
+                clean = x
+                x, affected = corrupt_training_clip(clean, model.mean, sensor_rng, a.sensor_kind)
             if a.mask_rate:
                 clean = x
                 batch, _, frames, height, width = x.shape
@@ -352,11 +370,17 @@ def main():
                 loss = criterion(logits, y)
                 if perm is not None:
                     loss = mix * loss + (1. - mix) * criterion(logits, y[perm])
-                if teacher is not None:
+                if a.distill:
                     with torch.no_grad():
                         target = (teacher(clean).float() / 2).softmax(dim=1)
                     kl = F.kl_div((logits.float() / 2).log_softmax(dim=1), target, reduction='batchmean')
                     loss = loss + a.distill * 4 * kl
+                elif a.sensor_consistency and affected.any():
+                    with torch.no_grad():
+                        target = (teacher(clean[affected]).float() / 2).softmax(dim=1)
+                    kl = F.kl_div((logits[affected].float() / 2).log_softmax(1), target, reduction='sum') / len(y)
+                    loss = loss + .20 * 4 * kl
+                    consistency_sum += kl.detach() * len(y)
                 if offline_targets is not None:
                     targets = offline_targets[indices.to(x.device)]
                     softened = logits.float() / 2
@@ -409,6 +433,8 @@ def main():
             row['order_loss'] = float(order_sum) / seen
         if offline_targets is not None:
             row['teacher_kl'] = float(teacher_sum) / seen
+        if a.sensor_consistency:
+            row['sensor_kl'] = float(consistency_sum) / seen
         with (a.output/'history.jsonl').open('a', encoding='utf-8') as f:
             f.write(json.dumps(row, allow_nan=False) + '\n')
         print(json.dumps(row), flush=True)

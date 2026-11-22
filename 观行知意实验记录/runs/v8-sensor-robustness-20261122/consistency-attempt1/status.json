@@ -1,0 +1,5 @@
+{
+  "status": "memory_allocation_failed",
+  "completed_epochs": 0,
+  "recovery": "same configuration, run after the other training group"
+}
