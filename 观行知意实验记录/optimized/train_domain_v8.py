@@ -180,7 +180,7 @@ def main():
     parser.add_argument('--keep-blocks-frozen', action='store_true', help='Keep staged Transformer blocks frozen for every epoch')
     parser.add_argument('--class-power', type=float, default=.25)
     parser.add_argument('--ir-jitter', action='store_true', help='Training-only clip-consistent IR gain and offset')
-    parser.add_argument('--domain-variant', choices=['plain', 'gate', 'temporal', 'phase'], default='plain')
+    parser.add_argument('--domain-variant', choices=['plain', 'gate', 'temporal', 'phase', 'balance', 'film'], default='plain')
     parser.add_argument('--mask-rate', type=float, default=0.)
     parser.add_argument('--distill', type=float, default=0., help='KL weight for frozen clean-view V8 teacher')
     parser.add_argument('--alignment', choices=['none', 'control', 'uniform', 'motion', 'motion-stratified'], default='none')
@@ -204,6 +204,9 @@ def main():
     parser.add_argument('--patch-repair-weight', type=float, default=0., help='Reconstruct clean patch features in corrupted depth regions')
     parser.add_argument('--patch-only', action='store_true', help='Update input projections and adapters with fixed encoder blocks and classifier')
     a = parser.parse_args()
+    fit_balance = a.domain_variant in ('balance', 'film')
+    if fit_balance and (a.mode != 'dual' or a.mask_rate):
+        parser.error('Modality balance requires dual continuation with unmasked inputs')
     use_view_teachers = a.teacher_view != 'offline'
     if use_view_teachers:
         if not (a.view_video_weights and a.view_r34_weights) or a.teacher_cache or a.teacher_policy != 'non-target':
@@ -240,8 +243,9 @@ def main():
         parser.error('--sensor-consistency requires --sensor-augment')
     if a.sensor_kind != 'mixed' and not a.sensor_augment:
         parser.error('--sensor-kind requires --sensor-augment')
-    if a.sensor_augment and (a.mode != 'dual' or not a.continue_dual or a.domain_variant != 'plain' or a.mask_rate or a.ir_jitter):
-        parser.error('Sensor augmentation requires plain dual continuation without other sensor corruption')
+    sensor_compatible = a.domain_variant == 'plain' or (fit_balance and not a.sensor_consistency)
+    if a.sensor_augment and (a.mode != 'dual' or not a.continue_dual or not sensor_compatible or a.mask_rate or a.ir_jitter):
+        parser.error('Sensor augmentation requires dual continuation without other sensor corruption')
     if any(not math.isfinite(value) or value < 0 for value in (a.anchor_weight, a.patch_repair_weight)):
         parser.error('Anchor and patch repair weights must be finite and nonnegative')
     if a.anchor_weight and (a.mode != 'dual' or not a.continue_dual or a.domain_variant != 'plain' or a.mask_rate or a.sensor_consistency or a.alignment != 'none'):
@@ -273,7 +277,7 @@ def main():
         model = DomainVideoMAE(variant=a.domain_variant)
         missing, extra = model.load_state_dict(state, strict=False)
         new_keys = {key for key in model.state_dict() if any(
-            part in key for part in ('sensor_gate', 'temporal_adapter', 'phase_head'))}
+            part in key for part in ('sensor_gate', 'temporal_adapter', 'phase_head', 'modality_balance'))}
         if set(missing) != new_keys or extra:
             raise ValueError(f'Unexpected V8 migration keys: {missing}, {extra}')
         if a.mode == 'staged':
@@ -287,6 +291,9 @@ def main():
         model.requires_grad_(False)
         model.encoder.patch_embed.depth_adapter.requires_grad_(True)
         model.encoder.patch_embed.ir_adapter.requires_grad_(True)
+    if fit_balance:
+        model.requires_grad_(False)
+        model.encoder.patch_embed.modality_balance.requires_grad_(True)
     if a.patch_only:
         model.requires_grad_(False)
         model.encoder.patch_embed.requires_grad_(True)
@@ -347,6 +354,8 @@ def main():
                       teacher_temperature=2., teacher_loss_weight=a.teacher_weight, teacher_top_k=a.teacher_top_k)
     if a.adapter_only:
         config.update(adapter_only=True, adapter_lr_multiplier=10.)
+    if fit_balance:
+        config.update(modality_balance_only=True, balance_lr_multiplier=10.)
     if a.last_blocks:
         config['train_last_blocks'] = a.last_blocks
     if a.sensor_augment:
@@ -384,7 +393,7 @@ def main():
         for is_patch in (False, True):
             selected = [q for q in chosen if (id(q) in patch_ids) == is_patch]
             if selected:
-                scale = (10. if a.adapter_only else 2.5) if is_patch and a.mode != 'control' else group['lr_scale']
+                scale = (10. if a.adapter_only or fit_balance else 2.5) if is_patch and a.mode != 'control' else group['lr_scale']
                 optimizer_groups.append(dict(group, params=selected, lr_scale=scale))
     if phase_parameters:
         optimizer_groups.append({'params': phase_parameters, 'lr_scale': 5., 'weight_decay': .05})
@@ -409,7 +418,7 @@ def main():
         if epoch == 2:
             for q in delayed:
                 q.requires_grad_(True)
-        model.train(not (a.phase_head_only or a.adapter_only or a.patch_only or a.anchor_eval_student))
+        model.train(not (a.phase_head_only or a.adapter_only or fit_balance or a.patch_only or a.anchor_eval_student))
         seen, loss_sum = 0, 0.
         alignment_sum = torch.zeros((), device='cuda')
         order_sum = torch.zeros((), device='cuda')

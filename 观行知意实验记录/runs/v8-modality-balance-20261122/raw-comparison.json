@@ -1,0 +1,113 @@
+{
+  "results": {
+    "initial": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.11618033021173,
+      "mode": "kd-non-target",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "8e5dd5517e6c5ad92e01b92e03966f991a72ee8bc67948ef716fbe68ab19173a",
+      "code_sha256": "a0b37c306d909752cb87c237f6bafd3b516853161f0be22ac7e89c7956577894",
+      "linux_verified": false
+    },
+    "adapters-control": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.11618033021173,
+      "mode": "adapters-control",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "fcfbadc1394d12dd2e95c495b59e980328eb64eda7d6bec871ca7fac2612ca26",
+      "code_sha256": "fc9e21f991f8d673d0e678ece8c7a5d1a50032ba5c0b6cd9e2a18c3aaeb8c9a3",
+      "linux_verified": false
+    },
+    "static-balance": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.11618033021173,
+      "mode": "static-balance",
+      "parameters": 24767928,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "b26e1509bdf9c64d0d9aad2de1bf07c9b4fe6423faf6b044b48ee56d6509884c",
+      "code_sha256": "c8f243595aa34f512016c29eed9e02e224b8c56bbf82385a08c3fe98b46c68cd",
+      "linux_verified": false
+    },
+    "clip-balance": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.11618033021173,
+      "mode": "clip-balance",
+      "parameters": 24806744,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "fac04381df3af9c0e9cddcf7db62fa17e07eefb3149d7f08b7529ff2d0ead15a",
+      "code_sha256": "e405d3db9d952bb90905fb1db6966def7dffcc19d0c3c471a149f39fbef3e700",
+      "linux_verified": false
+    },
+    "clip-balance-ir": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.11618033021173,
+      "mode": "clip-balance-ir",
+      "parameters": 24806744,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "a308e3ef9e72c1ef7e171d7d7d83ce56a57245edc7e3dd027a91819f6626c533",
+      "code_sha256": "a26d80da0cb07baba066b12f79cb6f6b433a39ee815e46f399d9ac31b1a73e9f",
+      "linux_verified": false
+    },
+    "clip-balance-defect": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.11618033021173,
+      "mode": "clip-balance-defect",
+      "parameters": 24806744,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "b2e12280c3d112c8f5a4625d0719aa32d103ff0bb388abcc39522c38b184946a",
+      "code_sha256": "a26d80da0cb07baba066b12f79cb6f6b433a39ee815e46f399d9ac31b1a73e9f",
+      "linux_verified": false
+    }
+  },
+  "recommended": "initial"
+}

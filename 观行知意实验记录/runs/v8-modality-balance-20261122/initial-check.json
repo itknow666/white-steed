@@ -1,0 +1,12 @@
+{
+  "balance": {
+    "matches_original_logits_exactly": true,
+    "finite_gradients": true,
+    "trainable_parameters": 384
+  },
+  "film": {
+    "matches_original_logits_exactly": true,
+    "finite_gradients": true,
+    "trainable_parameters": 39200
+  }
+}

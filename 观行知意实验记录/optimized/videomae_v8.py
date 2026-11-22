@@ -5,6 +5,33 @@ from torch.nn import functional as F
 from videomae_model import VideoMAEClassifier
 
 
+class ModalityBalance(nn.Module):
+    """Use separate gains for each depth and IR feature channel."""
+    def __init__(self, dim, *, clip_conditioned):
+        super().__init__()
+        self.prior = nn.Parameter(torch.zeros(dim))
+        self.condition = None
+        if clip_conditioned:
+            self.condition = nn.Sequential(
+                nn.LayerNorm(2 * dim), nn.Linear(2 * dim, 32), nn.GELU(), nn.Linear(32, dim))
+            nn.init.zeros_(self.condition[-1].weight)
+            nn.init.zeros_(self.condition[-1].bias)
+
+    def gains(self, depth, ir):
+        preference = self.prior.to(depth.dtype)
+        if self.condition is not None:
+            # Describe each sensor by its RMS activation over the synchronized clip.
+            depth_rms = depth.float().square().mean(dim=1).clamp_min(1e-8).sqrt().log1p()
+            ir_rms = ir.float().square().mean(dim=1).clamp_min(1e-8).sqrt().log1p()
+            summary = torch.cat((depth_rms, ir_rms), dim=-1)
+            preference = preference + self.condition(summary).to(depth.dtype)
+        return .5 * preference.tanh().unsqueeze(-2)
+
+    def forward(self, depth, ir):
+        # At initialization both branches are exactly the original equal sum.
+        return depth + ir + self.gains(depth, ir) * (depth - ir)
+
+
 class DualPatchEmbed(nn.Module):
     def __init__(self, source):
         super().__init__()
@@ -32,6 +59,8 @@ class DualPatchEmbed(nn.Module):
 
     def forward(self, x):
         depth, ir = self.streams(x)
+        if hasattr(self, 'modality_balance'):
+            return self.modality_balance(depth, ir)
         if hasattr(self, 'sensor_gate'):
             # Residual reliability correction starts at the exact equal-sum solution.
             a = F.layer_norm(depth, (depth.shape[-1],))
@@ -90,6 +119,9 @@ class DomainVideoMAE(VideoMAEClassifier):
         self.encoder.patch_embed = DualPatchEmbed(self.encoder.patch_embed)
         # Adding an optional module must not change the data shuffle or Mixup stream.
         with torch.random.fork_rng(devices=[]):
+            if variant in ('balance', 'film'):
+                self.encoder.patch_embed.modality_balance = ModalityBalance(
+                    self.encoder.num_features, clip_conditioned=variant == 'film')
             if variant == 'gate':
                 gate = nn.Linear(2 * self.encoder.num_features, 1)
                 nn.init.zeros_(gate.weight)

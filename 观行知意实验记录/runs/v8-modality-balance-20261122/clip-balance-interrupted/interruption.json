@@ -1,0 +1,5 @@
+{
+  "stage": "training batch load",
+  "trigger": "numpy._core._exceptions._ArrayMemoryError: Unable to allocate 2.25 MiB for an array with shape (4, 16, 192, 192) and data type uint8",
+  "recovery": "serial restart from identical checkpoint and seed"
+}
