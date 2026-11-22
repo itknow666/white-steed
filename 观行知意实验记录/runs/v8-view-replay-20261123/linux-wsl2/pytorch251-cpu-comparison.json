@@ -1,0 +1,15 @@
+{
+  "torch": "2.5.1+cpu",
+  "torchvision": "0.20.1+cpu",
+  "network_interfaces": [
+    "lo"
+  ],
+  "samples": 466,
+  "accuracy": 73.60515021459227,
+  "macro_f1": 70.08962355365495,
+  "correct": 343,
+  "sample_agreement_with_windows_gpu": 465,
+  "prediction_seconds_including_startup": 308.369,
+  "prediction_sha256": "bee41d38fa29e8d69a70f7f27869b26e2abe293e94ebcb4125f1609914c317ee",
+  "parameters_including_detector": 24767544
+}
