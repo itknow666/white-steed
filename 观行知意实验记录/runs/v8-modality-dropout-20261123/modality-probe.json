@@ -1,0 +1,47 @@
+{
+  "samples": 466,
+  "results": {
+    "initial": {
+      "dual": {
+        "accuracy": 73.60515021459227,
+        "macro_f1": 70.11618033021175
+      },
+      "depth-only": {
+        "accuracy": 71.24463519313305,
+        "macro_f1": 68.02768338237172
+      },
+      "ir-only": {
+        "accuracy": 21.244635193133046,
+        "macro_f1": 11.72202607144612
+      }
+    },
+    "adapter-control": {
+      "dual": {
+        "accuracy": 73.60515021459227,
+        "macro_f1": 70.11618033021175
+      },
+      "depth-only": {
+        "accuracy": 71.03004291845494,
+        "macro_f1": 67.68863109479003
+      },
+      "ir-only": {
+        "accuracy": 22.532188841201716,
+        "macro_f1": 13.335283058404027
+      }
+    },
+    "adapter-moddrop": {
+      "dual": {
+        "accuracy": 72.53218884120172,
+        "macro_f1": 68.80245433370398
+      },
+      "depth-only": {
+        "accuracy": 71.24463519313305,
+        "macro_f1": 68.05576065101502
+      },
+      "ir-only": {
+        "accuracy": 50.0,
+        "macro_f1": 42.33107457523923
+      }
+    }
+  }
+}

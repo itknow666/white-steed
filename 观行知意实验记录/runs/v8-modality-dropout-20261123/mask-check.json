@@ -1,0 +1,7 @@
+{
+  "dual_exact": true,
+  "single_branches_exact": {
+    "depthonly": true,
+    "ironly": true
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "results": {
+    "initial": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.11618033021173,
+      "mode": "kd-non-target",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "8e5dd5517e6c5ad92e01b92e03966f991a72ee8bc67948ef716fbe68ab19173a",
+      "code_sha256": "a0b37c306d909752cb87c237f6bafd3b516853161f0be22ac7e89c7956577894",
+      "linux_verified": false
+    },
+    "adapter-control": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.11618033021173,
+      "mode": "adapter-control",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "76955c3c7e1fe911d3795da99bf65769d98018e64dd5780eb1261f6aaac7d2b6",
+      "code_sha256": "d4b3092f2fa8d182663a53e849b099d3c39a74996ebcf9b4b6dae9bd60220f9e",
+      "linux_verified": false
+    },
+    "adapter-moddrop": {
+      "accuracy": 72.53218884120172,
+      "macro_f1": 68.80245433370398,
+      "mode": "adapter-moddrop",
+      "parameters": 24767544,
+      "corrected": 1,
+      "regressed": 6,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "96cd40bab3d486c77c3dfffcc1a2cc00abb789d4020eec8f9a94959e5966a66a",
+      "code_sha256": "728948540ab7628225051a32bf87f65afe0d64bf7e06c9d07cf5806c03f4499a",
+      "linux_verified": false
+    }
+  },
+  "recommended": "initial"
+}
