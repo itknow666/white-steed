@@ -1,0 +1,12 @@
+{
+  "adapter-control": {
+    "unchanged_tensors": 165,
+    "modified_adapter_tensors": 12,
+    "trainable_adapter_parameters": 51520
+  },
+  "adapter-kd": {
+    "unchanged_tensors": 165,
+    "modified_adapter_tensors": 12,
+    "trainable_adapter_parameters": 51520
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "status": "memory_allocation_failed",
+  "completed_epochs": 1,
+  "recovery": "restarted with unchanged seed and training configuration"
+}

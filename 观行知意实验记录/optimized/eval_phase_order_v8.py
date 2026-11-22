@@ -18,6 +18,7 @@ RAW = ROOT/'data/raw/validation'
 ARMS = {'control': 'videomae2_dual_v8', 'phase': 'videomae2_phase_v8',
         'phase-order': 'videomae2_phase_v8', 'phase-head-only': 'videomae2_phase_v8',
         'phase-head-half': 'videomae2_phase_v8', 'pace-jitter': 'videomae2_dual_v8'}
+PHASE_COLUMNS = ('普通续训', '阶段差分', '阶段差分加顺序损失', '仅训练阶段头', '阶段头分数减半', '节奏扰动')
 
 
 def probe_order(folder, manifest):
@@ -55,7 +56,7 @@ def probe_order(folder, manifest):
     return {'samples': len(rows), 'results': result}
 
 
-def compare(runs, out, manifest):
+def compare(runs, out, manifest, *, arms=ARMS, columns=PHASE_COLUMNS, title='时序适配', training_sources=(), report=True):
     out.mkdir(parents=True, exist_ok=True)
     labels = {row.get('sample_id', row['file']+'.npy'): int(row['label']) for row in manifest['samples']}
     initial = predictions(BASE/'validation.csv')
@@ -64,7 +65,7 @@ def compare(runs, out, manifest):
     errors = Counter((labels[key], initial[key]) for key in labels if labels[key] != initial[key])
     pairs = [pair for pair, _ in errors.most_common(5)]
     results = {'initial': read(BASE/'metrics.json')}
-    for name, architecture in ARMS.items():
+    for name, architecture in arms.items():
         folder = out/name
         if (folder/'metrics.json').is_file():
             results[name] = read(folder/'metrics.json')
@@ -82,7 +83,8 @@ def compare(runs, out, manifest):
         if not folder.exists():
             with TemporaryDirectory(dir=out) as temp:
                 staged = Path(temp)/name
-                package(runs, staged, {'mode': name, 'fusion': False, 'architecture': architecture})
+                package(runs, staged, {'mode': name, 'fusion': False, 'architecture': architecture,
+                                       'training_sources': training_sources})
                 staged.rename(folder)
         raw, probe = validate(folder)
         current = predictions(folder/'validation.csv')
@@ -96,19 +98,21 @@ def compare(runs, out, manifest):
                    weights_sha256=sha(folder/'model.pt'), code_sha256=sha(folder/'code.zip'), linux_verified=False)
         write(folder/'metrics.json', row)
         results[name] = row
+    if not report:
+        return
     best = max(results, key=lambda key: (results[key]['accuracy'], results[key]['macro_f1']))
     write(runs/'raw-comparison.json', {'results': results, 'recommended': best})
-    lines = ['# 方向 A · 时序适配', '', '| 方案 | 原图准确率 | Macro F1 | 改对 | 改错 | 推理参数 |',
+    lines = [f'# 方向 A · {title}', '', '| 方案 | 原图准确率 | Macro F1 | 改对 | 改错 | 推理参数 |',
              '|---|---:|---:|---:|---:|---:|']
     for name, row in results.items():
         lines.append(f"| {name} | {row['accuracy']:.2f}% | {row['macro_f1']:.2f}% | "
                      f"{row.get('corrected', 0)} | {row.get('regressed', 0)} | {row['parameters']:,} |")
     lines += ['', f'按准确率与 Macro F1 选型，建议使用 `{best}`。', '',
-              '| 真实类别 | 被预测为 | 起点 | 普通续训 | 阶段差分 | 阶段差分加顺序损失 | 仅训练阶段头 | 阶段头分数减半 | 节奏扰动 |',
-              '|---|---|---:|---:|---:|---:|---:|---:|---:|']
+              '| 真实类别 | 被预测为 | 起点 | ' + ' | '.join(columns) + ' |',
+              '|---|---|' + '---:|' * (1 + len(columns))]
     for index, pair in enumerate(pairs):
         y, p = pair
-        counts = [errors[pair], *(results[name]['error_counts'][index] for name in ARMS)]
+        counts = [errors[pair], *(results[name]['error_counts'][index] for name in arms)]
         lines.append(f"| {manifest['classes'][y]} | {manifest['classes'][p]} | " + ' | '.join(map(str, counts)) + ' |')
     if (runs/'order-probe.json').is_file():
         probe = read(runs/'order-probe.json')

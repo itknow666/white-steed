@@ -1,0 +1,8 @@
+{
+  "split": "train",
+  "samples": 1995,
+  "r34_sha256": "4ba89a9b1616530cbe53b504958945f2602488d9f738012cef471ca7fc70df2d",
+  "video_sha256": "a10a30a3f50f9c6caba4efb7f1393ecff4888b84fff1c874a9c5e575c22000a1",
+  "train_manifest_sha256": "05b6094a6ac20b28d700b7ebb36b61056cdead21508e6bb239ea8f0a6e89e8ef",
+  "teacher_cache_sha256": "1b92bd667d075aa045307fe7bcf7c7823055fec728961c21f7c8aad6ac6c1114"
+}

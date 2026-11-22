@@ -1,0 +1,111 @@
+{
+  "both": {
+    "total": 329,
+    "examples": [
+      [
+        "36_Walk",
+        51
+      ],
+      [
+        "34_Sit_down",
+        21
+      ],
+      [
+        "7_Eat_food",
+        19
+      ],
+      [
+        "32_Stand_up",
+        18
+      ],
+      [
+        "10_Stir_drinks",
+        14
+      ]
+    ]
+  },
+  "teacher_only": {
+    "total": 11,
+    "examples": [
+      [
+        "22_Turn_pages",
+        2
+      ],
+      [
+        "8_Take_and_use_tableware",
+        2
+      ],
+      [
+        "11_Peel_fruits",
+        1
+      ],
+      [
+        "28_Jog_in_place",
+        1
+      ],
+      [
+        "2_Comb_hair",
+        1
+      ]
+    ]
+  },
+  "student_only": {
+    "total": 11,
+    "examples": [
+      [
+        "34_Sit_down",
+        2
+      ],
+      [
+        "12_Sweep_the_floor",
+        1
+      ],
+      [
+        "20_Check_the_time",
+        1
+      ],
+      [
+        "2_Comb_hair",
+        1
+      ],
+      [
+        "31_Do_stretching_exercises",
+        1
+      ]
+    ]
+  },
+  "neither": {
+    "total": 115,
+    "examples": [
+      [
+        "20_Check_the_time",
+        7
+      ],
+      [
+        "23_Listen_to_music_with_headphones",
+        7
+      ],
+      [
+        "35_Do_lunges",
+        7
+      ],
+      [
+        "7_Eat_food",
+        7
+      ],
+      [
+        "21_Read_documents",
+        6
+      ]
+    ]
+  },
+  "training_adaptive": {
+    "r34_higher_true_probability": 1902,
+    "above_008": 1498,
+    "examples": 1995,
+    "both_correct": 1933,
+    "only_video": 22,
+    "only_r34": 22,
+    "neither": 18
+  }
+}

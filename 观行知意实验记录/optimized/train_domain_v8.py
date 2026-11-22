@@ -18,6 +18,27 @@ from videomae_model import VideoMAEClassifier
 from videomae_v8 import DomainVideoMAE
 
 
+def offline_teacher_targets(path, rows, policy):
+    with np.load(path, allow_pickle=False) as cache:
+        if cache['sample_ids'].tolist() != [row['sample_id'] for row in rows] or cache['labels'].tolist() != [row['label'] for row in rows]:
+            raise ValueError('Teacher rows must match the official training cache exactly')
+        video = torch.from_numpy(cache['video_logits']).float().cuda()
+        r34 = torch.from_numpy(cache['r34_logits']).float().cuda()
+        labels = torch.from_numpy(cache['labels']).long().cuda()
+    if video.shape != (len(rows), 40) or r34.shape != video.shape or not (video.isfinite().all() and r34.isfinite().all()):
+        raise ValueError('Teacher cache must contain 40 finite logits per training sample')
+    weight = .25
+    if policy == 'adaptive':
+        # Gate on correctness because the two teachers' confidence scales differ.
+        correct_video = video.argmax(1).eq(labels).float()
+        correct_r34 = r34.argmax(1).eq(labels).float()
+        weight = (.25 + .20 * (correct_r34 - correct_video))[:, None]
+    if policy == 'non-target':
+        video.scatter_(1, labels[:, None], -1e4)
+        r34.scatter_(1, labels[:, None], -1e4)
+    return (video / 2).softmax(1).lerp((r34 / 2).softmax(1), weight)
+
+
 def local_alignment(x, depth, ir, sampling, rng):
     """Match synchronized depth and IR tokens against distant tokens in each clip."""
     with torch.no_grad():
@@ -122,6 +143,9 @@ def main():
     parser.add_argument('--order-weight', type=float, default=0., help='Auxiliary before/after prediction weight')
     parser.add_argument('--phase-head-only', action='store_true', help='Freeze the starting model and train only the phase residual')
     parser.add_argument('--pace-jitter', action='store_true', help='Synchronized monotonic time warp during training')
+    parser.add_argument('--teacher-cache', type=Path, help='Frozen VideoMAE and R34 logits for the training split')
+    parser.add_argument('--teacher-policy', choices=['fusion', 'adaptive', 'non-target'], default='fusion')
+    parser.add_argument('--adapter-only', action='store_true', help='Train only the two input residual adapters')
     a = parser.parse_args()
     if a.continue_dual and a.mode not in ('dual', 'staged'):
         parser.error('--continue-dual supports dual and staged')
@@ -137,6 +161,10 @@ def main():
         parser.error('Auxiliary direction prediction requires an unmasked phase head')
     if a.phase_head_only and (a.mode != 'dual' or a.domain_variant != 'phase' or a.order_weight):
         parser.error('Phase-only fitting requires phase classification without auxiliary direction prediction')
+    if (a.teacher_cache or a.adapter_only) and (not a.continue_dual or a.mode != 'dual' or a.domain_variant != 'plain' or a.mask_rate):
+        parser.error('Offline teacher and input-only trials require an unmasked plain dual checkpoint')
+    if a.teacher_policy != 'fusion' and a.teacher_cache is None:
+        parser.error('--teacher-policy requires --teacher-cache')
     if not 0 <= a.mask_rate < 1 or a.distill < 0 or (a.distill and not (a.continue_dual and a.mask_rate)):
         parser.error('Distillation requires a V8 checkpoint and a positive mask rate')
     a.output.mkdir(parents=True)
@@ -168,7 +196,12 @@ def main():
     if a.phase_head_only:
         model.requires_grad_(False)
         model.phase_head.requires_grad_(True)
+    if a.adapter_only:
+        model.requires_grad_(False)
+        model.encoder.patch_embed.depth_adapter.requires_grad_(True)
+        model.encoder.patch_embed.ir_adapter.requires_grad_(True)
     model.cuda()
+    offline_targets = offline_teacher_targets(a.teacher_cache, train.rows, a.teacher_policy) if a.teacher_cache else None
     order_head = None
     if a.order_weight:
         with torch.random.fork_rng(devices=[]):
@@ -201,6 +234,11 @@ def main():
         config['phase_head_only'] = True
     if a.pace_jitter:
         config.update(pace_jitter_max=.13, pace_jitter_probability=.5)
+    if offline_targets is not None:
+        config.update(offline_teacher_sha256=sha(a.teacher_cache), teacher_policy=a.teacher_policy,
+                      teacher_temperature=2., teacher_loss_weight=.35)
+    if a.adapter_only:
+        config.update(adapter_only=True, adapter_lr_multiplier=10.)
     write(a.output/'config.json', config)
     started = time.monotonic()
     if a.mode == 'ssl':
@@ -228,7 +266,7 @@ def main():
         for is_patch in (False, True):
             selected = [q for q in chosen if (id(q) in patch_ids) == is_patch]
             if selected:
-                scale = 2.5 if is_patch and a.mode != 'control' else group['lr_scale']
+                scale = (10. if a.adapter_only else 2.5) if is_patch and a.mode != 'control' else group['lr_scale']
                 optimizer_groups.append(dict(group, params=selected, lr_scale=scale))
     if phase_parameters:
         optimizer_groups.append({'params': phase_parameters, 'lr_scale': 5., 'weight_decay': .05})
@@ -252,11 +290,12 @@ def main():
         if epoch == 2:
             for q in delayed:
                 q.requires_grad_(True)
-        model.train(not a.phase_head_only)
+        model.train(not (a.phase_head_only or a.adapter_only))
         seen, loss_sum = 0, 0.
         alignment_sum = torch.zeros((), device='cuda')
         order_sum = torch.zeros((), device='cuda')
-        for x, y, _ in tr:
+        teacher_sum = torch.zeros((), device='cuda')
+        for x, y, indices in tr:
             x, y = x.cuda(non_blocking=True), y.cuda(non_blocking=True)
             if a.pace_jitter:
                 # Move the interior positions while retaining endpoints and frame order.
@@ -303,6 +342,21 @@ def main():
                         target = (teacher(clean).float() / 2).softmax(dim=1)
                     kl = F.kl_div((logits.float() / 2).log_softmax(dim=1), target, reduction='batchmean')
                     loss = loss + a.distill * 4 * kl
+                if offline_targets is not None:
+                    targets = offline_targets[indices.to(x.device)]
+                    softened = logits.float() / 2
+                    if a.teacher_policy == 'non-target':
+                        keep = softened.scatter(1, y[:, None], -1e4).log_softmax(1)
+                        kl = F.kl_div(keep, targets, reduction='batchmean')
+                        if perm is not None:
+                            other = softened.scatter(1, y[perm, None], -1e4).log_softmax(1)
+                            kl = mix * kl + (1. - mix) * F.kl_div(other, targets[perm], reduction='batchmean')
+                    else:
+                        if perm is not None:
+                            targets = targets.lerp(targets[perm], 1. - mix)
+                        kl = F.kl_div(softened.log_softmax(1), targets, reduction='batchmean')
+                    loss = loss + .35 * 4 * kl
+                    teacher_sum += kl.detach() * len(y)
                 if use_alignment_loss:
                     aux = local_alignment(x, depth, ir, a.alignment, align_rng)
                     loss = loss + .04 * aux
@@ -338,6 +392,8 @@ def main():
             row['alignment_loss'] = float(alignment_sum) / seen
         if order_head is not None:
             row['order_loss'] = float(order_sum) / seen
+        if offline_targets is not None:
+            row['teacher_kl'] = float(teacher_sum) / seen
         with (a.output/'history.jsonl').open('a', encoding='utf-8') as f:
             f.write(json.dumps(row, allow_nan=False) + '\n')
         print(json.dumps(row), flush=True)
