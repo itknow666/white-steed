@@ -1,0 +1,7 @@
+{
+  "samples": 466,
+  "candidates": [
+    "local-quality-centered"
+  ],
+  "single_api_exact_comparisons_per_candidate": 3
+}

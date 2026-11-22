@@ -46,7 +46,7 @@ def materialize_last_variants(runs):
 
 
 @torch.inference_mode()
-def sensor_probe(runs, manifest):
+def sensor_probe(runs, manifest, *, variants=VARIANTS):
     dataset = Clips(ROOT/'cache/crop16-192-v3', 'validation', frames=16)
     truth = {r.get('sample_id', r['file']+'.npy'): int(r['label']) for r in manifest['samples']}
     observed = {r['sample_id']: int(r['label']) for r in dataset.rows}
@@ -55,11 +55,12 @@ def sensor_probe(runs, manifest):
     labels = np.asarray([row['label'] for row in dataset.rows], dtype=np.int64)
     loader = DataLoader(dataset, batch_size=8, pin_memory=True)
     results = {}
-    for name, variant in {'initial': 'plain', **VARIANTS}.items():
+    for name, variant in {'initial': 'plain', **variants}.items():
         state = INIT if name == 'initial' else runs/name/'best_ema.pt'
         model = DomainVideoMAE(variant=variant)
         model.load_state_dict(torch.load(state, weights_only=True, map_location='cpu'), strict=True)
         model.cuda().to(memory_format=torch.channels_last_3d).eval()
+        local = variant in ('local', 'localcontrast')
         scores = np.empty((len(CASES), len(dataset), 40), dtype=np.float32)
         # Per case: inside coverage, outside coverage, probabilities, and signed gain.
         totals = torch.zeros((len(CASES), 5), dtype=torch.float64, device='cuda')
@@ -68,17 +69,19 @@ def sensor_probe(runs, manifest):
             for i, case in enumerate(CASES):
                 view = stress_clip(clip, model.mean, case).contiguous(memory_format=torch.channels_last_3d)
                 with torch.autocast('cuda', dtype=torch.float16):
-                    if variant == 'local':
+                    if local:
                         logits, quality = model.forward_with_local_quality(view)
                     else:
                         logits = model(view)
                 scores[i, index.numpy()] = logits.float().cpu().numpy()
-                if variant == 'local':
+                if local:
                     probabilities = quality.sigmoid()
                     sensor = int(case == 'dark-ir')
                     region = local_sensor_coverage(clip, view)[...,sensor] >= .5
                     bad = probabilities[...,sensor]
-                    gain = .5 * (bad - probabilities[...,1-sensor])
+                    gain = model.encoder.patch_embed.modality_balance.corruption_gain(quality)[...,0]
+                    if sensor == 0:
+                        gain = -gain
                     totals[i] += torch.stack((region.sum(), (~region).sum(),
                                               (bad*region).sum(), (bad*(~region)).sum(),
                                               (gain*region).sum()))
@@ -88,7 +91,7 @@ def sensor_probe(runs, manifest):
             row[case].pop('confusion')
             changed = scores[0].argmax(1) != scores[i].argmax(1)
             row[case]['changed_predictions'] = int(changed.sum())
-            if variant == 'local':
+            if local:
                 inside, outside, inside_bad, outside_bad, inside_gain = totals[i].tolist()
                 row[case].update(fault_score_inside=inside_bad/inside if inside else None,
                                  fault_score_outside=outside_bad/outside if outside else None,

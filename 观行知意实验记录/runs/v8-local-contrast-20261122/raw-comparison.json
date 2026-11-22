@@ -1,0 +1,41 @@
+{
+  "results": {
+    "initial": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.11618033021173,
+      "mode": "kd-non-target",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "8e5dd5517e6c5ad92e01b92e03966f991a72ee8bc67948ef716fbe68ab19173a",
+      "code_sha256": "a0b37c306d909752cb87c237f6bafd3b516853161f0be22ac7e89c7956577894",
+      "linux_verified": false
+    },
+    "local-quality-centered": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.08962355365495,
+      "mode": "local-quality-centered",
+      "parameters": 24787586,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "98f9581cac30c1d2774e86b3befcbe1db51ec1a838bae18289590a503267216d",
+      "code_sha256": "674581bb37d9f5a513247e2ba8a25968ffaeb0a5c4677e3de68b6f529dbfb992",
+      "linux_verified": false
+    }
+  },
+  "recommended": "initial"
+}

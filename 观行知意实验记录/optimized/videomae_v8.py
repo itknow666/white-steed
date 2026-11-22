@@ -34,18 +34,28 @@ class ModalityBalance(nn.Module):
 
 class LocalModalityBalance(nn.Module):
     """Predict per-tubelet corruption for paired depth and IR features."""
-    def __init__(self, dim):
+    def __init__(self, dim, *, spatial_centered=False):
         super().__init__()
+        self.spatial_centered = spatial_centered
         self.quality = nn.Sequential(nn.LayerNorm(2 * dim), nn.Linear(2 * dim, 24),
                                      nn.GELU(), nn.Linear(24, 2))
         nn.init.zeros_(self.quality[-1].weight)
         nn.init.constant_(self.quality[-1].bias, -4.)
 
+    def corruption_gain(self, corruption_logits):
+        scores = corruption_logits.sigmoid()
+        if self.spatial_centered:
+            # Compare within each modality and time index before comparing modalities.
+            spatial = scores.reshape(scores.size(0), 8, 14 * 14, 2)
+            scores = (spatial - spatial.mean(dim=2, keepdim=True) - .05).clamp_min(0.)
+            scores = scores.flatten(1, 2)
+        bad_depth, bad_ir = scores.split(1, dim=-1)
+        return .5 * (bad_ir - bad_depth)
+
     def fuse(self, depth, ir):
         corruption_logits = self.quality(torch.cat((depth, ir), dim=-1)).float()
-        bad_depth, bad_ir = corruption_logits.sigmoid().split(1, dim=-1)
         # Positive gain favors depth. Equal fault scores recover the original equal sum.
-        gain = .5 * (bad_ir - bad_depth)
+        gain = self.corruption_gain(corruption_logits)
         depth32, ir32 = depth.float(), ir.float()
         mixed = depth32 + ir32 + gain * (depth32 - ir32)
         return mixed.to(depth.dtype), corruption_logits
@@ -144,8 +154,9 @@ class DomainVideoMAE(VideoMAEClassifier):
             if variant in ('balance', 'film'):
                 self.encoder.patch_embed.modality_balance = ModalityBalance(
                     self.encoder.num_features, clip_conditioned=variant == 'film')
-            if variant == 'local':
-                self.encoder.patch_embed.modality_balance = LocalModalityBalance(self.encoder.num_features)
+            if variant in ('local', 'localcontrast'):
+                self.encoder.patch_embed.modality_balance = LocalModalityBalance(
+                    self.encoder.num_features, spatial_centered=variant == 'localcontrast')
             if variant == 'gate':
                 gate = nn.Linear(2 * self.encoder.num_features, 1)
                 nn.init.zeros_(gate.weight)

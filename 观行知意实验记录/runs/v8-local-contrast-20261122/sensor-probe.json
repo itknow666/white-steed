@@ -1,0 +1,67 @@
+{
+  "samples": 466,
+  "cases": [
+    "clean",
+    "dark-ir",
+    "depth-gap",
+    "short-offset-gap"
+  ],
+  "results": {
+    "initial": {
+      "clean": {
+        "accuracy": 73.60515021459227,
+        "macro_f1": 70.11618033021175,
+        "changed_predictions": 0
+      },
+      "dark-ir": {
+        "accuracy": 72.96137339055794,
+        "macro_f1": 69.84684206634333,
+        "changed_predictions": 10
+      },
+      "depth-gap": {
+        "accuracy": 56.652360515021456,
+        "macro_f1": 49.68077533507399,
+        "changed_predictions": 175
+      },
+      "short-offset-gap": {
+        "accuracy": 69.74248927038627,
+        "macro_f1": 65.29748862847177,
+        "changed_predictions": 41
+      }
+    },
+    "local-quality-centered": {
+      "clean": {
+        "accuracy": 73.60515021459227,
+        "macro_f1": 70.08962355365496,
+        "changed_predictions": 0,
+        "fault_score_inside": null,
+        "fault_score_outside": 0.15377252795414967,
+        "clean_sensor_gain_inside": null
+      },
+      "dark-ir": {
+        "accuracy": 72.74678111587983,
+        "macro_f1": 69.62159855984983,
+        "changed_predictions": 10,
+        "fault_score_inside": 0.4027902946651545,
+        "fault_score_outside": 0.6085596046881036,
+        "clean_sensor_gain_inside": 0.003749576033802631
+      },
+      "depth-gap": {
+        "accuracy": 56.652360515021456,
+        "macro_f1": 49.70534248383752,
+        "changed_predictions": 175,
+        "fault_score_inside": 0.3809438109909516,
+        "fault_score_outside": 0.1546817325215483,
+        "clean_sensor_gain_inside": -0.0005670966599163238
+      },
+      "short-offset-gap": {
+        "accuracy": 69.74248927038627,
+        "macro_f1": 65.29748862847177,
+        "changed_predictions": 42,
+        "fault_score_inside": 0.37851808904947437,
+        "fault_score_outside": 0.15357768645835876,
+        "clean_sensor_gain_inside": -0.005720202055746669
+      }
+    }
+  }
+}
