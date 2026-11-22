@@ -1,0 +1,38 @@
+{
+  "mode": "dual",
+  "seed": 42,
+  "batch": 8,
+  "epochs": 3,
+  "base_lr": 2e-05,
+  "layer_decay": 0.85,
+  "head_multiplier": 5,
+  "continue_dual": true,
+  "class_power": 0.25,
+  "ir_jitter": false,
+  "keep_blocks_frozen": false,
+  "domain_variant": "localrepair",
+  "mask_rate": 0.0,
+  "distill": 0.0,
+  "initial_sha256": "2cf6c3b256dc5dfa74e8a63c5b3879859ef412a89236ecd138e8aaf2131af810",
+  "cache_sha256": "b3f92fd6952b07fa0a88e53131bd663a3e39ba573b44ed26261c6819acf6be26",
+  "parameters": 22213874,
+  "initial_trainable": 50368,
+  "train_samples": 1995,
+  "validation_samples": 466,
+  "test_accessed": false,
+  "modality_balance_only": true,
+  "balance_lr_multiplier": 10.0,
+  "cross_repair_weight": 0.25,
+  "train_cross_repair_only": true,
+  "sensor_kind": "depth-only",
+  "sensor_augment_probability": 0.55,
+  "ir_gain_range": [
+    0.55,
+    0.9
+  ],
+  "depth_gap_side_range": [
+    0.18,
+    0.34
+  ],
+  "sensor_consistency_weight": 0.0
+}

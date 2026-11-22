@@ -1,0 +1,9 @@
+{
+  "samples": 466,
+  "candidates": [
+    "repair-ce",
+    "repair-latent",
+    "repair-strong"
+  ],
+  "single_api_exact_comparisons_per_candidate": 3
+}

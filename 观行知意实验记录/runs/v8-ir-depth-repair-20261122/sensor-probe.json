@@ -1,0 +1,135 @@
+{
+  "samples": 466,
+  "cases": [
+    "clean",
+    "dark-ir",
+    "depth-gap",
+    "short-offset-gap"
+  ],
+  "results": {
+    "initial": {
+      "clean": {
+        "accuracy": 73.60515021459227,
+        "macro_f1": 70.11618033021175,
+        "changed_predictions": 0
+      },
+      "dark-ir": {
+        "accuracy": 72.96137339055794,
+        "macro_f1": 69.84684206634333,
+        "changed_predictions": 10
+      },
+      "depth-gap": {
+        "accuracy": 56.652360515021456,
+        "macro_f1": 49.68077533507399,
+        "changed_predictions": 175
+      },
+      "short-offset-gap": {
+        "accuracy": 69.74248927038627,
+        "macro_f1": 65.29748862847177,
+        "changed_predictions": 41
+      }
+    },
+    "repair-ce": {
+      "clean": {
+        "accuracy": 73.60515021459227,
+        "macro_f1": 70.11618033021175,
+        "changed_predictions": 0,
+        "fault_score_inside": null,
+        "fault_score_outside": 0.25469921586851196,
+        "clean_sensor_gain_inside": null
+      },
+      "dark-ir": {
+        "accuracy": 72.96137339055794,
+        "macro_f1": 69.84684206634333,
+        "changed_predictions": 10,
+        "fault_score_inside": 0.06658704063706908,
+        "fault_score_outside": 0.08290624580603911,
+        "clean_sensor_gain_inside": -0.007499355272464504
+      },
+      "depth-gap": {
+        "accuracy": 57.2961373390558,
+        "macro_f1": 50.33360579483023,
+        "changed_predictions": 171,
+        "fault_score_inside": 0.6224583685824459,
+        "fault_score_outside": 0.25676596430749854,
+        "clean_sensor_gain_inside": 0.12529108213934947
+      },
+      "short-offset-gap": {
+        "accuracy": 69.74248927038627,
+        "macro_f1": 65.25212220623891,
+        "changed_predictions": 40,
+        "fault_score_inside": 0.544111115010476,
+        "fault_score_outside": 0.2535499082314901,
+        "clean_sensor_gain_inside": 0.10710765283007467
+      }
+    },
+    "repair-latent": {
+      "clean": {
+        "accuracy": 73.60515021459227,
+        "macro_f1": 70.11618033021175,
+        "changed_predictions": 0,
+        "fault_score_inside": null,
+        "fault_score_outside": 0.25469921586851196,
+        "clean_sensor_gain_inside": null
+      },
+      "dark-ir": {
+        "accuracy": 72.96137339055794,
+        "macro_f1": 69.84684206634333,
+        "changed_predictions": 10,
+        "fault_score_inside": 0.06658704063706908,
+        "fault_score_outside": 0.08290624580603911,
+        "clean_sensor_gain_inside": -0.007499355272464504
+      },
+      "depth-gap": {
+        "accuracy": 57.2961373390558,
+        "macro_f1": 50.3492621801587,
+        "changed_predictions": 171,
+        "fault_score_inside": 0.6224583685824459,
+        "fault_score_outside": 0.25676596430749854,
+        "clean_sensor_gain_inside": 0.12529108213934947
+      },
+      "short-offset-gap": {
+        "accuracy": 69.52789699570816,
+        "macro_f1": 65.12292848329518,
+        "changed_predictions": 41,
+        "fault_score_inside": 0.544111115010476,
+        "fault_score_outside": 0.2535499082314901,
+        "clean_sensor_gain_inside": 0.10710765283007467
+      }
+    },
+    "repair-strong": {
+      "clean": {
+        "accuracy": 73.39055793991416,
+        "macro_f1": 69.84559209491762,
+        "changed_predictions": 0,
+        "fault_score_inside": null,
+        "fault_score_outside": 0.25469921586851196,
+        "clean_sensor_gain_inside": null
+      },
+      "dark-ir": {
+        "accuracy": 72.96137339055794,
+        "macro_f1": 69.87431459381585,
+        "changed_predictions": 10,
+        "fault_score_inside": 0.06658704063706908,
+        "fault_score_outside": 0.08290624580603911,
+        "clean_sensor_gain_inside": -0.007499355272464504
+      },
+      "depth-gap": {
+        "accuracy": 57.51072961373391,
+        "macro_f1": 50.58968461459551,
+        "changed_predictions": 168,
+        "fault_score_inside": 0.6224583685824459,
+        "fault_score_outside": 0.25676596430749854,
+        "clean_sensor_gain_inside": 0.12529108213934947
+      },
+      "short-offset-gap": {
+        "accuracy": 69.52789699570816,
+        "macro_f1": 65.12292848329518,
+        "changed_predictions": 40,
+        "fault_score_inside": 0.544111115010476,
+        "fault_score_outside": 0.2535499082314901,
+        "clean_sensor_gain_inside": 0.10710765283007467
+      }
+    }
+  }
+}

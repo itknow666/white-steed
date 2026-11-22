@@ -1,0 +1,6 @@
+{
+  "initial_exact_on_clean_and_damaged": true,
+  "training_and_inference_scores_exact": true,
+  "repair_gradients_finite": true,
+  "trainable": 50368
+}

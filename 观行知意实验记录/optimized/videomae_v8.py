@@ -66,6 +66,27 @@ class LocalModalityBalance(nn.Module):
         return self.fuse(depth, ir)[0]
 
 
+class LocalDepthRepair(LocalModalityBalance):
+    """Predict a depth feature residual from IR under the learned local gate."""
+    def __init__(self, dim):
+        super().__init__(dim, spatial_centered=True)
+        self.repair = nn.Sequential(nn.LayerNorm(dim), nn.Linear(dim, 64),
+                                    nn.GELU(), nn.Linear(64, dim))
+        nn.init.zeros_(self.repair[-1].weight)
+        nn.init.zeros_(self.repair[-1].bias)
+
+    def repair_parts(self, depth, ir):
+        fused, quality = super().fuse(depth, ir)
+        residual = self.repair(ir)
+        strength = (-2 * self.corruption_gain(quality)).clamp(0., 1.)
+        corrected = fused.float() + strength * residual.float()
+        return corrected.to(fused.dtype), quality, residual
+
+    def fuse(self, depth, ir):
+        fused, quality, _ = self.repair_parts(depth, ir)
+        return fused, quality
+
+
 class DualPatchEmbed(nn.Module):
     def __init__(self, source):
         super().__init__()
@@ -86,10 +107,13 @@ class DualPatchEmbed(nn.Module):
         nn.init.zeros_(block[-1].bias)
         return block
 
-    def streams(self, x):
+    def depth_tokens(self, x):
         depth = self.depth(x[:, :3]).flatten(2).transpose(1, 2)
+        return depth + self.depth_adapter(depth)
+
+    def streams(self, x):
         ir = self.ir(x[:, 3:]).flatten(2).transpose(1, 2)
-        return depth + self.depth_adapter(depth), ir + self.ir_adapter(ir)
+        return self.depth_tokens(x), ir + self.ir_adapter(ir)
 
     def forward(self, x):
         depth, ir = self.streams(x)
@@ -159,6 +183,8 @@ class DomainVideoMAE(VideoMAEClassifier):
             if variant in ('local', 'localcontrast'):
                 self.encoder.patch_embed.modality_balance = LocalModalityBalance(
                     self.encoder.num_features, spatial_centered=variant == 'localcontrast')
+            if variant == 'localrepair':
+                self.encoder.patch_embed.modality_balance = LocalDepthRepair(self.encoder.num_features)
             if variant == 'gate':
                 gate = nn.Linear(2 * self.encoder.num_features, 1)
                 nn.init.zeros_(gate.weight)
@@ -194,6 +220,13 @@ class DomainVideoMAE(VideoMAEClassifier):
         depth, ir = patch.streams(normalized)
         fused, quality = patch.modality_balance.fuse(depth, ir)
         return self.classify_tokens(fused, position_dtype=normalized.dtype), quality
+
+    def forward_with_cross_repair(self, x):
+        patch = self.encoder.patch_embed
+        normalized = self.normalized_clip(x)
+        depth, ir = patch.streams(normalized)
+        fused, _, residual = patch.modality_balance.repair_parts(depth, ir)
+        return self.classify_tokens(fused, position_dtype=normalized.dtype), depth, residual
 
     def forward_with_order_inputs(self, x):
         # The auxiliary order head sees content before temporal position is added.

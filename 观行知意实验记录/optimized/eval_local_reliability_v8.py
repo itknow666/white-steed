@@ -60,7 +60,7 @@ def sensor_probe(runs, manifest, *, variants=VARIANTS):
         model = DomainVideoMAE(variant=variant)
         model.load_state_dict(torch.load(state, weights_only=True, map_location='cpu'), strict=True)
         model.cuda().to(memory_format=torch.channels_last_3d).eval()
-        local = variant in ('local', 'localcontrast')
+        local = variant in ('local', 'localcontrast', 'localrepair')
         scores = np.empty((len(CASES), len(dataset), 40), dtype=np.float32)
         # Per case: inside coverage, outside coverage, probabilities, and signed gain.
         totals = torch.zeros((len(CASES), 5), dtype=torch.float64, device='cuda')

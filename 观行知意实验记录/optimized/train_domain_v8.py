@@ -83,6 +83,15 @@ def local_direction_loss(balance, logits, coverage):
     return .5 * (foreground_loss + background_loss)
 
 
+def cross_sensor_repair_loss(residual, depth, clean_depth, coverage):
+    """Regress the clean depth residual on tubelets with synthetic depth loss."""
+    target = clean_depth.float() - depth.float()
+    error = (residual.float() - target).square().mean(dim=-1)
+    scale = clean_depth.float().square().mean(dim=-1).clamp_min(.1)
+    weights = coverage[...,0]
+    return ((error / scale) * weights).sum() / weights.sum().clamp_min(1.)
+
+
 def patch_reconstruction(clean, altered, tokens, reference):
     """Match clean fused tokens at locations where the depth view was removed."""
     changed = (clean[:, :3] != altered[:, :3]).any(dim=1, keepdim=True).float()
@@ -191,7 +200,7 @@ def main():
     parser.add_argument('--keep-blocks-frozen', action='store_true', help='Keep staged Transformer blocks frozen for every epoch')
     parser.add_argument('--class-power', type=float, default=.25)
     parser.add_argument('--ir-jitter', action='store_true', help='Training-only clip-consistent IR gain and offset')
-    parser.add_argument('--domain-variant', choices=['plain', 'gate', 'temporal', 'phase', 'balance', 'film', 'local', 'localcontrast'], default='plain')
+    parser.add_argument('--domain-variant', choices=['plain', 'gate', 'temporal', 'phase', 'balance', 'film', 'local', 'localcontrast', 'localrepair'], default='plain')
     parser.add_argument('--mask-rate', type=float, default=0.)
     parser.add_argument('--distill', type=float, default=0., help='KL weight for frozen clean-view V8 teacher')
     parser.add_argument('--alignment', choices=['none', 'control', 'uniform', 'motion', 'motion-stratified'], default='none')
@@ -218,14 +227,21 @@ def main():
                         help='Supervise tubelet quality with locations of synthetic sensor defects')
     parser.add_argument('--local-direction-weight', type=float, default=0.,
                         help='Supervise signed spatial gains from known local sensor defects')
+    parser.add_argument('--cross-repair-weight', type=float, default=0.,
+                        help='Regress clean depth features from co-located IR under synthetic depth loss')
     a = parser.parse_args()
+    if (not math.isfinite(a.cross_repair_weight) or a.cross_repair_weight < 0
+            or (a.cross_repair_weight and a.domain_variant != 'localrepair')):
+        parser.error('Cross-sensor repair supervision requires the localrepair variant')
+    if a.domain_variant == 'localrepair' and (not a.sensor_augment or a.sensor_kind != 'depth-only'):
+        parser.error('Local depth repair training requires depth-only sensor changes')
     if (not math.isfinite(a.local_direction_weight) or a.local_direction_weight < 0
             or (a.local_direction_weight and (a.domain_variant != 'localcontrast' or not a.sensor_augment))):
         parser.error('Signed local supervision requires localcontrast and sensor augmentation')
     if (not math.isfinite(a.local_quality_weight) or a.local_quality_weight < 0
             or (a.local_quality_weight and (a.domain_variant != 'local' or not a.sensor_augment))):
         parser.error('Local quality supervision requires the local variant and sensor augmentation')
-    fit_balance = a.domain_variant in ('balance', 'film', 'local', 'localcontrast')
+    fit_balance = a.domain_variant in ('balance', 'film', 'local', 'localcontrast', 'localrepair')
     if fit_balance and (a.mode != 'dual' or a.mask_rate):
         parser.error('Modality balance requires dual continuation with unmasked inputs')
     use_view_teachers = a.teacher_view != 'offline'
@@ -302,6 +318,8 @@ def main():
         new_keys = {key for key in model.state_dict() if any(
             part in key for part in ('sensor_gate', 'temporal_adapter', 'phase_head', 'modality_balance'))}
         expected_missing = set() if a.domain_variant == 'localcontrast' else new_keys
+        if a.domain_variant == 'localrepair':
+            expected_missing = {key for key in new_keys if '.modality_balance.repair.' in key}
         if set(missing) != expected_missing or extra:
             raise ValueError(f'Unexpected V8 migration keys: {missing}, {extra}')
         if a.mode == 'staged':
@@ -317,7 +335,11 @@ def main():
         model.encoder.patch_embed.ir_adapter.requires_grad_(True)
     if fit_balance:
         model.requires_grad_(False)
-        model.encoder.patch_embed.modality_balance.requires_grad_(True)
+        balance = model.encoder.patch_embed.modality_balance
+        if a.domain_variant == 'localrepair':
+            balance.repair.requires_grad_(True)
+        else:
+            balance.requires_grad_(True)
     if a.patch_only:
         model.requires_grad_(False)
         model.encoder.patch_embed.requires_grad_(True)
@@ -383,6 +405,8 @@ def main():
         config.update(modality_balance_only=True, balance_lr_multiplier=10.)
     if a.local_quality_weight:
         config.update(local_quality_weight=a.local_quality_weight, quality_pos_weight=[8., 3.])
+    if a.domain_variant == 'localrepair':
+        config.update(cross_repair_weight=a.cross_repair_weight, train_cross_repair_only=True)
     if a.local_direction_weight:
         config.update(local_direction_weight=a.local_direction_weight, direction_target_fraction=.5,
                       direction_threshold=.005, direction_huber_beta=.05)
@@ -501,7 +525,14 @@ def main():
                 mask = torch.cat((~mask_ir.expand(-1, 3, -1, -1, -1), mask_ir), dim=1) & patches
                 x = torch.where(mask, model.mean, x)
             with torch.autocast('cuda', dtype=torch.bfloat16):
-                if a.local_quality_weight or a.local_direction_weight:
+                if a.cross_repair_weight:
+                    logits, damaged_depth, residual = model.forward_with_cross_repair(x)
+                    with torch.no_grad():
+                        clean_depth = model.encoder.patch_embed.depth_tokens(model.normalized_clip(clean))
+                        coverage = local_sensor_coverage(clean, x)
+                    cross_loss = cross_sensor_repair_loss(residual, damaged_depth, clean_depth, coverage)
+                    repair_sum += cross_loss.detach() * len(y)
+                elif a.local_quality_weight or a.local_direction_weight:
                     logits, quality_logits = model.forward_with_local_quality(x)
                     targets = local_sensor_coverage(clean, x)
                     if a.local_direction_weight:
@@ -522,6 +553,8 @@ def main():
                 loss = criterion(logits, y)
                 if perm is not None:
                     loss = mix * loss + (1. - mix) * criterion(logits, y[perm])
+                if a.cross_repair_weight:
+                    loss = loss + a.cross_repair_weight * cross_loss
                 if a.local_quality_weight or a.local_direction_weight:
                     loss = loss + (a.local_quality_weight or a.local_direction_weight) * quality_loss
                 if a.distill:
@@ -607,6 +640,8 @@ def main():
         if a.local_quality_weight or a.local_direction_weight:
             key = 'direction_loss' if a.local_direction_weight else 'quality_loss'
             row[key] = float(quality_sum) / seen
+        if a.cross_repair_weight:
+            row['cross_repair_loss'] = float(repair_sum) / seen
         if a.patch_repair_weight:
             row['patch_repair_loss'] = float(repair_sum) / seen
         with (a.output/'history.jsonl').open('a', encoding='utf-8') as f:

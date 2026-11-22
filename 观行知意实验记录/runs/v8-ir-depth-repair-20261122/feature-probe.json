@@ -1,0 +1,51 @@
+{
+  "samples": 466,
+  "cases": [
+    "depth-gap",
+    "short-offset-gap"
+  ],
+  "results": {
+    "repair-ce": {
+      "depth-gap": {
+        "fused_mse_before": 2.8404965438876806,
+        "fused_mse_after": 2.83861237410048,
+        "depth_residual_mse": 2.846205354442854,
+        "relative_fused_mse_change": -0.0006633240907317292
+      },
+      "short-offset-gap": {
+        "fused_mse_before": 2.4436267673500995,
+        "fused_mse_after": 2.441677781049525,
+        "depth_residual_mse": 2.4523009576975836,
+        "relative_fused_mse_change": -0.0007975793712098313
+      }
+    },
+    "repair-latent": {
+      "depth-gap": {
+        "fused_mse_before": 2.8404965438876806,
+        "fused_mse_after": 2.8202718654004215,
+        "depth_residual_mse": 2.797666604117568,
+        "relative_fused_mse_change": -0.007120120786902372
+      },
+      "short-offset-gap": {
+        "fused_mse_before": 2.4436267673500995,
+        "fused_mse_after": 2.421299019419218,
+        "depth_residual_mse": 2.3752742402833347,
+        "relative_fused_mse_change": -0.009137135109669037
+      }
+    },
+    "repair-strong": {
+      "depth-gap": {
+        "fused_mse_before": 2.8404965438876806,
+        "fused_mse_after": 2.8058651679905298,
+        "depth_residual_mse": 2.750625136150673,
+        "relative_fused_mse_change": -0.012192014798142355
+      },
+      "short-offset-gap": {
+        "fused_mse_before": 2.4436267673500995,
+        "fused_mse_after": 2.404829148367662,
+        "depth_residual_mse": 2.303697001049375,
+        "relative_fused_mse_change": -0.015877064165780965
+      }
+    }
+  }
+}
