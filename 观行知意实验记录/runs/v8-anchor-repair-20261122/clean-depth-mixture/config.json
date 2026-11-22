@@ -1,0 +1,11 @@
+{
+  "method": "equal parameter averaging",
+  "sources": [
+    "runs\\v8-anchor-repair-20261122\\replay-no-drop\\best_ema.pt",
+    "runs\\v8-anchor-repair-20261122\\half-depth\\best_ema.pt"
+  ],
+  "source_sha256": [
+    "765e1f2898bbb64866cf189cfead6e4a356d480583e961b58b25c401127de95b",
+    "a40185336acafcd1b4cb5dfd8ec23d4b94b128451348920e07a265d8ffd32804"
+  ]
+}

@@ -31,6 +31,9 @@ def stress_clip(x, mean, case):
     elif case == 'depth-gap':
         h, w = x.shape[-2:]
         altered[:, :3, :, 3*h//10:7*h//10, 3*w//10:7*w//10] = mean[:, :3]
+    elif case == 'short-offset-gap':
+        frames, h, w = x.shape[-3:]
+        altered[:, :3, frames//4:3*frames//4, h//8:h//2, w//2:7*w//8] = 0.
     else:
         raise ValueError(f'Unknown synthetic stress case {case}')
     return altered

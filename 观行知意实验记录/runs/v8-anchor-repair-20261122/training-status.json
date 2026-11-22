@@ -1,0 +1,7 @@
+{
+  "anchor-clean": "complete",
+  "anchor-depth": "complete",
+  "patch-repair": "complete",
+  "anchor-replay": "complete",
+  "patch-only": "complete"
+}

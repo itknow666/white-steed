@@ -1,0 +1,9 @@
+{
+  "samples": 4,
+  "split": "train",
+  "same_weights_and_view": true,
+  "device": "cpu-fp32",
+  "train_mode_kl": 0.02612338401377201,
+  "eval_mode_kl": 3.725290298461914e-09,
+  "eval_max_probability_difference": 0.0
+}

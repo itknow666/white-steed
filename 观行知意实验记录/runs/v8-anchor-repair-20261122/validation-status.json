@@ -1,0 +1,10 @@
+{
+  "patch-repair": "complete",
+  "anchor-replay": "complete",
+  "anchor-depth": "complete",
+  "patch-only": "complete",
+  "repair-replay": "complete",
+  "half-repair": "complete",
+  "anchor-clean": "complete",
+  "half-depth": "complete"
+}

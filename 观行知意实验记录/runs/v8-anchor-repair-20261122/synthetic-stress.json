@@ -1,0 +1,211 @@
+{
+  "samples": 466,
+  "ir_gain": 0.5,
+  "depth_gap_side_fraction": 0.4,
+  "cases": [
+    "clean",
+    "dark-ir",
+    "depth-gap",
+    "short-offset-gap"
+  ],
+  "results": {
+    "initial": {
+      "clean": {
+        "accuracy": 73.60515021459227,
+        "macro_f1": 70.11618033021175
+      },
+      "dark-ir": {
+        "accuracy": 72.96137339055794,
+        "macro_f1": 69.84684206634333
+      },
+      "depth-gap": {
+        "accuracy": 56.652360515021456,
+        "macro_f1": 49.68077533507399
+      },
+      "short-offset-gap": {
+        "accuracy": 69.74248927038627,
+        "macro_f1": 65.29748862847177
+      }
+    },
+    "anchor-clean": {
+      "clean": {
+        "accuracy": 72.74678111587983,
+        "macro_f1": 69.07151714942863
+      },
+      "dark-ir": {
+        "accuracy": 72.53218884120172,
+        "macro_f1": 69.50935673032859
+      },
+      "depth-gap": {
+        "accuracy": 56.437768240343345,
+        "macro_f1": 49.59610933652962
+      },
+      "short-offset-gap": {
+        "accuracy": 69.95708154506438,
+        "macro_f1": 65.70033998128302
+      }
+    },
+    "anchor-depth": {
+      "clean": {
+        "accuracy": 72.53218884120172,
+        "macro_f1": 68.96741474186646
+      },
+      "dark-ir": {
+        "accuracy": 72.53218884120172,
+        "macro_f1": 69.0434258059978
+      },
+      "depth-gap": {
+        "accuracy": 57.2961373390558,
+        "macro_f1": 50.814859329205454
+      },
+      "short-offset-gap": {
+        "accuracy": 70.1716738197425,
+        "macro_f1": 64.69852471941773
+      }
+    },
+    "patch-repair": {
+      "clean": {
+        "accuracy": 72.53218884120172,
+        "macro_f1": 69.0770278857212
+      },
+      "dark-ir": {
+        "accuracy": 71.88841201716738,
+        "macro_f1": 68.38095796979833
+      },
+      "depth-gap": {
+        "accuracy": 59.65665236051502,
+        "macro_f1": 52.76449532955024
+      },
+      "short-offset-gap": {
+        "accuracy": 69.95708154506438,
+        "macro_f1": 65.65883909436818
+      }
+    },
+    "anchor-replay": {
+      "clean": {
+        "accuracy": 72.53218884120172,
+        "macro_f1": 69.26899308425673
+      },
+      "dark-ir": {
+        "accuracy": 71.88841201716738,
+        "macro_f1": 68.48089106473057
+      },
+      "depth-gap": {
+        "accuracy": 56.652360515021456,
+        "macro_f1": 49.86473140865595
+      },
+      "short-offset-gap": {
+        "accuracy": 70.3862660944206,
+        "macro_f1": 66.19247850688068
+      }
+    },
+    "patch-only": {
+      "clean": {
+        "accuracy": 72.74678111587983,
+        "macro_f1": 69.05612400815538
+      },
+      "dark-ir": {
+        "accuracy": 71.88841201716738,
+        "macro_f1": 68.30243422306485
+      },
+      "depth-gap": {
+        "accuracy": 57.081545064377686,
+        "macro_f1": 50.267998134597015
+      },
+      "short-offset-gap": {
+        "accuracy": 69.74248927038627,
+        "macro_f1": 64.3675696125107
+      }
+    },
+    "half-depth": {
+      "clean": {
+        "accuracy": 73.17596566523605,
+        "macro_f1": 69.57067558985406
+      },
+      "dark-ir": {
+        "accuracy": 73.17596566523605,
+        "macro_f1": 70.11371881704362
+      },
+      "depth-gap": {
+        "accuracy": 57.72532188841202,
+        "macro_f1": 50.73207406425093
+      },
+      "short-offset-gap": {
+        "accuracy": 70.1716738197425,
+        "macro_f1": 65.68637945727247
+      }
+    },
+    "half-repair": {
+      "clean": {
+        "accuracy": 72.74678111587983,
+        "macro_f1": 69.23302180734733
+      },
+      "dark-ir": {
+        "accuracy": 72.3175965665236,
+        "macro_f1": 69.08209994833817
+      },
+      "depth-gap": {
+        "accuracy": 57.2961373390558,
+        "macro_f1": 50.272316976349465
+      },
+      "short-offset-gap": {
+        "accuracy": 70.3862660944206,
+        "macro_f1": 65.900953287566
+      }
+    },
+    "repair-replay": {
+      "clean": {
+        "accuracy": 72.74678111587983,
+        "macro_f1": 69.3454486239247
+      },
+      "dark-ir": {
+        "accuracy": 71.67381974248927,
+        "macro_f1": 68.60346792724151
+      },
+      "depth-gap": {
+        "accuracy": 57.081545064377686,
+        "macro_f1": 50.06015871259153
+      },
+      "short-offset-gap": {
+        "accuracy": 69.95708154506438,
+        "macro_f1": 65.72135270973943
+      }
+    },
+    "replay-no-drop": {
+      "clean": {
+        "accuracy": 73.39055793991416,
+        "macro_f1": 69.5388745991847
+      },
+      "dark-ir": {
+        "accuracy": 72.3175965665236,
+        "macro_f1": 68.80333417761486
+      },
+      "depth-gap": {
+        "accuracy": 56.86695278969957,
+        "macro_f1": 49.94784864307443
+      },
+      "short-offset-gap": {
+        "accuracy": 69.95708154506438,
+        "macro_f1": 65.62933187673943
+      }
+    },
+    "clean-depth-mixture": {
+      "clean": {
+        "accuracy": 73.17596566523605,
+        "macro_f1": 69.63617467410315
+      },
+      "dark-ir": {
+        "accuracy": 72.74678111587983,
+        "macro_f1": 69.59592512599849
+      },
+      "depth-gap": {
+        "accuracy": 57.2961373390558,
+        "macro_f1": 50.351555657895794
+      },
+      "short-offset-gap": {
+        "accuracy": 70.1716738197425,
+        "macro_f1": 65.84718953143354
+      }
+    }
+  }
+}

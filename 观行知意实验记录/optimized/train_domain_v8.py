@@ -40,6 +40,17 @@ def offline_teacher_targets(path, rows, policy):
     return (video / 2).softmax(1).lerp((r34 / 2).softmax(1), weight)
 
 
+def patch_reconstruction(clean, altered, tokens, reference):
+    """Match clean fused tokens at locations where the depth view was removed."""
+    changed = (clean[:, :3] != altered[:, :3]).any(dim=1, keepdim=True).float()
+    coverage = F.adaptive_avg_pool3d(changed, (8, 14, 14)).flatten(1)
+    width = tokens.size(-1)
+    tokens = F.layer_norm(tokens.float(), (width,))
+    reference = F.layer_norm(reference.float(), (width,))
+    error = (tokens - reference).square().mean(dim=-1)
+    return (error * coverage).sum() / coverage.sum().clamp_min(1.)
+
+
 def local_alignment(x, depth, ir, sampling, rng):
     """Match synchronized depth and IR tokens against distant tokens in each clip."""
     with torch.no_grad():
@@ -152,6 +163,10 @@ def main():
     parser.add_argument('--sensor-augment', action='store_true', help='Darken IR or hide a local depth patch')
     parser.add_argument('--sensor-consistency', action='store_true', help='Match a frozen clean-view teacher on perturbed samples')
     parser.add_argument('--sensor-kind', choices=['mixed', 'depth-only'], default='mixed')
+    parser.add_argument('--anchor-weight', type=float, default=0., help='Match the starting model on clean views throughout training')
+    parser.add_argument('--anchor-eval-student', action='store_true', help='Disable student Dropout and DropPath during anchored fitting')
+    parser.add_argument('--patch-repair-weight', type=float, default=0., help='Reconstruct clean patch features in corrupted depth regions')
+    parser.add_argument('--patch-only', action='store_true', help='Update input projections and adapters with fixed encoder blocks and classifier')
     a = parser.parse_args()
     if a.continue_dual and a.mode not in ('dual', 'staged'):
         parser.error('--continue-dual supports dual and staged')
@@ -181,6 +196,16 @@ def main():
         parser.error('--sensor-kind requires --sensor-augment')
     if a.sensor_augment and (a.mode != 'dual' or not a.continue_dual or a.domain_variant != 'plain' or a.mask_rate or a.ir_jitter):
         parser.error('Sensor augmentation requires plain dual continuation without other sensor corruption')
+    if any(not math.isfinite(value) or value < 0 for value in (a.anchor_weight, a.patch_repair_weight)):
+        parser.error('Anchor and patch repair weights must be finite and nonnegative')
+    if a.anchor_weight and (a.mode != 'dual' or not a.continue_dual or a.domain_variant != 'plain' or a.mask_rate or a.sensor_consistency or a.alignment != 'none'):
+        parser.error('Anchoring requires plain dual continuation without another online teacher or alignment')
+    if a.anchor_eval_student and not a.anchor_weight:
+        parser.error('--anchor-eval-student requires a positive anchor weight')
+    if a.patch_repair_weight and (not a.anchor_weight or a.sensor_kind != 'depth-only'):
+        parser.error('Patch reconstruction requires anchoring with depth-only augmentation')
+    if a.patch_only and (not a.patch_repair_weight or a.adapter_only or a.last_blocks):
+        parser.error('--patch-only requires patch repair with no other parameter-freezing mode')
     if not 0 <= a.mask_rate < 1 or a.distill < 0 or (a.distill and not (a.continue_dual and a.mask_rate)):
         parser.error('Distillation requires a V8 checkpoint and a positive mask rate')
     a.output.mkdir(parents=True)
@@ -216,6 +241,9 @@ def main():
         model.requires_grad_(False)
         model.encoder.patch_embed.depth_adapter.requires_grad_(True)
         model.encoder.patch_embed.ir_adapter.requires_grad_(True)
+    if a.patch_only:
+        model.requires_grad_(False)
+        model.encoder.patch_embed.requires_grad_(True)
     if a.last_blocks:
         if a.last_blocks > len(model.encoder.blocks):
             parser.error('--last-blocks exceeds the encoder depth')
@@ -231,7 +259,7 @@ def main():
             order_head = nn.Linear(model.encoder.num_features, 1, bias=False).cuda()
             nn.init.zeros_(order_head.weight)
     teacher = None
-    if a.distill or a.sensor_consistency:
+    if a.distill or a.sensor_consistency or a.anchor_weight:
         with torch.random.fork_rng(devices=[]):
             teacher = DomainVideoMAE().cuda().eval().requires_grad_(False)
         teacher.load_state_dict(state)
@@ -267,6 +295,11 @@ def main():
     if a.sensor_augment:
         config.update(sensor_kind=a.sensor_kind, sensor_augment_probability=.55, ir_gain_range=[.55, .90], depth_gap_side_range=[.18, .34],
                       sensor_consistency_weight=.20 if a.sensor_consistency else 0.)
+    if a.anchor_weight:
+        config.update(anchor_weight=a.anchor_weight, patch_repair_weight=a.patch_repair_weight,
+                      anchor_eval_student=a.anchor_eval_student)
+    if a.patch_only:
+        config['patch_only'] = True
     write(a.output/'config.json', config)
     started = time.monotonic()
     if a.mode == 'ssl':
@@ -319,12 +352,14 @@ def main():
         if epoch == 2:
             for q in delayed:
                 q.requires_grad_(True)
-        model.train(not (a.phase_head_only or a.adapter_only))
+        model.train(not (a.phase_head_only or a.adapter_only or a.patch_only or a.anchor_eval_student))
         seen, loss_sum = 0, 0.
         alignment_sum = torch.zeros((), device='cuda')
         order_sum = torch.zeros((), device='cuda')
         teacher_sum = torch.zeros((), device='cuda')
         consistency_sum = torch.zeros((), device='cuda')
+        anchor_sum = torch.zeros((), device='cuda')
+        repair_sum = torch.zeros((), device='cuda')
         for x, y, indices in tr:
             x, y = x.cuda(non_blocking=True), y.cuda(non_blocking=True)
             if a.pace_jitter:
@@ -349,6 +384,8 @@ def main():
             mix = float(np.random.beta(.2, .2)) if perm is not None else 1.
             if perm is not None:
                 x = mix * x + (1. - mix) * x[perm]
+            if a.anchor_weight:
+                clean = x
             if a.sensor_augment:
                 clean = x
                 x, affected = corrupt_training_clip(clean, model.mean, sensor_rng, a.sensor_kind)
@@ -363,6 +400,8 @@ def main():
             with torch.autocast('cuda', dtype=torch.bfloat16):
                 if a.alignment != 'none':
                     logits, depth, ir = model.forward_with_streams(x)
+                elif a.anchor_weight:
+                    logits, anchor_tokens = model.forward_with_order_inputs(x)
                 elif order_head is not None:
                     logits, order_tokens = model.forward_with_order_inputs(x)
                 else:
@@ -381,6 +420,17 @@ def main():
                     kl = F.kl_div((logits[affected].float() / 2).log_softmax(1), target, reduction='sum') / len(y)
                     loss = loss + .20 * 4 * kl
                     consistency_sum += kl.detach() * len(y)
+                if a.anchor_weight:
+                    with torch.no_grad():
+                        anchor_logits, clean_tokens = teacher.forward_with_order_inputs(clean)
+                        target = (anchor_logits.float() / 2).softmax(1)
+                    anchor_kl = F.kl_div((logits.float() / 2).log_softmax(1), target, reduction='batchmean')
+                    loss = loss + a.anchor_weight * 4 * anchor_kl
+                    anchor_sum += anchor_kl.detach() * len(y)
+                    if a.patch_repair_weight:
+                        repair = patch_reconstruction(clean, x, anchor_tokens, clean_tokens)
+                        loss = loss + a.patch_repair_weight * repair
+                        repair_sum += repair.detach() * len(y)
                 if offline_targets is not None:
                     targets = offline_targets[indices.to(x.device)]
                     softened = logits.float() / 2
@@ -435,6 +485,10 @@ def main():
             row['teacher_kl'] = float(teacher_sum) / seen
         if a.sensor_consistency:
             row['sensor_kl'] = float(consistency_sum) / seen
+        if a.anchor_weight:
+            row['anchor_kl'] = float(anchor_sum) / seen
+        if a.patch_repair_weight:
+            row['patch_repair_loss'] = float(repair_sum) / seen
         with (a.output/'history.jsonl').open('a', encoding='utf-8') as f:
             f.write(json.dumps(row, allow_nan=False) + '\n')
         print(json.dumps(row), flush=True)

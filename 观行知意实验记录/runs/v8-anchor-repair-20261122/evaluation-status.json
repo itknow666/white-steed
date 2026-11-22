@@ -1,0 +1,15 @@
+{
+  "evaluated": [
+    "anchor-clean",
+    "anchor-depth",
+    "patch-repair",
+    "anchor-replay",
+    "patch-only",
+    "replay-no-drop",
+    "half-depth",
+    "half-repair",
+    "repair-replay",
+    "clean-depth-mixture"
+  ],
+  "other_candidates": []
+}

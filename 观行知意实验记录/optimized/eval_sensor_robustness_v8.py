@@ -21,9 +21,9 @@ CASES = ('clean', 'dark-ir', 'depth-gap')
 
 
 @torch.inference_mode()
-def synthetic_probe(runs):
+def synthetic_probe(runs, *, baseline_weights=INIT, arms=ARMS, cases=CASES):
     models = {}
-    for name, path in [('initial', INIT), *((arm, runs/arm/'best_ema.pt') for arm in ARMS)]:
+    for name, path in [('initial', baseline_weights), *((arm, runs/arm/'best_ema.pt') for arm in arms)]:
         model = DomainVideoMAE()
         model.load_state_dict(torch.load(path, map_location='cpu', weights_only=True), strict=True)
         models[name] = model.cuda().to(memory_format=torch.channels_last_3d).eval()
@@ -31,11 +31,11 @@ def synthetic_probe(runs):
     if len(data) != 466 or len({row['sample_id'] for row in data.rows}) != 466:
         raise ValueError('Expected complete official public validation cache')
     labels = np.empty(len(data), dtype=np.int64)
-    probabilities = {name: {case: np.empty((len(data), 40), dtype=np.float32) for case in CASES} for name in models}
+    probabilities = {name: {case: np.empty((len(data), 40), dtype=np.float32) for case in cases} for name in models}
     for clips, y, indices in DataLoader(data, batch_size=8, pin_memory=True):
         x = clips.cuda(non_blocking=True)
         labels[indices.numpy()] = y.numpy()
-        for case in CASES:
+        for case in cases:
             changed = stress_clip(x, models['initial'].mean, case).contiguous(memory_format=torch.channels_last_3d)
             with torch.autocast('cuda', dtype=torch.float16):
                 for name, model in models.items():
@@ -49,7 +49,7 @@ def synthetic_probe(runs):
             score.pop('confusion')
             rows[name][case] = score
         print(name, rows[name], flush=True)
-    return {'samples': len(data), 'ir_gain': .5, 'depth_gap_side_fraction': .4, 'results': rows}
+    return {'samples': len(data), 'ir_gain': .5, 'depth_gap_side_fraction': .4, 'cases': list(cases), 'results': rows}
 
 
 def main():

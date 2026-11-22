@@ -1,0 +1,5 @@
+{
+  "trainable_input_parameters": 838336,
+  "unchanged_tensors": 162,
+  "changed_input_tensors": 15
+}

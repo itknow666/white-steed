@@ -1,0 +1,11 @@
+{
+  "method": "equal parameter averaging",
+  "sources": [
+    "runs\\v8-teacher-transfer-20261122\\kd-non-target\\best_ema.pt",
+    "runs\\v8-anchor-repair-20261122\\patch-repair\\best_ema.pt"
+  ],
+  "source_sha256": [
+    "de5c160925e2da71e7fd4a7be80e8ce3daaf7c9ad53a60d6d73cf7d573fa8816",
+    "996660385bee890178f443d4aca8b6bee9c7b22bfc6ad347f339204c49588a22"
+  ]
+}
