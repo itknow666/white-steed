@@ -1,0 +1,11 @@
+{
+  "method": "equal parameter averaging",
+  "components": [
+    "top-5",
+    "top-12"
+  ],
+  "source_sha256": [
+    "0b026a1f9f72e0cbac8d40addfbbf3ecb6e6dce5aa3c5061a97a224614e77cdd",
+    "6f7a1f19de26f26884cc05d6f75eef567e69f133a6824fec23fa6375b36c8c62"
+  ]
+}

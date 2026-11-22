@@ -1,0 +1,95 @@
+{
+  "results": {
+    "initial": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.11618033021173,
+      "mode": "kd-non-target",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "8e5dd5517e6c5ad92e01b92e03966f991a72ee8bc67948ef716fbe68ab19173a",
+      "code_sha256": "a0b37c306d909752cb87c237f6bafd3b516853161f0be22ac7e89c7956577894",
+      "linux_verified": false
+    },
+    "top-5": {
+      "accuracy": 73.17596566523605,
+      "macro_f1": 69.75431908382288,
+      "mode": "top-5",
+      "parameters": 24767544,
+      "corrected": 3,
+      "regressed": 5,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "9ebc38fe68bcd087616c867a87408fa905236ab5f8f8a6f029b23b9158176c4a",
+      "code_sha256": "29af8e3f14a606d0126a9202af1a7a0dcc8bae3f011777c00f1c21ef5881f7ca",
+      "linux_verified": false
+    },
+    "top-12": {
+      "accuracy": 72.96137339055794,
+      "macro_f1": 69.7486325649447,
+      "mode": "top-12",
+      "parameters": 24767544,
+      "corrected": 2,
+      "regressed": 5,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "16f8c402878370e35fca04b0b9e0db87b4897537dbdfcdf3b134be353a4a9841",
+      "code_sha256": "38b3872c887185494b13ea4853010572b03923784ff1ba76c5dd4b89b0a05e19",
+      "linux_verified": false
+    },
+    "top-average": {
+      "accuracy": 72.96137339055794,
+      "macro_f1": 69.63301228984167,
+      "mode": "top-average",
+      "parameters": 24767544,
+      "corrected": 2,
+      "regressed": 5,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "ce6b7b0b22170dfff26a699b9d6337834fd1ca7d007c90d244dfd5db7059a8c6",
+      "code_sha256": "f798f1e98f268a097b780298042d4aee1a453c66e5d4e8bb7019e3db762b2db6",
+      "linux_verified": false
+    },
+    "top-5-scaled": {
+      "accuracy": 73.17596566523605,
+      "macro_f1": 69.75477843312399,
+      "mode": "top-5-scaled",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 2,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "60db6a011b0d8e358b0b703341061ff839bf2df10fd2b5168987e2754fb8cd7a",
+      "code_sha256": "a9efee9c9749005caac2e1c6eb9171614110616d46e032513c8e991ba8fe0eaa",
+      "linux_verified": false
+    }
+  },
+  "recommended": "initial"
+}

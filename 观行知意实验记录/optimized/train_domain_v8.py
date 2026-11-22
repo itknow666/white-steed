@@ -40,6 +40,19 @@ def offline_teacher_targets(path, rows, policy):
     return (video / 2).softmax(1).lerp((r34 / 2).softmax(1), weight)
 
 
+def non_target_kl(softened, labels, targets, top_k):
+    student = softened.scatter(1, labels[:, None], -1e4).log_softmax(1)
+    if top_k:
+        selected = targets.topk(top_k, dim=1).indices
+        keep = torch.zeros_like(targets, dtype=torch.bool).scatter_(1, selected, True)
+        # Preserve the total probability of all excluded competitors in one bin.
+        residual = student.masked_fill(keep, -torch.inf).logsumexp(1, keepdim=True)
+        student = torch.cat((student.gather(1, selected), residual), dim=1)
+        target_tail = targets.masked_fill(keep, 0.).sum(1, keepdim=True)
+        targets = torch.cat((targets.gather(1, selected), target_tail), dim=1)
+    return F.kl_div(student, targets, reduction='batchmean')
+
+
 def patch_reconstruction(clean, altered, tokens, reference):
     """Match clean fused tokens at locations where the depth view was removed."""
     changed = (clean[:, :3] != altered[:, :3]).any(dim=1, keepdim=True).float()
@@ -158,6 +171,7 @@ def main():
     parser.add_argument('--teacher-cache', type=Path, help='Frozen VideoMAE and R34 logits for the training split')
     parser.add_argument('--teacher-policy', choices=['fusion', 'adaptive', 'non-target'], default='fusion')
     parser.add_argument('--teacher-weight', type=float, default=.35, help='Weight on temperature-scaled offline KL')
+    parser.add_argument('--teacher-top-k', type=int, default=0, help='Keep K individual non-target classes and aggregate the rest')
     parser.add_argument('--adapter-only', action='store_true', help='Train only the two input residual adapters')
     parser.add_argument('--last-blocks', type=int, default=0, help='Train only the last N encoder blocks, normalization and head')
     parser.add_argument('--sensor-augment', action='store_true', help='Darken IR or hide a local depth patch')
@@ -186,6 +200,8 @@ def main():
         parser.error('Offline teacher and input-only trials require an unmasked plain dual checkpoint')
     if a.teacher_policy != 'fusion' and a.teacher_cache is None:
         parser.error('--teacher-policy requires --teacher-cache')
+    if not 0 <= a.teacher_top_k <= 38 or (a.teacher_top_k and a.teacher_policy != 'non-target'):
+        parser.error('--teacher-top-k must be 0–38 and requires non-target distillation when positive')
     if not math.isfinite(a.teacher_weight) or a.teacher_weight <= 0 or (a.teacher_weight != .35 and a.teacher_cache is None):
         parser.error('A positive finite teacher weight requires offline teacher logits')
     if a.last_blocks < 0 or (a.last_blocks and (a.mode != 'dual' or not a.continue_dual or a.domain_variant != 'plain' or a.adapter_only)):
@@ -287,7 +303,7 @@ def main():
         config.update(pace_jitter_max=.13, pace_jitter_probability=.5)
     if offline_targets is not None:
         config.update(offline_teacher_sha256=sha(a.teacher_cache), teacher_policy=a.teacher_policy,
-                      teacher_temperature=2., teacher_loss_weight=a.teacher_weight)
+                      teacher_temperature=2., teacher_loss_weight=a.teacher_weight, teacher_top_k=a.teacher_top_k)
     if a.adapter_only:
         config.update(adapter_only=True, adapter_lr_multiplier=10.)
     if a.last_blocks:
@@ -435,11 +451,10 @@ def main():
                     targets = offline_targets[indices.to(x.device)]
                     softened = logits.float() / 2
                     if a.teacher_policy == 'non-target':
-                        keep = softened.scatter(1, y[:, None], -1e4).log_softmax(1)
-                        kl = F.kl_div(keep, targets, reduction='batchmean')
+                        kl = non_target_kl(softened, y, targets, a.teacher_top_k)
                         if perm is not None:
-                            other = softened.scatter(1, y[perm, None], -1e4).log_softmax(1)
-                            kl = mix * kl + (1. - mix) * F.kl_div(other, targets[perm], reduction='batchmean')
+                            other = non_target_kl(softened, y[perm], targets[perm], a.teacher_top_k)
+                            kl = mix * kl + (1. - mix) * other
                     else:
                         if perm is not None:
                             targets = targets.lerp(targets[perm], 1. - mix)
