@@ -1,0 +1,41 @@
+{
+  "results": {
+    "initial": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.11618033021173,
+      "mode": "kd-non-target",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "8e5dd5517e6c5ad92e01b92e03966f991a72ee8bc67948ef716fbe68ab19173a",
+      "code_sha256": "a0b37c306d909752cb87c237f6bafd3b516853161f0be22ac7e89c7956577894",
+      "linux_verified": false
+    },
+    "adapter-moddrop-10": {
+      "accuracy": 72.74678111587983,
+      "macro_f1": 69.11273941898907,
+      "mode": "adapter-moddrop-10",
+      "parameters": 24767544,
+      "corrected": 1,
+      "regressed": 5,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "fec551892fd05f92c085c67eed618daba681f47243e2b98434637e91b763ef45",
+      "code_sha256": "30364f355acfeff7b31ff4acd35e16817298e25ae23943b9a4194ef8bc83e2ca",
+      "linux_verified": false
+    }
+  },
+  "recommended": "initial"
+}
