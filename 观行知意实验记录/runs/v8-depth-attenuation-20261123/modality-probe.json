@@ -1,0 +1,75 @@
+{
+  "samples": 466,
+  "results": {
+    "initial": {
+      "dual": {
+        "accuracy": 73.60515021459227,
+        "macro_f1": 70.11618033021175
+      },
+      "depth-only": {
+        "accuracy": 71.24463519313305,
+        "macro_f1": 68.02768338237172
+      },
+      "ir-only": {
+        "accuracy": 21.244635193133046,
+        "macro_f1": 11.72202607144612
+      }
+    },
+    "attenuation-fixed": {
+      "dual": {
+        "accuracy": 73.39055793991416,
+        "macro_f1": 69.8798864705626
+      },
+      "depth-only": {
+        "accuracy": 71.03004291845494,
+        "macro_f1": 67.68863109479003
+      },
+      "ir-only": {
+        "accuracy": 22.317596566523605,
+        "macro_f1": 13.507577105688764
+      }
+    },
+    "attenuation-ramp": {
+      "dual": {
+        "accuracy": 73.17596566523605,
+        "macro_f1": 69.4737016079536
+      },
+      "depth-only": {
+        "accuracy": 71.24463519313305,
+        "macro_f1": 68.05576065101502
+      },
+      "ir-only": {
+        "accuracy": 31.11587982832618,
+        "macro_f1": 24.53716388457802
+      }
+    },
+    "dropout-recovery": {
+      "dual": {
+        "accuracy": 73.17596566523605,
+        "macro_f1": 69.64943167696616
+      },
+      "depth-only": {
+        "accuracy": 70.81545064377683,
+        "macro_f1": 66.66609966201268
+      },
+      "ir-only": {
+        "accuracy": 42.06008583690987,
+        "macro_f1": 34.21821547516857
+      }
+    },
+    "adapter-interpolation": {
+      "dual": {
+        "accuracy": 73.17596566523605,
+        "macro_f1": 69.5469616339613
+      },
+      "depth-only": {
+        "accuracy": 71.24463519313305,
+        "macro_f1": 68.02768338237172
+      },
+      "ir-only": {
+        "accuracy": 27.467811158798284,
+        "macro_f1": 20.86822792118234
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "samples": 466,
+  "candidates": [
+    "attenuation-fixed",
+    "attenuation-ramp",
+    "dropout-recovery",
+    "adapter-interpolation"
+  ],
+  "single_api_exact_comparisons_per_candidate": 3
+}

@@ -1,0 +1,12 @@
+{
+  "torch.float16": {
+    "ordinary_scores_exact": true,
+    "scale_applied_to_depth_only": true,
+    "finite_scores": true
+  },
+  "torch.bfloat16": {
+    "ordinary_scores_exact": true,
+    "scale_applied_to_depth_only": true,
+    "finite_scores": true
+  }
+}

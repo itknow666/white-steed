@@ -226,7 +226,9 @@ class DomainVideoMAE(VideoMAEClassifier):
     def forward_with_modality_mask(self, x, keep_depth, keep_ir):
         normalized = self.normalized_clip(x)
         depth, ir = self.encoder.patch_embed.streams(normalized)
-        tokens = depth * keep_depth[:, None, None] + ir * keep_ir[:, None, None]
+        depth_scale = keep_depth.to(depth.dtype)[:, None, None]
+        ir_scale = keep_ir.to(ir.dtype)[:, None, None]
+        tokens = depth * depth_scale + ir * ir_scale
         return self.classify_tokens(tokens, position_dtype=normalized.dtype)
 
     def forward_with_local_quality(self, x):

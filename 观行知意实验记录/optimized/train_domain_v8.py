@@ -240,13 +240,20 @@ def main():
                         help='Regress clean depth features from co-located IR under synthetic depth loss')
     parser.add_argument('--modality-dropout', type=float, default=0.,
                         help='Probability of dropping one modality at the tubelet sum during training')
+    parser.add_argument('--depth-attenuation', type=float, nargs=3, metavar=('PROB','START','END'),
+                        help='Scale depth features with the chosen probability and a linear epoch schedule')
     a = parser.parse_args()
     if not 0. <= a.modality_dropout <= .5:
         parser.error('--modality-dropout must be between 0 and 0.5')
-    if a.modality_dropout and (a.domain_variant != 'plain' or a.mode != 'dual' or not a.continue_dual
-                               or a.sensor_augment or a.mask_rate or a.anchor_weight
-                               or a.teacher_cache or a.teacher_view != 'offline' or a.alignment != 'none'):
-        parser.error('Modality dropout requires plain dual continuation with no alternate student views')
+    if a.depth_attenuation:
+        probability, depth_start, depth_end = a.depth_attenuation
+        if a.modality_dropout or not (0 < probability <= .5 and 0 < depth_start <= depth_end <= 1):
+            parser.error('Depth attenuation expects PROB in (0, 0.5] and 0 < START <= END <= 1')
+    if (a.modality_dropout or a.depth_attenuation) and (
+            a.domain_variant != 'plain' or a.mode != 'dual' or not a.continue_dual
+            or a.sensor_augment or a.mask_rate or a.anchor_weight or a.teacher_cache
+            or a.teacher_view != 'offline' or a.alignment != 'none'):
+        parser.error('Modality perturbations require plain dual continuation with no alternate student views')
     if (not math.isfinite(a.cross_repair_weight) or a.cross_repair_weight < 0
             or (a.cross_repair_weight and a.domain_variant != 'localrepair')):
         parser.error('Cross-sensor repair supervision requires the localrepair variant')
@@ -430,6 +437,9 @@ def main():
         config.update(modality_balance_only=True, balance_lr_multiplier=10.)
     if a.local_quality_weight:
         config.update(local_quality_weight=a.local_quality_weight, quality_pos_weight=[8., 3.])
+    if a.depth_attenuation:
+        config.update(depth_attenuation_probability=probability,
+                      depth_attenuation_start=depth_start, depth_attenuation_end=depth_end)
     if a.modality_dropout:
         config.update(modality_dropout=a.modality_dropout, drop_depth_probability=.60*a.modality_dropout,
                       drop_ir_probability=.40*a.modality_dropout)
@@ -512,6 +522,9 @@ def main():
         repair_sum = torch.zeros((), device='cuda')
         if a.local_quality_weight or a.local_direction_weight:
             quality_sum = torch.zeros((), device='cuda')
+        if a.depth_attenuation:
+            depth_scale = depth_start + (depth_end - depth_start) * (epoch - 1) / max(1, a.epochs - 1)
+            attenuated = torch.zeros((), device='cuda', dtype=torch.long)
         if a.modality_dropout:
             drops = torch.zeros(2, device='cuda', dtype=torch.long)
         for x, y, indices in tr:
@@ -573,6 +586,12 @@ def main():
                         quality_loss = F.binary_cross_entropy_with_logits(
                             quality_logits, targets, pos_weight=quality_positive_weight)
                     quality_sum += quality_loss.detach() * len(y)
+                elif a.depth_attenuation:
+                    draw = torch.rand(len(y), device=x.device, generator=modality_rng)
+                    selected = draw < probability
+                    scales = torch.where(selected, depth_scale, 1.)
+                    attenuated += selected.sum()
+                    logits = model.forward_with_modality_mask(x, scales, torch.ones_like(scales))
                 elif a.modality_dropout:
                     draw = torch.rand(len(y), device=x.device, generator=modality_rng)
                     keep_depth = draw >= .60*a.modality_dropout
@@ -677,6 +696,9 @@ def main():
         if a.local_quality_weight or a.local_direction_weight:
             key = 'direction_loss' if a.local_direction_weight else 'quality_loss'
             row[key] = float(quality_sum) / seen
+        if a.depth_attenuation:
+            row['depth_scale'] = depth_scale
+            row['selected_depth_attenuation'] = int(attenuated)
         if a.modality_dropout:
             row['dropped_depth'], row['dropped_ir'] = drops.tolist()
         if a.cross_repair_weight:
