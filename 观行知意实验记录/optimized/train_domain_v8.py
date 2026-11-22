@@ -13,7 +13,7 @@ from torch import nn
 from torch.nn import functional as F
 from torch.utils.data import DataLoader
 
-from train_videomae import Clips, evaluate, save, sha, write
+from train_videomae import Clips, RawModel, evaluate, save, sha, write
 from videomae_model import VideoMAEClassifier
 from videomae_v8 import DomainVideoMAE
 from sensor_corruption_v8 import corrupt_training_clip
@@ -51,6 +51,25 @@ def non_target_kl(softened, labels, targets, top_k):
         target_tail = targets.masked_fill(keep, 0.).sum(1, keepdim=True)
         targets = torch.cat((targets.gather(1, selected), target_tail), dim=1)
     return F.kl_div(student, targets, reduction='batchmean')
+
+
+@torch.no_grad()
+def shared_view_logits(models, clips):
+    video, r34 = models
+    video_logits, r34_logits = [], []
+    with torch.autocast('cuda', dtype=torch.float16, cache_enabled=False):
+        for view in clips.split(4):
+            batch, channels, frames = view.shape[:3]
+            spatial = F.interpolate(view.flatten(1, 2), (128, 128), mode='area')
+            spatial = spatial.reshape(batch, channels, frames, 128, 128)
+            video_logits.append(video(view.contiguous(memory_format=torch.channels_last_3d)).float())
+            r34_logits.append(r34(spatial.contiguous(memory_format=torch.channels_last_3d)).float())
+    return torch.cat(video_logits), torch.cat(r34_logits)
+
+
+def shared_view_targets(logits, labels):
+    video, r34 = ((branch / 2).scatter(1, labels[:, None], -1e4).softmax(1) for branch in logits)
+    return video.lerp(r34, .25)
 
 
 def patch_reconstruction(clean, altered, tokens, reference):
@@ -169,6 +188,9 @@ def main():
     parser.add_argument('--phase-head-only', action='store_true', help='Freeze the starting model and train only the phase residual')
     parser.add_argument('--pace-jitter', action='store_true', help='Synchronized monotonic time warp during training')
     parser.add_argument('--teacher-cache', type=Path, help='Frozen VideoMAE and R34 logits for the training split')
+    parser.add_argument('--teacher-view', choices=['offline', 'augmented', 'mixed'], default='offline')
+    parser.add_argument('--view-video-weights', type=Path)
+    parser.add_argument('--view-r34-weights', type=Path)
     parser.add_argument('--teacher-policy', choices=['fusion', 'adaptive', 'non-target'], default='fusion')
     parser.add_argument('--teacher-weight', type=float, default=.35, help='Weight on temperature-scaled offline KL')
     parser.add_argument('--teacher-top-k', type=int, default=0, help='Keep K individual non-target classes and aggregate the rest')
@@ -182,6 +204,14 @@ def main():
     parser.add_argument('--patch-repair-weight', type=float, default=0., help='Reconstruct clean patch features in corrupted depth regions')
     parser.add_argument('--patch-only', action='store_true', help='Update input projections and adapters with fixed encoder blocks and classifier')
     a = parser.parse_args()
+    use_view_teachers = a.teacher_view != 'offline'
+    if use_view_teachers:
+        if not (a.view_video_weights and a.view_r34_weights) or a.teacher_cache or a.teacher_policy != 'non-target':
+            parser.error('Matched views require both teacher weights and the non-target policy')
+        if a.mode != 'dual' or not a.continue_dual or a.domain_variant != 'plain' or a.mask_rate or a.sensor_augment or a.anchor_weight:
+            parser.error('Matched-view training expects plain dual continuation without sensor masking or anchoring')
+    elif a.view_video_weights or a.view_r34_weights:
+        parser.error('Teacher weight paths require an augmented or mixed teacher view')
     if a.continue_dual and a.mode not in ('dual', 'staged'):
         parser.error('--continue-dual supports dual and staged')
     if a.base_lr <= 0 or a.class_power < 0:
@@ -198,11 +228,11 @@ def main():
         parser.error('Phase-only fitting requires phase classification without auxiliary direction prediction')
     if (a.teacher_cache or a.adapter_only) and (not a.continue_dual or a.mode != 'dual' or a.domain_variant != 'plain' or a.mask_rate):
         parser.error('Offline teacher and input-only trials require an unmasked plain dual checkpoint')
-    if a.teacher_policy != 'fusion' and a.teacher_cache is None:
+    if a.teacher_policy != 'fusion' and not (a.teacher_cache or use_view_teachers):
         parser.error('--teacher-policy requires --teacher-cache')
     if not 0 <= a.teacher_top_k <= 38 or (a.teacher_top_k and a.teacher_policy != 'non-target'):
         parser.error('--teacher-top-k must be 0–38 and requires non-target distillation when positive')
-    if not math.isfinite(a.teacher_weight) or a.teacher_weight <= 0 or (a.teacher_weight != .35 and a.teacher_cache is None):
+    if not math.isfinite(a.teacher_weight) or a.teacher_weight <= 0 or (a.teacher_weight != .35 and not (a.teacher_cache or use_view_teachers)):
         parser.error('A positive finite teacher weight requires offline teacher logits')
     if a.last_blocks < 0 or (a.last_blocks and (a.mode != 'dual' or not a.continue_dual or a.domain_variant != 'plain' or a.adapter_only)):
         parser.error('--last-blocks requires plain dual fine-tuning without adapter-only mode')
@@ -269,6 +299,13 @@ def main():
         model.head.requires_grad_(True)
     model.cuda()
     offline_targets = offline_teacher_targets(a.teacher_cache, train.rows, a.teacher_policy) if a.teacher_cache else None
+    view_teachers = None
+    if use_view_teachers:
+        with torch.random.fork_rng(devices=[]):
+            view_teachers = (DomainVideoMAE(), RawModel(channels=4, pretrained=None))
+        for branch, path in zip(view_teachers, (a.view_video_weights, a.view_r34_weights)):
+            branch.load_state_dict(torch.load(path, map_location='cpu', weights_only=True), strict=True)
+            branch.cuda().to(memory_format=torch.channels_last_3d).eval().requires_grad_(False)
     order_head = None
     if a.order_weight:
         with torch.random.fork_rng(devices=[]):
@@ -303,6 +340,10 @@ def main():
         config.update(pace_jitter_max=.13, pace_jitter_probability=.5)
     if offline_targets is not None:
         config.update(offline_teacher_sha256=sha(a.teacher_cache), teacher_policy=a.teacher_policy,
+                      teacher_temperature=2., teacher_loss_weight=a.teacher_weight, teacher_top_k=a.teacher_top_k)
+    if view_teachers is not None:
+        config.update(teacher_view=a.teacher_view, teacher_video_sha256=sha(a.view_video_weights),
+                      teacher_r34_sha256=sha(a.view_r34_weights), teacher_policy=a.teacher_policy,
                       teacher_temperature=2., teacher_loss_weight=a.teacher_weight, teacher_top_k=a.teacher_top_k)
     if a.adapter_only:
         config.update(adapter_only=True, adapter_lr_multiplier=10.)
@@ -398,8 +439,12 @@ def main():
             optimizer.zero_grad(set_to_none=True)
             perm = torch.randperm(len(y), device='cuda') if random.random() < .5 else None
             mix = float(np.random.beta(.2, .2)) if perm is not None else 1.
+            if a.teacher_view == 'augmented':
+                online_logits = shared_view_logits(view_teachers, x)
             if perm is not None:
                 x = mix * x + (1. - mix) * x[perm]
+            if a.teacher_view == 'mixed':
+                online_logits = shared_view_logits(view_teachers, x)
             if a.anchor_weight:
                 clean = x
             if a.sensor_augment:
@@ -447,13 +492,16 @@ def main():
                         repair = patch_reconstruction(clean, x, anchor_tokens, clean_tokens)
                         loss = loss + a.patch_repair_weight * repair
                         repair_sum += repair.detach() * len(y)
-                if offline_targets is not None:
-                    targets = offline_targets[indices.to(x.device)]
+                if offline_targets is not None or view_teachers is not None:
+                    targets = (shared_view_targets(online_logits, y) if view_teachers is not None
+                               else offline_targets[indices.to(x.device)])
                     softened = logits.float() / 2
                     if a.teacher_policy == 'non-target':
                         kl = non_target_kl(softened, y, targets, a.teacher_top_k)
                         if perm is not None:
-                            other = non_target_kl(softened, y[perm], targets[perm], a.teacher_top_k)
+                            paired = (shared_view_targets(online_logits, y[perm]) if a.teacher_view == 'mixed'
+                                      else targets[perm])
+                            other = non_target_kl(softened, y[perm], paired, a.teacher_top_k)
                             kl = mix * kl + (1. - mix) * other
                     else:
                         if perm is not None:
@@ -496,7 +544,7 @@ def main():
             row['alignment_loss'] = float(alignment_sum) / seen
         if order_head is not None:
             row['order_loss'] = float(order_sum) / seen
-        if offline_targets is not None:
+        if offline_targets is not None or view_teachers is not None:
             row['teacher_kl'] = float(teacher_sum) / seen
         if a.sensor_consistency:
             row['sensor_kl'] = float(consistency_sum) / seen

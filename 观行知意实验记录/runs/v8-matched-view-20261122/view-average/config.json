@@ -1,0 +1,11 @@
+{
+  "method": "equal parameter averaging",
+  "sources": [
+    "augmented",
+    "mixed"
+  ],
+  "source_sha256": [
+    "424608b4f0e2ffc5b471dbb315ae82fc09b51f36a9f38cdd4c8072d93adcca7b",
+    "7eb44ed2fe89db45feb897c2cc394e0184153f84215130fe11793b33f5950c7d"
+  ]
+}

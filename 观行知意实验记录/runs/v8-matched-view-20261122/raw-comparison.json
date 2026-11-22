@@ -1,0 +1,95 @@
+{
+  "results": {
+    "initial": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.11618033021173,
+      "mode": "kd-non-target",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "8e5dd5517e6c5ad92e01b92e03966f991a72ee8bc67948ef716fbe68ab19173a",
+      "code_sha256": "a0b37c306d909752cb87c237f6bafd3b516853161f0be22ac7e89c7956577894",
+      "linux_verified": false
+    },
+    "offline-control": {
+      "accuracy": 73.39055793991416,
+      "macro_f1": 69.81211631144183,
+      "mode": "offline-control",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 1,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "9bd9bd3d302108149fb562648250a10b8a4855df2157ba23ddead320018fd647",
+      "code_sha256": "a23fea753592665fd26c01e4e92baa44d8a82f714bd2f8dcbb9eddd3a07994d1",
+      "linux_verified": false
+    },
+    "augmented": {
+      "accuracy": 73.39055793991416,
+      "macro_f1": 69.93055801253297,
+      "mode": "augmented",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 1,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "88cd65fc68e784e625006237700d0c49a8d9d90daa03096a8387df7c479f2ab7",
+      "code_sha256": "778fbf730a103b51046fcb6155ffe5d465f721c242ab3699a339ce3ffc375c18",
+      "linux_verified": false
+    },
+    "mixed": {
+      "accuracy": 73.17596566523605,
+      "macro_f1": 69.90464631863287,
+      "mode": "mixed",
+      "parameters": 24767544,
+      "corrected": 2,
+      "regressed": 4,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "d502538c7d92360cbfe8d0662548f8e76efbe3119c459db28b0768b19a6a584f",
+      "code_sha256": "a8aa5fe326d1c3ceb71c1f966ad98c8b55bad78abdda6189cc23f3f8c44f1f8d",
+      "linux_verified": false
+    },
+    "view-average": {
+      "accuracy": 72.96137339055794,
+      "macro_f1": 69.50439674864646,
+      "mode": "view-average",
+      "parameters": 24767544,
+      "corrected": 1,
+      "regressed": 4,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "d796443678564102b73b200014e64572ec909c659ad7d86aa3f089d82366380c",
+      "code_sha256": "ae63e9e433ed22552061b8b7fac7c2073268630e65693da4042ab48a8e2a6db0",
+      "linux_verified": false
+    }
+  },
+  "recommended": "initial"
+}
