@@ -1,0 +1,11 @@
+{
+  "initial_scores_exact": true,
+  "training_and_inference_scores_exact": true,
+  "quality_targets_shape": [
+    1,
+    1568,
+    2
+  ],
+  "finite_gradients": true,
+  "trainable": 20042
+}

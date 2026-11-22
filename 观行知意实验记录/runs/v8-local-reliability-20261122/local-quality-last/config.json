@@ -1,0 +1,6 @@
+{
+  "source": "local-quality/last_ema.pt",
+  "source_sha256": "a306e14788e5bdb9e377efefdfe615b7beb5210c141be3d7b2b0ed90b7150965",
+  "epoch": 3,
+  "quality_logit_bias_shift": 0.0
+}

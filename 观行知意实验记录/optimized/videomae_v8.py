@@ -32,6 +32,28 @@ class ModalityBalance(nn.Module):
         return depth + ir + self.gains(depth, ir) * (depth - ir)
 
 
+class LocalModalityBalance(nn.Module):
+    """Predict per-tubelet corruption for paired depth and IR features."""
+    def __init__(self, dim):
+        super().__init__()
+        self.quality = nn.Sequential(nn.LayerNorm(2 * dim), nn.Linear(2 * dim, 24),
+                                     nn.GELU(), nn.Linear(24, 2))
+        nn.init.zeros_(self.quality[-1].weight)
+        nn.init.constant_(self.quality[-1].bias, -4.)
+
+    def fuse(self, depth, ir):
+        corruption_logits = self.quality(torch.cat((depth, ir), dim=-1)).float()
+        bad_depth, bad_ir = corruption_logits.sigmoid().split(1, dim=-1)
+        # Positive gain favors depth. Equal fault scores recover the original equal sum.
+        gain = .5 * (bad_ir - bad_depth)
+        depth32, ir32 = depth.float(), ir.float()
+        mixed = depth32 + ir32 + gain * (depth32 - ir32)
+        return mixed.to(depth.dtype), corruption_logits
+
+    def forward(self, depth, ir):
+        return self.fuse(depth, ir)[0]
+
+
 class DualPatchEmbed(nn.Module):
     def __init__(self, source):
         super().__init__()
@@ -122,6 +144,8 @@ class DomainVideoMAE(VideoMAEClassifier):
             if variant in ('balance', 'film'):
                 self.encoder.patch_embed.modality_balance = ModalityBalance(
                     self.encoder.num_features, clip_conditioned=variant == 'film')
+            if variant == 'local':
+                self.encoder.patch_embed.modality_balance = LocalModalityBalance(self.encoder.num_features)
             if variant == 'gate':
                 gate = nn.Linear(2 * self.encoder.num_features, 1)
                 nn.init.zeros_(gate.weight)
@@ -151,6 +175,13 @@ class DomainVideoMAE(VideoMAEClassifier):
             return self.head(self.encoder(x))
         return self.classify_tokens(self.encoder.patch_embed(x))
 
+    def forward_with_local_quality(self, x):
+        patch = self.encoder.patch_embed
+        normalized = self.normalized_clip(x)
+        depth, ir = patch.streams(normalized)
+        fused, quality = patch.modality_balance.fuse(depth, ir)
+        return self.classify_tokens(fused, position_dtype=normalized.dtype), quality
+
     def forward_with_order_inputs(self, x):
         # The auxiliary order head sees content before temporal position is added.
         tokens = self.encoder.patch_embed(self.normalized_clip(x))
@@ -161,9 +192,9 @@ class DomainVideoMAE(VideoMAEClassifier):
         depth, ir = self.encoder.patch_embed.streams(self.normalized_clip(x))
         return self.classify_tokens(depth + ir), depth, ir
 
-    def classify_tokens(self, tokens):
+    def classify_tokens(self, tokens, *, position_dtype=None):
         encoder = self.encoder
-        x = tokens + encoder.pos_embed.to(tokens.dtype)
+        x = tokens + encoder.pos_embed.to(position_dtype or tokens.dtype)
         for block in encoder.blocks:
             x = block(x)
             if hasattr(block, 'temporal_adapter'):

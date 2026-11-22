@@ -1,0 +1,11 @@
+{
+  "samples": 466,
+  "candidates": [
+    "adapters-defect",
+    "local-task",
+    "local-quality",
+    "local-quality-last",
+    "local-quality-conservative"
+  ],
+  "single_api_exact_comparisons_per_candidate": 3
+}

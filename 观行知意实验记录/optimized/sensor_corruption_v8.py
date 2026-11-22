@@ -1,5 +1,6 @@
 """Synchronized, clip-consistent synthetic perturbations of depth and IR."""
 import torch
+from torch.nn import functional as F
 
 
 def corrupt_training_clip(x, mean, rng, kind='mixed'):
@@ -20,6 +21,14 @@ def corrupt_training_clip(x, mean, rng, kind='mixed'):
     gain = torch.where(dark_ir, .55 + .35 * draws[:, 5], 1.)
     ir = x[:, 3:] * gain[:, None, None, None, None]
     return torch.cat((depth, ir), dim=1), active
+
+
+def local_sensor_coverage(clean, altered):
+    """Return fraction of altered pixels per VideoMAE tubelet for each sensor."""
+    depth_changed = (clean[:, :3] - altered[:, :3]).abs().amax(dim=1, keepdim=True) > 1e-5
+    ir_changed = (clean[:, 3:] - altered[:, 3:]).abs() > 1e-5
+    changed = torch.cat((depth_changed, ir_changed), dim=1).float()
+    return F.adaptive_avg_pool3d(changed, (8, 14, 14)).flatten(2).transpose(1, 2)
 
 
 def stress_clip(x, mean, case):

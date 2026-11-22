@@ -16,7 +16,7 @@ from torch.utils.data import DataLoader
 from train_videomae import Clips, RawModel, evaluate, save, sha, write
 from videomae_model import VideoMAEClassifier
 from videomae_v8 import DomainVideoMAE
-from sensor_corruption_v8 import corrupt_training_clip
+from sensor_corruption_v8 import corrupt_training_clip, local_sensor_coverage
 
 
 def offline_teacher_targets(path, rows, policy):
@@ -180,7 +180,7 @@ def main():
     parser.add_argument('--keep-blocks-frozen', action='store_true', help='Keep staged Transformer blocks frozen for every epoch')
     parser.add_argument('--class-power', type=float, default=.25)
     parser.add_argument('--ir-jitter', action='store_true', help='Training-only clip-consistent IR gain and offset')
-    parser.add_argument('--domain-variant', choices=['plain', 'gate', 'temporal', 'phase', 'balance', 'film'], default='plain')
+    parser.add_argument('--domain-variant', choices=['plain', 'gate', 'temporal', 'phase', 'balance', 'film', 'local'], default='plain')
     parser.add_argument('--mask-rate', type=float, default=0.)
     parser.add_argument('--distill', type=float, default=0., help='KL weight for frozen clean-view V8 teacher')
     parser.add_argument('--alignment', choices=['none', 'control', 'uniform', 'motion', 'motion-stratified'], default='none')
@@ -203,8 +203,13 @@ def main():
     parser.add_argument('--anchor-eval-student', action='store_true', help='Disable student Dropout and DropPath during anchored fitting')
     parser.add_argument('--patch-repair-weight', type=float, default=0., help='Reconstruct clean patch features in corrupted depth regions')
     parser.add_argument('--patch-only', action='store_true', help='Update input projections and adapters with fixed encoder blocks and classifier')
+    parser.add_argument('--local-quality-weight', type=float, default=0.,
+                        help='Supervise tubelet quality with locations of synthetic sensor defects')
     a = parser.parse_args()
-    fit_balance = a.domain_variant in ('balance', 'film')
+    if (not math.isfinite(a.local_quality_weight) or a.local_quality_weight < 0
+            or (a.local_quality_weight and (a.domain_variant != 'local' or not a.sensor_augment))):
+        parser.error('Local quality supervision requires the local variant and sensor augmentation')
+    fit_balance = a.domain_variant in ('balance', 'film', 'local')
     if fit_balance and (a.mode != 'dual' or a.mask_rate):
         parser.error('Modality balance requires dual continuation with unmasked inputs')
     use_view_teachers = a.teacher_view != 'offline'
@@ -356,6 +361,8 @@ def main():
         config.update(adapter_only=True, adapter_lr_multiplier=10.)
     if fit_balance:
         config.update(modality_balance_only=True, balance_lr_multiplier=10.)
+    if a.local_quality_weight:
+        config.update(local_quality_weight=a.local_quality_weight, quality_pos_weight=[8., 3.])
     if a.last_blocks:
         config['train_last_blocks'] = a.last_blocks
     if a.sensor_augment:
@@ -413,6 +420,7 @@ def main():
     align_rng = torch.Generator(device='cuda').manual_seed(a.seed + 1259)
     pace_rng = torch.Generator(device='cuda').manual_seed(a.seed + 1597)
     sensor_rng = torch.Generator(device='cuda').manual_seed(a.seed + 1999)
+    quality_positive_weight = torch.tensor([8., 3.], device='cuda') if a.local_quality_weight else None
     torch.cuda.reset_peak_memory_stats()
     for epoch in range(1, a.epochs + 1):
         if epoch == 2:
@@ -426,6 +434,8 @@ def main():
         consistency_sum = torch.zeros((), device='cuda')
         anchor_sum = torch.zeros((), device='cuda')
         repair_sum = torch.zeros((), device='cuda')
+        if a.local_quality_weight:
+            quality_sum = torch.zeros((), device='cuda')
         for x, y, indices in tr:
             x, y = x.cuda(non_blocking=True), y.cuda(non_blocking=True)
             if a.pace_jitter:
@@ -468,7 +478,13 @@ def main():
                 mask = torch.cat((~mask_ir.expand(-1, 3, -1, -1, -1), mask_ir), dim=1) & patches
                 x = torch.where(mask, model.mean, x)
             with torch.autocast('cuda', dtype=torch.bfloat16):
-                if a.alignment != 'none':
+                if a.local_quality_weight:
+                    logits, quality_logits = model.forward_with_local_quality(x)
+                    targets = local_sensor_coverage(clean, x)
+                    quality_loss = F.binary_cross_entropy_with_logits(
+                        quality_logits, targets, pos_weight=quality_positive_weight)
+                    quality_sum += quality_loss.detach() * len(y)
+                elif a.alignment != 'none':
                     logits, depth, ir = model.forward_with_streams(x)
                 elif a.anchor_weight:
                     logits, anchor_tokens = model.forward_with_order_inputs(x)
@@ -479,6 +495,8 @@ def main():
                 loss = criterion(logits, y)
                 if perm is not None:
                     loss = mix * loss + (1. - mix) * criterion(logits, y[perm])
+                if a.local_quality_weight:
+                    loss = loss + a.local_quality_weight * quality_loss
                 if a.distill:
                     with torch.no_grad():
                         target = (teacher(clean).float() / 2).softmax(dim=1)
@@ -559,11 +577,15 @@ def main():
             row['sensor_kl'] = float(consistency_sum) / seen
         if a.anchor_weight:
             row['anchor_kl'] = float(anchor_sum) / seen
+        if a.local_quality_weight:
+            row['quality_loss'] = float(quality_sum) / seen
         if a.patch_repair_weight:
             row['patch_repair_loss'] = float(repair_sum) / seen
         with (a.output/'history.jsonl').open('a', encoding='utf-8') as f:
             f.write(json.dumps(row, allow_nan=False) + '\n')
         print(json.dumps(row), flush=True)
+    if a.local_quality_weight:
+        save(a.output/'last_ema.pt', ema.module.state_dict())
     write(a.output/'summary.json', dict(mode=a.mode, best_epoch=best_epoch, accuracy=best[0], macro_f1=best[1]))
 
 
