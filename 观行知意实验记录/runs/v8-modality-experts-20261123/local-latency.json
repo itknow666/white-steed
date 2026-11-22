@@ -1,0 +1,18 @@
+{
+  "samples": 50,
+  "warmup": 3,
+  "includes_crop_and_decode": true,
+  "device": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+  "results": {
+    "initial": {
+      "mean_ms": 217.55421600013506,
+      "median_ms": 219.0883000039321,
+      "p95_ms": 241.1773899981199
+    },
+    "dual-with-depth": {
+      "mean_ms": 231.21769600053085,
+      "median_ms": 233.23304999939865,
+      "p95_ms": 250.35271999950055
+    }
+  }
+}

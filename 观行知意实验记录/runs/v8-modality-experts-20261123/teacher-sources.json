@@ -1,0 +1,29 @@
+{
+  "split": "train",
+  "samples": 1995,
+  "modalities": [
+    "dual",
+    "depth-expert",
+    "ir-expert"
+  ],
+  "sha256": [
+    "de5c160925e2da71e7fd4a7be80e8ce3daaf7c9ad53a60d6d73cf7d573fa8816",
+    "c9bd4488cc13d780950d1ed6e092ea8066405512b727b8f0c3a67451c77be216",
+    "7f42c4531ce73780abb8b42139966aded32c237036057d4441e38948e2955619"
+  ],
+  "temperature": 2.0,
+  "expert_fraction": 0.4,
+  "teacher_all_sha256": "4b162a57e3ad50216c851181973673b2791c0174714c9e5eb845b1b01fb20cbb",
+  "teacher_selected_sha256": "0283756862aeda4f5bb73b5cb4a677ffacf78271f2a4778b3bc86b7b6708506e",
+  "agreement": {
+    "correct_by_model": {
+      "dual": 1964,
+      "depth-expert": 1962,
+      "ir-expert": 1851
+    },
+    "only_depth_expert": 124,
+    "only_ir_expert": 13,
+    "either_expert": 1975,
+    "expert_correct_where_dual_wrong": 14
+  }
+}

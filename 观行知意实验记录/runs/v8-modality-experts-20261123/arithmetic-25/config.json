@@ -1,0 +1,9 @@
+{
+  "source_sha256": [
+    "de5c160925e2da71e7fd4a7be80e8ce3daaf7c9ad53a60d6d73cf7d573fa8816",
+    "c9bd4488cc13d780950d1ed6e092ea8066405512b727b8f0c3a67451c77be216",
+    "7f42c4531ce73780abb8b42139966aded32c237036057d4441e38948e2955619"
+  ],
+  "depth_scale": 0.25,
+  "ir_scale": 0.25
+}

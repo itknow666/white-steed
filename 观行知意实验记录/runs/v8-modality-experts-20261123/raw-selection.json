@@ -1,0 +1,16 @@
+{
+  "mixtures_ranked_on_cache": [
+    "dual-with-depth",
+    "dual-with-ir"
+  ],
+  "fitted_ranked_on_cache": "fitted-global",
+  "single_candidates": [
+    "depth-expert",
+    "ir-expert",
+    "dual-control",
+    "dual-distill-all",
+    "dual-distill-selected",
+    "arithmetic-10",
+    "arithmetic-25"
+  ]
+}

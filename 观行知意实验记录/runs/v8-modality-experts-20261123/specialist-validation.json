@@ -1,0 +1,52 @@
+{
+  "samples": 466,
+  "agreement": {
+    "correct_by_model": {
+      "dual": 343,
+      "depth-expert": 334,
+      "ir-expert": 310
+    },
+    "only_depth_expert": 48,
+    "only_ir_expert": 24,
+    "either_expert": 358,
+    "expert_correct_where_dual_wrong": 18
+  },
+  "results": {
+    "initial": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.11618033021175
+    },
+    "untrained-depth": {
+      "accuracy": 71.24463519313305,
+      "macro_f1": 68.02768338237172
+    },
+    "untrained-ir": {
+      "accuracy": 21.244635193133046,
+      "macro_f1": 11.72202607144612
+    },
+    "depth-expert": {
+      "accuracy": 71.67381974248927,
+      "macro_f1": 67.09502042701494
+    },
+    "ir-expert": {
+      "accuracy": 66.52360515021459,
+      "macro_f1": 61.505446243352026
+    },
+    "expert-pair": {
+      "accuracy": 72.53218884120172,
+      "macro_f1": 69.28842191157966
+    },
+    "dual-with-experts": {
+      "accuracy": 73.17596566523605,
+      "macro_f1": 69.49926399491304
+    },
+    "dual-with-ir": {
+      "accuracy": 73.17596566523605,
+      "macro_f1": 69.64177658742564
+    },
+    "dual-with-depth": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.11618033021175
+    }
+  }
+}

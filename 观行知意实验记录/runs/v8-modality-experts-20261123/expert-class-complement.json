@@ -1,0 +1,242 @@
+{
+  "0_Wash_face": {
+    "samples": 6,
+    "only_depth_expert": 2,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "1_Brush_teeth": {
+    "samples": 6,
+    "only_depth_expert": 0,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "2_Comb_hair": {
+    "samples": 9,
+    "only_depth_expert": 4,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "3_Take_off_clothes": {
+    "samples": 6,
+    "only_depth_expert": 1,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "4_Wipe_hands": {
+    "samples": 7,
+    "only_depth_expert": 0,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "5_Put_on_clothes": {
+    "samples": 9,
+    "only_depth_expert": 2,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "6_Drink_water": {
+    "samples": 19,
+    "only_depth_expert": 3,
+    "only_ir_expert": 2,
+    "either_expert_correct_where_dual_wrong": 1
+  },
+  "7_Eat_food": {
+    "samples": 26,
+    "only_depth_expert": 0,
+    "only_ir_expert": 5,
+    "either_expert_correct_where_dual_wrong": 4
+  },
+  "8_Take_and_use_tableware": {
+    "samples": 13,
+    "only_depth_expert": 3,
+    "only_ir_expert": 2,
+    "either_expert_correct_where_dual_wrong": 2
+  },
+  "9_Pour_drinks": {
+    "samples": 16,
+    "only_depth_expert": 3,
+    "only_ir_expert": 4,
+    "either_expert_correct_where_dual_wrong": 2
+  },
+  "10_Stir_drinks": {
+    "samples": 17,
+    "only_depth_expert": 4,
+    "only_ir_expert": 1,
+    "either_expert_correct_where_dual_wrong": 1
+  },
+  "11_Peel_fruits": {
+    "samples": 17,
+    "only_depth_expert": 6,
+    "only_ir_expert": 1,
+    "either_expert_correct_where_dual_wrong": 1
+  },
+  "12_Sweep_the_floor": {
+    "samples": 12,
+    "only_depth_expert": 2,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "13_Mop_the_floor": {
+    "samples": 6,
+    "only_depth_expert": 0,
+    "only_ir_expert": 1,
+    "either_expert_correct_where_dual_wrong": 1
+  },
+  "14_Wipe_bowls": {
+    "samples": 8,
+    "only_depth_expert": 0,
+    "only_ir_expert": 1,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "15_Wipe_windows_and_tables": {
+    "samples": 9,
+    "only_depth_expert": 2,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "16_Fold_clothes": {
+    "samples": 3,
+    "only_depth_expert": 0,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "17_Tap_the_keyboard": {
+    "samples": 11,
+    "only_depth_expert": 1,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "18_Write": {
+    "samples": 5,
+    "only_depth_expert": 0,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "19_Make_a_phone_call": {
+    "samples": 6,
+    "only_depth_expert": 0,
+    "only_ir_expert": 1,
+    "either_expert_correct_where_dual_wrong": 1
+  },
+  "20_Check_the_time": {
+    "samples": 15,
+    "only_depth_expert": 1,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "21_Read_documents": {
+    "samples": 12,
+    "only_depth_expert": 0,
+    "only_ir_expert": 2,
+    "either_expert_correct_where_dual_wrong": 2
+  },
+  "22_Turn_pages": {
+    "samples": 9,
+    "only_depth_expert": 2,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "23_Listen_to_music_with_headphones": {
+    "samples": 14,
+    "only_depth_expert": 0,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "24_Use_a_mobile_phone": {
+    "samples": 6,
+    "only_depth_expert": 0,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "25_Watch_TV": {
+    "samples": 3,
+    "only_depth_expert": 0,
+    "only_ir_expert": 1,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "26_Play_games": {
+    "samples": 6,
+    "only_depth_expert": 1,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "27_Take_a_selfie": {
+    "samples": 8,
+    "only_depth_expert": 1,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "28_Jog_in_place": {
+    "samples": 5,
+    "only_depth_expert": 1,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 1
+  },
+  "29_Do_squats": {
+    "samples": 18,
+    "only_depth_expert": 0,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "30_Do_jumping_jacks": {
+    "samples": 6,
+    "only_depth_expert": 0,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "31_Do_stretching_exercises": {
+    "samples": 9,
+    "only_depth_expert": 2,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "32_Stand_up": {
+    "samples": 21,
+    "only_depth_expert": 2,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "33_Lie_down": {
+    "samples": 6,
+    "only_depth_expert": 1,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "34_Sit_down": {
+    "samples": 25,
+    "only_depth_expert": 0,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "35_Do_lunges": {
+    "samples": 11,
+    "only_depth_expert": 0,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "36_Walk": {
+    "samples": 55,
+    "only_depth_expert": 3,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "37_Take_medicine": {
+    "samples": 8,
+    "only_depth_expert": 0,
+    "only_ir_expert": 0,
+    "either_expert_correct_where_dual_wrong": 0
+  },
+  "38_Massage_oneself": {
+    "samples": 12,
+    "only_depth_expert": 1,
+    "only_ir_expert": 2,
+    "either_expert_correct_where_dual_wrong": 1
+  },
+  "39_Take_body_temperature": {
+    "samples": 6,
+    "only_depth_expert": 0,
+    "only_ir_expert": 1,
+    "either_expert_correct_where_dual_wrong": 1
+  }
+}

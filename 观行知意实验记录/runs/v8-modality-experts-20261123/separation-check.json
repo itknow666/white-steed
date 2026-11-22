@@ -1,0 +1,10 @@
+{
+  "depthonly": {
+    "unused_modality_can_change_without_altering_any_scores": true,
+    "score_count": 40
+  },
+  "ironly": {
+    "unused_modality_can_change_without_altering_any_scores": true,
+    "score_count": 40
+  }
+}

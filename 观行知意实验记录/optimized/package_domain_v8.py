@@ -56,15 +56,28 @@ def package(run, package_dir, winner):
     config = json.loads((V7/'code/config.json').read_text(encoding='utf-8'))
     default_arch = 'videomae2_lora_v8' if winner['mode'] == 'lora' else 'videomae2_dual_v8'
     arch = winner.get('architecture', default_arch)
-    config['components'][0]['architecture'] = arch
-    state = torch.load(run/winner['mode']/'best_ema.pt', map_location='cpu', weights_only=True)
-    if winner['fusion']:
-        r34 = torch.load(R34/'best_ema.pt', map_location='cpu', weights_only=True)
-        state = {f'{i}.{name}': tensor for i, branch in enumerate((state, r34))
-                 for name, tensor in branch.items()}
+    custom = winner.get('components')
+    if custom:
+        if not 2 <= len(custom) <= 3:
+            raise ValueError('Expert fusion expects two or three components')
+        template = config['components'][0]
+        config['components'] = [
+            dict(template, architecture=spec['architecture'], weight=spec['weight']) for spec in custom
+        ]
+        if 'log_mix_weights' in winner:
+            config['log_mix_weights'] = winner['log_mix_weights']
+        branches = [torch.load(spec['weights'], map_location='cpu', weights_only=True) for spec in custom]
+        state = {f'{i}.{name}': tensor for i, branch in enumerate(branches) for name, tensor in branch.items()}
     else:
-        config['architecture'] = arch
-        config.pop('components')
+        config['components'][0]['architecture'] = arch
+        state = torch.load(run/winner['mode']/'best_ema.pt', map_location='cpu', weights_only=True)
+        if winner['fusion']:
+            r34 = torch.load(R34/'best_ema.pt', map_location='cpu', weights_only=True)
+            state = {f'{i}.{name}': tensor for i, branch in enumerate((state, r34))
+                     for name, tensor in branch.items()}
+        else:
+            config['architecture'] = arch
+            config.pop('components')
     torch.save(state, package_dir/'model.pt')
     additions = {'inference.py': ROOT/'optimized/inference_v7.py',
                  'videomae_v8.py': ROOT/'optimized/videomae_v8.py',

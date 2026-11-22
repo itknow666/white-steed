@@ -27,7 +27,8 @@ class Model:
         elif architecture in ['x3d_m','tsm_r50','mvit_v2_s','uniformer_s','c3d','videomae2_s',
                               'videomae2_dual_v8','videomae2_lora_v8',
                               'videomae2_gate_v8','videomae2_temporal_v8','videomae2_phase_v8',
-                              'videomae2_balance_v8','videomae2_film_v8','videomae2_local_v8','videomae2_localcontrast_v8','videomae2_localrepair_v8']:
+                              'videomae2_balance_v8','videomae2_film_v8','videomae2_local_v8','videomae2_localcontrast_v8','videomae2_localrepair_v8',
+                              'videomae2_depthonly_v8','videomae2_ironly_v8']:
             self.model = self._classifier(architecture)
         else:
             self.model = RawModel(channels=int(config.get('channels', 4)), pretrained=None)
@@ -36,6 +37,15 @@ class Model:
         if self.device.startswith('cuda') and config.get('channels_last_3d', True):
             self.model.to(memory_format=torch.channels_last_3d)
         self.parameters = sum(p.numel() for p in self.model.parameters())
+        self.log_mix_weights = None
+        if 'log_mix_weights' in config:
+            weights = torch.as_tensor(config['log_mix_weights'], dtype=torch.float32, device=device)
+            if (not self.components or weights.shape != (len(self.components), 40)
+                    or not weights.isfinite().all() or (weights < 0).any()
+                    or not torch.allclose(weights.sum(0), torch.ones(40, device=device), atol=1e-5)):
+                raise ValueError('Expected nonnegative component weights summing to one for each class')
+            self.log_mix_weights = weights
+            self.parameters += weights.numel()
         self.detector = None
         if config.get('person_crop', False):
             from ultralytics import YOLO
@@ -62,7 +72,8 @@ class Model:
             from videomae_v8 import DomainVideoMAE
             return DomainVideoMAE('lora' if name == 'videomae2_lora_v8' else 'dual')
         if name in ('videomae2_gate_v8', 'videomae2_temporal_v8', 'videomae2_phase_v8',
-                    'videomae2_balance_v8', 'videomae2_film_v8', 'videomae2_local_v8', 'videomae2_localcontrast_v8', 'videomae2_localrepair_v8'):
+                    'videomae2_balance_v8', 'videomae2_film_v8', 'videomae2_local_v8', 'videomae2_localcontrast_v8', 'videomae2_localrepair_v8',
+                    'videomae2_depthonly_v8', 'videomae2_ironly_v8'):
             from videomae_v8 import DomainVideoMAE
             return DomainVideoMAE(variant=name.split('_')[1])
         if name == 'c3d':
@@ -115,16 +126,22 @@ class Model:
     @torch.inference_mode()
     def predict(self, sample_path):
         if self.components:
-            # 两个分类器共享同一次人物定位；全部参数在初始化时统一计数。
+            # Reuse decoding when two classifiers have the same input settings.
             depth, ir, crops = self._paths_crop(sample_path, all_scales=True)
-            scores, total = None, 0.
+            inputs, values = {}, []
             for classifier, spec in zip(self.model, self.components):
-                x = self._input(depth, ir, crops[float(spec.get('crop_scale',1.4))], spec)
-                value = self._scores(classifier, x, bool(spec.get('flip_tta', False)))
-                weight = float(spec['weight'])
-                scores = value*weight if scores is None else scores+value*weight
-                total += weight
-            return (scores/total).cpu().tolist()
+                scale = float(spec.get('crop_scale',1.4))
+                key = (scale, int(spec.get('frames',16)), int(spec.get('size',128)), bool(spec.get('ir_contrast',False)))
+                if key not in inputs:
+                    inputs[key] = self._input(depth, ir, crops[scale], spec)
+                values.append(self._scores(classifier, inputs[key], bool(spec.get('flip_tta',False))))
+            if self.log_mix_weights is not None:
+                log_probabilities = torch.stack(values).clamp_min(1e-12).log()
+                scores = (log_probabilities * self.log_mix_weights).sum(0)
+            else:
+                weights = [float(spec['weight']) for spec in self.components]
+                scores = sum(value*weight for value, weight in zip(values, weights)) / sum(weights)
+            return scores.cpu().tolist()
         x = self.prepare(sample_path)
         return self._scores(self.model, x, bool(self.config.get('flip_tta', False))).cpu().tolist()
 

@@ -88,8 +88,9 @@ class LocalDepthRepair(LocalModalityBalance):
 
 
 class DualPatchEmbed(nn.Module):
-    def __init__(self, source):
+    def __init__(self, source, *, single_modality=None):
         super().__init__()
+        self.single_modality = single_modality
         src = source.proj
         self.depth = nn.Conv3d(3, src.out_channels, src.kernel_size, src.stride)
         self.ir = nn.Conv3d(1, src.out_channels, src.kernel_size, src.stride, bias=False)
@@ -111,11 +112,18 @@ class DualPatchEmbed(nn.Module):
         depth = self.depth(x[:, :3]).flatten(2).transpose(1, 2)
         return depth + self.depth_adapter(depth)
 
-    def streams(self, x):
+    def ir_tokens(self, x):
         ir = self.ir(x[:, 3:]).flatten(2).transpose(1, 2)
-        return self.depth_tokens(x), ir + self.ir_adapter(ir)
+        return ir + self.ir_adapter(ir)
+
+    def streams(self, x):
+        return self.depth_tokens(x), self.ir_tokens(x)
 
     def forward(self, x):
+        if self.single_modality == 'depth':
+            return self.depth_tokens(x)
+        if self.single_modality == 'ir':
+            return self.ir_tokens(x)
         depth, ir = self.streams(x)
         if hasattr(self, 'modality_balance'):
             return self.modality_balance(depth, ir)
@@ -174,7 +182,8 @@ class DomainVideoMAE(VideoMAEClassifier):
         super().__init__(pretrained=pretrained)
         if warmstart is not None:
             self.load_state_dict(warmstart, strict=True)
-        self.encoder.patch_embed = DualPatchEmbed(self.encoder.patch_embed)
+        single = {'depthonly': 'depth', 'ironly': 'ir'}.get(variant)
+        self.encoder.patch_embed = DualPatchEmbed(self.encoder.patch_embed, single_modality=single)
         # Adding an optional module must not change the data shuffle or Mixup stream.
         with torch.random.fork_rng(devices=[]):
             if variant in ('balance', 'film'):
@@ -213,6 +222,12 @@ class DomainVideoMAE(VideoMAEClassifier):
         if not hasattr(self.encoder.blocks[3], 'temporal_adapter') and not hasattr(self, 'phase_head'):
             return self.head(self.encoder(x))
         return self.classify_tokens(self.encoder.patch_embed(x))
+
+    def forward_with_modality_mask(self, x, keep_depth, keep_ir):
+        normalized = self.normalized_clip(x)
+        depth, ir = self.encoder.patch_embed.streams(normalized)
+        tokens = depth * keep_depth[:, None, None] + ir * keep_ir[:, None, None]
+        return self.classify_tokens(tokens, position_dtype=normalized.dtype)
 
     def forward_with_local_quality(self, x):
         patch = self.encoder.patch_embed

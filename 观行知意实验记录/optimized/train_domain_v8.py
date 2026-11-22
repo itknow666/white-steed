@@ -23,9 +23,17 @@ def offline_teacher_targets(path, rows, policy):
     with np.load(path, allow_pickle=False) as cache:
         if cache['sample_ids'].tolist() != [row['sample_id'] for row in rows] or cache['labels'].tolist() != [row['label'] for row in rows]:
             raise ValueError('Teacher rows must match the official training cache exactly')
+        labels = torch.from_numpy(cache['labels']).long().cuda()
+        if 'non_target_targets' in cache.files:
+            targets = torch.from_numpy(cache['non_target_targets']).float().cuda()
+            if (policy != 'non-target' or targets.shape != (len(rows), 40)
+                    or not targets.isfinite().all() or (targets < 0).any()
+                    or not torch.allclose(targets.sum(1), torch.ones_like(labels, dtype=targets.dtype), atol=1e-5)
+                    or targets.gather(1, labels[:, None]).any()):
+                raise ValueError('Expected 39 normalized non-target probabilities per training clip')
+            return targets
         video = torch.from_numpy(cache['video_logits']).float().cuda()
         r34 = torch.from_numpy(cache['r34_logits']).float().cuda()
-        labels = torch.from_numpy(cache['labels']).long().cuda()
     if video.shape != (len(rows), 40) or r34.shape != video.shape or not (video.isfinite().all() and r34.isfinite().all()):
         raise ValueError('Teacher cache must contain 40 finite logits per training sample')
     weight = .25
@@ -200,7 +208,8 @@ def main():
     parser.add_argument('--keep-blocks-frozen', action='store_true', help='Keep staged Transformer blocks frozen for every epoch')
     parser.add_argument('--class-power', type=float, default=.25)
     parser.add_argument('--ir-jitter', action='store_true', help='Training-only clip-consistent IR gain and offset')
-    parser.add_argument('--domain-variant', choices=['plain', 'gate', 'temporal', 'phase', 'balance', 'film', 'local', 'localcontrast', 'localrepair'], default='plain')
+    parser.add_argument('--domain-variant', choices=['plain', 'gate', 'temporal', 'phase', 'balance', 'film', 'local',
+                                                        'localcontrast', 'localrepair', 'depthonly', 'ironly'], default='plain')
     parser.add_argument('--mask-rate', type=float, default=0.)
     parser.add_argument('--distill', type=float, default=0., help='KL weight for frozen clean-view V8 teacher')
     parser.add_argument('--alignment', choices=['none', 'control', 'uniform', 'motion', 'motion-stratified'], default='none')
@@ -229,7 +238,15 @@ def main():
                         help='Supervise signed spatial gains from known local sensor defects')
     parser.add_argument('--cross-repair-weight', type=float, default=0.,
                         help='Regress clean depth features from co-located IR under synthetic depth loss')
+    parser.add_argument('--modality-dropout', type=float, default=0.,
+                        help='Probability of dropping one modality at the tubelet sum during training')
     a = parser.parse_args()
+    if not 0. <= a.modality_dropout <= .5:
+        parser.error('--modality-dropout must be between 0 and 0.5')
+    if a.modality_dropout and (a.domain_variant != 'plain' or a.mode != 'dual' or not a.continue_dual
+                               or a.sensor_augment or a.mask_rate or a.anchor_weight
+                               or a.teacher_cache or a.teacher_view != 'offline' or a.alignment != 'none'):
+        parser.error('Modality dropout requires plain dual continuation with no alternate student views')
     if (not math.isfinite(a.cross_repair_weight) or a.cross_repair_weight < 0
             or (a.cross_repair_weight and a.domain_variant != 'localrepair')):
         parser.error('Cross-sensor repair supervision requires the localrepair variant')
@@ -241,6 +258,9 @@ def main():
     if (not math.isfinite(a.local_quality_weight) or a.local_quality_weight < 0
             or (a.local_quality_weight and (a.domain_variant != 'local' or not a.sensor_augment))):
         parser.error('Local quality supervision requires the local variant and sensor augmentation')
+    single_modality = a.domain_variant in ('depthonly', 'ironly')
+    if single_modality and (a.mode != 'dual' or a.mask_rate or a.ir_jitter):
+        parser.error('Unimodal experts require dual continuation without sensor-specific corruption')
     fit_balance = a.domain_variant in ('balance', 'film', 'local', 'localcontrast', 'localrepair')
     if fit_balance and (a.mode != 'dual' or a.mask_rate):
         parser.error('Modality balance requires dual continuation with unmasked inputs')
@@ -326,6 +346,11 @@ def main():
             model.encoder.blocks.requires_grad_(False)
     else:
         model = make_model(a.mode, state)
+    if single_modality:
+        patch = model.encoder.patch_embed
+        unused = (patch.ir, patch.ir_adapter) if a.domain_variant == 'depthonly' else (patch.depth, patch.depth_adapter)
+        for module in unused:
+            module.requires_grad_(False)
     if a.phase_head_only:
         model.requires_grad_(False)
         model.phase_head.requires_grad_(True)
@@ -405,6 +430,9 @@ def main():
         config.update(modality_balance_only=True, balance_lr_multiplier=10.)
     if a.local_quality_weight:
         config.update(local_quality_weight=a.local_quality_weight, quality_pos_weight=[8., 3.])
+    if a.modality_dropout:
+        config.update(modality_dropout=a.modality_dropout, drop_depth_probability=.60*a.modality_dropout,
+                      drop_ir_probability=.40*a.modality_dropout)
     if a.domain_variant == 'localrepair':
         config.update(cross_repair_weight=a.cross_repair_weight, train_cross_repair_only=True)
     if a.local_direction_weight:
@@ -467,6 +495,7 @@ def main():
     align_rng = torch.Generator(device='cuda').manual_seed(a.seed + 1259)
     pace_rng = torch.Generator(device='cuda').manual_seed(a.seed + 1597)
     sensor_rng = torch.Generator(device='cuda').manual_seed(a.seed + 1999)
+    modality_rng = torch.Generator(device='cuda').manual_seed(a.seed + 4161)
     quality_positive_weight = torch.tensor([8., 3.], device='cuda') if a.local_quality_weight else None
     torch.cuda.reset_peak_memory_stats()
     for epoch in range(1, a.epochs + 1):
@@ -483,6 +512,8 @@ def main():
         repair_sum = torch.zeros((), device='cuda')
         if a.local_quality_weight or a.local_direction_weight:
             quality_sum = torch.zeros((), device='cuda')
+        if a.modality_dropout:
+            drops = torch.zeros(2, device='cuda', dtype=torch.long)
         for x, y, indices in tr:
             x, y = x.cuda(non_blocking=True), y.cuda(non_blocking=True)
             if a.pace_jitter:
@@ -542,6 +573,12 @@ def main():
                         quality_loss = F.binary_cross_entropy_with_logits(
                             quality_logits, targets, pos_weight=quality_positive_weight)
                     quality_sum += quality_loss.detach() * len(y)
+                elif a.modality_dropout:
+                    draw = torch.rand(len(y), device=x.device, generator=modality_rng)
+                    keep_depth = draw >= .60*a.modality_dropout
+                    keep_ir = (~keep_depth) | (draw >= a.modality_dropout)
+                    drops += torch.stack(((~keep_depth).sum(), (~keep_ir).sum()))
+                    logits = model.forward_with_modality_mask(x, keep_depth, keep_ir)
                 elif a.alignment != 'none':
                     logits, depth, ir = model.forward_with_streams(x)
                 elif a.anchor_weight:
@@ -640,6 +677,8 @@ def main():
         if a.local_quality_weight or a.local_direction_weight:
             key = 'direction_loss' if a.local_direction_weight else 'quality_loss'
             row[key] = float(quality_sum) / seen
+        if a.modality_dropout:
+            row['dropped_depth'], row['dropped_ir'] = drops.tolist()
         if a.cross_repair_weight:
             row['cross_repair_loss'] = float(repair_sum) / seen
         if a.patch_repair_weight:
