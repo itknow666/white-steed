@@ -1,0 +1,12 @@
+{
+  "objective_before": 3.7017854824093384,
+  "objective_after": 0.5319024745545189,
+  "training_accuracy": 98.59649122807016,
+  "ir_logit_shift_rms_before": 0.023585731614921487,
+  "ir_logit_shift_rms_after": 0.017573510350317352,
+  "head_weight_update_l2": 3.98312440523364,
+  "optimizer_evaluations": 38,
+  "fit_seconds": 0.26228220000484725,
+  "mode": "fresh-linear",
+  "best_epoch": null
+}

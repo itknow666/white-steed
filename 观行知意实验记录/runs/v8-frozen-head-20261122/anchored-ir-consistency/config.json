@@ -1,0 +1,8 @@
+{
+  "anchor": true,
+  "mirror": true,
+  "alpha": 2.0,
+  "beta": 0.15,
+  "source_sha256": "8e5dd5517e6c5ad92e01b92e03966f991a72ee8bc67948ef716fbe68ab19173a",
+  "train_samples": 1995
+}

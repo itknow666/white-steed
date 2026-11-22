@@ -1,0 +1,14 @@
+{
+  "split": "train",
+  "views": [
+    "clean",
+    "mirror",
+    "ir_photometric"
+  ],
+  "samples": 1995,
+  "dimension": 384,
+  "source_weights_sha256": "8e5dd5517e6c5ad92e01b92e03966f991a72ee8bc67948ef716fbe68ab19173a",
+  "feature_cache_sha256": "588e20c0f1a784bfc227d64c2200b667ff963b111b5e0193a3afa7022e79dd2b",
+  "train_manifest_sha256": "05b6094a6ac20b28d700b7ebb36b61056cdead21508e6bb239ea8f0a6e89e8ef",
+  "cache_manifest_sha256": "b3f92fd6952b07fa0a88e53131bd663a3e39ba573b44ed26261c6819acf6be26"
+}

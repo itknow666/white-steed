@@ -1,0 +1,12 @@
+{
+  "objective_before": 0.48945684397526273,
+  "objective_after": 0.48514003120704485,
+  "training_accuracy": 98.54636591478697,
+  "ir_logit_shift_rms_before": 0.023585731614921487,
+  "ir_logit_shift_rms_after": 0.022540544156767674,
+  "head_weight_update_l2": 0.24589353712949888,
+  "optimizer_evaluations": 12,
+  "fit_seconds": 0.1171740999998292,
+  "mode": "anchored-ir-normalized",
+  "best_epoch": null
+}

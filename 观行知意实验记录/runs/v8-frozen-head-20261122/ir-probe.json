@@ -1,0 +1,72 @@
+{
+  "samples": 466,
+  "ir_gain": 0.5,
+  "results": {
+    "initial": {
+      "clean": {
+        "accuracy": 73.60515021459227,
+        "macro_f1": 70.11618033021175
+      },
+      "dark-ir": {
+        "accuracy": 72.96137339055794,
+        "macro_f1": 69.84684206634333
+      },
+      "dark_ir_logit_shift_rms": 0.07506762444972992
+    },
+    "fresh-linear": {
+      "clean": {
+        "accuracy": 72.53218884120172,
+        "macro_f1": 68.75864918892847
+      },
+      "dark-ir": {
+        "accuracy": 70.81545064377683,
+        "macro_f1": 67.03839540951847
+      },
+      "dark_ir_logit_shift_rms": 0.05872223898768425
+    },
+    "anchored-clean": {
+      "clean": {
+        "accuracy": 73.17596566523605,
+        "macro_f1": 69.52288147220699
+      },
+      "dark-ir": {
+        "accuracy": 72.53218884120172,
+        "macro_f1": 69.28002228481766
+      },
+      "dark_ir_logit_shift_rms": 0.07413574308156967
+    },
+    "anchored-mirror": {
+      "clean": {
+        "accuracy": 73.17596566523605,
+        "macro_f1": 69.52288147220699
+      },
+      "dark-ir": {
+        "accuracy": 72.53218884120172,
+        "macro_f1": 69.28002228481766
+      },
+      "dark_ir_logit_shift_rms": 0.07411692291498184
+    },
+    "anchored-ir-consistency": {
+      "clean": {
+        "accuracy": 73.17596566523605,
+        "macro_f1": 69.52288147220699
+      },
+      "dark-ir": {
+        "accuracy": 72.53218884120172,
+        "macro_f1": 69.28002228481766
+      },
+      "dark_ir_logit_shift_rms": 0.07412052899599075
+    },
+    "anchored-ir-normalized": {
+      "clean": {
+        "accuracy": 73.17596566523605,
+        "macro_f1": 69.52288147220699
+      },
+      "dark-ir": {
+        "accuracy": 72.53218884120172,
+        "macro_f1": 69.28002228481766
+      },
+      "dark_ir_logit_shift_rms": 0.07246702909469604
+    }
+  }
+}
