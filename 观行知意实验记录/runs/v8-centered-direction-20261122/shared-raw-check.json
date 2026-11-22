@@ -1,0 +1,10 @@
+{
+  "samples": 466,
+  "candidates": [
+    "centered-ce",
+    "centered-direction",
+    "centered-top2-ce",
+    "centered-top2-direction"
+  ],
+  "single_api_exact_comparisons_per_candidate": 3
+}

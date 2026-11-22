@@ -1,0 +1,8 @@
+{
+  "target_favors_intact_sensor": true,
+  "uniform_change_neutral": true,
+  "finite_gradients": true,
+  "gradient_step_reduces_direction_loss": true,
+  "loss_before": 0.000698935822583735,
+  "loss_after": 0.0006808550097048283
+}

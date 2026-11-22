@@ -72,6 +72,17 @@ def shared_view_targets(logits, labels):
     return video.lerp(r34, .25)
 
 
+def local_direction_loss(balance, logits, coverage):
+    """Supervise signed local gains in affected and unaffected tubelets."""
+    target = .5 * balance.gain_from_scores(coverage)
+    loss = F.smooth_l1_loss(balance.corruption_gain(logits), target, beta=.05, reduction='none')
+    affected = target.abs() > .005
+    background = ~affected
+    foreground_loss = (loss * affected).sum() / affected.sum().clamp_min(1)
+    background_loss = (loss * background).sum() / background.sum().clamp_min(1)
+    return .5 * (foreground_loss + background_loss)
+
+
 def patch_reconstruction(clean, altered, tokens, reference):
     """Match clean fused tokens at locations where the depth view was removed."""
     changed = (clean[:, :3] != altered[:, :3]).any(dim=1, keepdim=True).float()
@@ -180,7 +191,7 @@ def main():
     parser.add_argument('--keep-blocks-frozen', action='store_true', help='Keep staged Transformer blocks frozen for every epoch')
     parser.add_argument('--class-power', type=float, default=.25)
     parser.add_argument('--ir-jitter', action='store_true', help='Training-only clip-consistent IR gain and offset')
-    parser.add_argument('--domain-variant', choices=['plain', 'gate', 'temporal', 'phase', 'balance', 'film', 'local'], default='plain')
+    parser.add_argument('--domain-variant', choices=['plain', 'gate', 'temporal', 'phase', 'balance', 'film', 'local', 'localcontrast'], default='plain')
     parser.add_argument('--mask-rate', type=float, default=0.)
     parser.add_argument('--distill', type=float, default=0., help='KL weight for frozen clean-view V8 teacher')
     parser.add_argument('--alignment', choices=['none', 'control', 'uniform', 'motion', 'motion-stratified'], default='none')
@@ -205,11 +216,16 @@ def main():
     parser.add_argument('--patch-only', action='store_true', help='Update input projections and adapters with fixed encoder blocks and classifier')
     parser.add_argument('--local-quality-weight', type=float, default=0.,
                         help='Supervise tubelet quality with locations of synthetic sensor defects')
+    parser.add_argument('--local-direction-weight', type=float, default=0.,
+                        help='Supervise signed spatial gains from known local sensor defects')
     a = parser.parse_args()
+    if (not math.isfinite(a.local_direction_weight) or a.local_direction_weight < 0
+            or (a.local_direction_weight and (a.domain_variant != 'localcontrast' or not a.sensor_augment))):
+        parser.error('Signed local supervision requires localcontrast and sensor augmentation')
     if (not math.isfinite(a.local_quality_weight) or a.local_quality_weight < 0
             or (a.local_quality_weight and (a.domain_variant != 'local' or not a.sensor_augment))):
         parser.error('Local quality supervision requires the local variant and sensor augmentation')
-    fit_balance = a.domain_variant in ('balance', 'film', 'local')
+    fit_balance = a.domain_variant in ('balance', 'film', 'local', 'localcontrast')
     if fit_balance and (a.mode != 'dual' or a.mask_rate):
         parser.error('Modality balance requires dual continuation with unmasked inputs')
     use_view_teachers = a.teacher_view != 'offline'
@@ -242,8 +258,10 @@ def main():
         parser.error('--teacher-top-k must be 0–38 and requires non-target distillation when positive')
     if not math.isfinite(a.teacher_weight) or a.teacher_weight <= 0 or (a.teacher_weight != .35 and not (a.teacher_cache or use_view_teachers)):
         parser.error('A positive finite teacher weight requires offline teacher logits')
-    if a.last_blocks < 0 or (a.last_blocks and (a.mode != 'dual' or not a.continue_dual or a.domain_variant != 'plain' or a.adapter_only)):
-        parser.error('--last-blocks requires plain dual fine-tuning without adapter-only mode')
+    last_blocks_variant = a.domain_variant in ('plain', 'localcontrast')
+    if a.last_blocks < 0 or (a.last_blocks and (a.mode != 'dual' or not a.continue_dual
+                                               or not last_blocks_variant or a.adapter_only)):
+        parser.error('--last-blocks requires plain or centered dual fine-tuning without adapter-only mode')
     if a.sensor_consistency and not a.sensor_augment:
         parser.error('--sensor-consistency requires --sensor-augment')
     if a.sensor_kind != 'mixed' and not a.sensor_augment:
@@ -283,7 +301,8 @@ def main():
         missing, extra = model.load_state_dict(state, strict=False)
         new_keys = {key for key in model.state_dict() if any(
             part in key for part in ('sensor_gate', 'temporal_adapter', 'phase_head', 'modality_balance'))}
-        if set(missing) != new_keys or extra:
+        expected_missing = set() if a.domain_variant == 'localcontrast' else new_keys
+        if set(missing) != expected_missing or extra:
             raise ValueError(f'Unexpected V8 migration keys: {missing}, {extra}')
         if a.mode == 'staged':
             model.encoder.blocks.requires_grad_(False)
@@ -305,7 +324,8 @@ def main():
     if a.last_blocks:
         if a.last_blocks > len(model.encoder.blocks):
             parser.error('--last-blocks exceeds the encoder depth')
-        model.requires_grad_(False)
+        if not fit_balance:
+            model.requires_grad_(False)
         model.encoder.blocks[-a.last_blocks:].requires_grad_(True)
         model.encoder.fc_norm.requires_grad_(True)
         model.head.requires_grad_(True)
@@ -363,6 +383,9 @@ def main():
         config.update(modality_balance_only=True, balance_lr_multiplier=10.)
     if a.local_quality_weight:
         config.update(local_quality_weight=a.local_quality_weight, quality_pos_weight=[8., 3.])
+    if a.local_direction_weight:
+        config.update(local_direction_weight=a.local_direction_weight, direction_target_fraction=.5,
+                      direction_threshold=.005, direction_huber_beta=.05)
     if a.last_blocks:
         config['train_last_blocks'] = a.last_blocks
     if a.sensor_augment:
@@ -434,7 +457,7 @@ def main():
         consistency_sum = torch.zeros((), device='cuda')
         anchor_sum = torch.zeros((), device='cuda')
         repair_sum = torch.zeros((), device='cuda')
-        if a.local_quality_weight:
+        if a.local_quality_weight or a.local_direction_weight:
             quality_sum = torch.zeros((), device='cuda')
         for x, y, indices in tr:
             x, y = x.cuda(non_blocking=True), y.cuda(non_blocking=True)
@@ -478,11 +501,15 @@ def main():
                 mask = torch.cat((~mask_ir.expand(-1, 3, -1, -1, -1), mask_ir), dim=1) & patches
                 x = torch.where(mask, model.mean, x)
             with torch.autocast('cuda', dtype=torch.bfloat16):
-                if a.local_quality_weight:
+                if a.local_quality_weight or a.local_direction_weight:
                     logits, quality_logits = model.forward_with_local_quality(x)
                     targets = local_sensor_coverage(clean, x)
-                    quality_loss = F.binary_cross_entropy_with_logits(
-                        quality_logits, targets, pos_weight=quality_positive_weight)
+                    if a.local_direction_weight:
+                        balance = model.encoder.patch_embed.modality_balance
+                        quality_loss = local_direction_loss(balance, quality_logits, targets)
+                    else:
+                        quality_loss = F.binary_cross_entropy_with_logits(
+                            quality_logits, targets, pos_weight=quality_positive_weight)
                     quality_sum += quality_loss.detach() * len(y)
                 elif a.alignment != 'none':
                     logits, depth, ir = model.forward_with_streams(x)
@@ -495,8 +522,8 @@ def main():
                 loss = criterion(logits, y)
                 if perm is not None:
                     loss = mix * loss + (1. - mix) * criterion(logits, y[perm])
-                if a.local_quality_weight:
-                    loss = loss + a.local_quality_weight * quality_loss
+                if a.local_quality_weight or a.local_direction_weight:
+                    loss = loss + (a.local_quality_weight or a.local_direction_weight) * quality_loss
                 if a.distill:
                     with torch.no_grad():
                         target = (teacher(clean).float() / 2).softmax(dim=1)
@@ -577,8 +604,9 @@ def main():
             row['sensor_kl'] = float(consistency_sum) / seen
         if a.anchor_weight:
             row['anchor_kl'] = float(anchor_sum) / seen
-        if a.local_quality_weight:
-            row['quality_loss'] = float(quality_sum) / seen
+        if a.local_quality_weight or a.local_direction_weight:
+            key = 'direction_loss' if a.local_direction_weight else 'quality_loss'
+            row[key] = float(quality_sum) / seen
         if a.patch_repair_weight:
             row['patch_repair_loss'] = float(repair_sum) / seen
         with (a.output/'history.jsonl').open('a', encoding='utf-8') as f:

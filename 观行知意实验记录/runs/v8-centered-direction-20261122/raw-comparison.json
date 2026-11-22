@@ -1,0 +1,95 @@
+{
+  "results": {
+    "initial": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.11618033021173,
+      "mode": "kd-non-target",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "8e5dd5517e6c5ad92e01b92e03966f991a72ee8bc67948ef716fbe68ab19173a",
+      "code_sha256": "a0b37c306d909752cb87c237f6bafd3b516853161f0be22ac7e89c7956577894",
+      "linux_verified": false
+    },
+    "centered-ce": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.11618033021173,
+      "mode": "centered-ce",
+      "parameters": 24787586,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "36d01049d982b555ba184e073cdfe13b9a8028a00dec2c29fe0898127b08cfce",
+      "code_sha256": "0c95e8cff3c30dbf7a6056492f4717a3f4290d825ada2f72ce3a37585d1b6bcf",
+      "linux_verified": false
+    },
+    "centered-direction": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.08962355365495,
+      "mode": "centered-direction",
+      "parameters": 24787586,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "91828f80cca6efd513b704f5f349110b9d512465ef838f0e56e71c9cbb6004ee",
+      "code_sha256": "0c95e8cff3c30dbf7a6056492f4717a3f4290d825ada2f72ce3a37585d1b6bcf",
+      "linux_verified": false
+    },
+    "centered-top2-ce": {
+      "accuracy": 72.96137339055794,
+      "macro_f1": 69.25578745511297,
+      "mode": "centered-top2-ce",
+      "parameters": 24787586,
+      "corrected": 0,
+      "regressed": 3,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        5
+      ],
+      "weights_sha256": "7e2168f965b7112a9ecde45e17272ce53b9411fbe3b987693152291178f4fd35",
+      "code_sha256": "0c95e8cff3c30dbf7a6056492f4717a3f4290d825ada2f72ce3a37585d1b6bcf",
+      "linux_verified": false
+    },
+    "centered-top2-direction": {
+      "accuracy": 72.96137339055794,
+      "macro_f1": 69.25578745511297,
+      "mode": "centered-top2-direction",
+      "parameters": 24787586,
+      "corrected": 0,
+      "regressed": 3,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        5
+      ],
+      "weights_sha256": "ad6b4c6fa0929d42da35444cfa25a3052e6e451f1a7119299db6b6463034e1d0",
+      "code_sha256": "5faa3a5891d54d17bd3926ad785a688a0203703188bb6ca99ad9975d500698b5",
+      "linux_verified": false
+    }
+  },
+  "recommended": "initial"
+}

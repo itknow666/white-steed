@@ -1,0 +1,37 @@
+{
+  "mode": "dual",
+  "seed": 42,
+  "batch": 8,
+  "epochs": 3,
+  "base_lr": 2e-05,
+  "layer_decay": 0.85,
+  "head_multiplier": 5,
+  "continue_dual": true,
+  "class_power": 0.25,
+  "ir_jitter": false,
+  "keep_blocks_frozen": false,
+  "domain_variant": "localcontrast",
+  "mask_rate": 0.0,
+  "distill": 0.0,
+  "initial_sha256": "a306e14788e5bdb9e377efefdfe615b7beb5210c141be3d7b2b0ed90b7150965",
+  "cache_sha256": "b3f92fd6952b07fa0a88e53131bd663a3e39ba573b44ed26261c6819acf6be26",
+  "parameters": 22163506,
+  "initial_trainable": 3584370,
+  "train_samples": 1995,
+  "validation_samples": 466,
+  "test_accessed": false,
+  "modality_balance_only": true,
+  "balance_lr_multiplier": 10.0,
+  "train_last_blocks": 2,
+  "sensor_kind": "mixed",
+  "sensor_augment_probability": 0.55,
+  "ir_gain_range": [
+    0.55,
+    0.9
+  ],
+  "depth_gap_side_range": [
+    0.18,
+    0.34
+  ],
+  "sensor_consistency_weight": 0.0
+}

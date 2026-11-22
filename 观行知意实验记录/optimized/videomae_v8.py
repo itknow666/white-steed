@@ -43,7 +43,9 @@ class LocalModalityBalance(nn.Module):
         nn.init.constant_(self.quality[-1].bias, -4.)
 
     def corruption_gain(self, corruption_logits):
-        scores = corruption_logits.sigmoid()
+        return self.gain_from_scores(corruption_logits.sigmoid())
+
+    def gain_from_scores(self, scores):
         if self.spatial_centered:
             # Compare within each modality and time index before comparing modalities.
             spatial = scores.reshape(scores.size(0), 8, 14 * 14, 2)
