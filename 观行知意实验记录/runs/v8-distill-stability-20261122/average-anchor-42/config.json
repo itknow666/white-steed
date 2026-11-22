@@ -1,0 +1,12 @@
+{
+  "mode": "average-anchor-42",
+  "method": "equal checkpoint averaging",
+  "sources": [
+    "runs\\v8-paper-sprint-20261122\\anchor43-half\\best_ema.pt",
+    "runs\\v8-teacher-transfer-20261122\\kd-non-target\\best_ema.pt"
+  ],
+  "source_sha256": [
+    "a0b80e77ce54a6983ed0496a584aeff783fb1ffa9ef9cebd3a48b4490d61f440",
+    "de5c160925e2da71e7fd4a7be80e8ce3daaf7c9ad53a60d6d73cf7d573fa8816"
+  ]
+}

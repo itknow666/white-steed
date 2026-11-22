@@ -1,0 +1,18 @@
+{
+  "count": 466,
+  "both": 338,
+  "only_seed42": 5,
+  "only_seed43": 2,
+  "either": 345,
+  "probability_average_correct": 341,
+  "three_seeds": {
+    "correct_by_seed": {
+      "42": 343,
+      "43": 340,
+      "44": 341
+    },
+    "all_three_correct": 335,
+    "any_correct": 346,
+    "probability_average_correct": 341
+  }
+}

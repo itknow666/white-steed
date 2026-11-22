@@ -145,7 +145,9 @@ def main():
     parser.add_argument('--pace-jitter', action='store_true', help='Synchronized monotonic time warp during training')
     parser.add_argument('--teacher-cache', type=Path, help='Frozen VideoMAE and R34 logits for the training split')
     parser.add_argument('--teacher-policy', choices=['fusion', 'adaptive', 'non-target'], default='fusion')
+    parser.add_argument('--teacher-weight', type=float, default=.35, help='Weight on temperature-scaled offline KL')
     parser.add_argument('--adapter-only', action='store_true', help='Train only the two input residual adapters')
+    parser.add_argument('--last-blocks', type=int, default=0, help='Train only the last N encoder blocks, normalization and head')
     a = parser.parse_args()
     if a.continue_dual and a.mode not in ('dual', 'staged'):
         parser.error('--continue-dual supports dual and staged')
@@ -165,6 +167,10 @@ def main():
         parser.error('Offline teacher and input-only trials require an unmasked plain dual checkpoint')
     if a.teacher_policy != 'fusion' and a.teacher_cache is None:
         parser.error('--teacher-policy requires --teacher-cache')
+    if not math.isfinite(a.teacher_weight) or a.teacher_weight <= 0 or (a.teacher_weight != .35 and a.teacher_cache is None):
+        parser.error('A positive finite teacher weight requires offline teacher logits')
+    if a.last_blocks < 0 or (a.last_blocks and (a.mode != 'dual' or not a.continue_dual or a.domain_variant != 'plain' or a.adapter_only)):
+        parser.error('--last-blocks requires plain dual fine-tuning without adapter-only mode')
     if not 0 <= a.mask_rate < 1 or a.distill < 0 or (a.distill and not (a.continue_dual and a.mask_rate)):
         parser.error('Distillation requires a V8 checkpoint and a positive mask rate')
     a.output.mkdir(parents=True)
@@ -200,6 +206,13 @@ def main():
         model.requires_grad_(False)
         model.encoder.patch_embed.depth_adapter.requires_grad_(True)
         model.encoder.patch_embed.ir_adapter.requires_grad_(True)
+    if a.last_blocks:
+        if a.last_blocks > len(model.encoder.blocks):
+            parser.error('--last-blocks exceeds the encoder depth')
+        model.requires_grad_(False)
+        model.encoder.blocks[-a.last_blocks:].requires_grad_(True)
+        model.encoder.fc_norm.requires_grad_(True)
+        model.head.requires_grad_(True)
     model.cuda()
     offline_targets = offline_teacher_targets(a.teacher_cache, train.rows, a.teacher_policy) if a.teacher_cache else None
     order_head = None
@@ -236,9 +249,11 @@ def main():
         config.update(pace_jitter_max=.13, pace_jitter_probability=.5)
     if offline_targets is not None:
         config.update(offline_teacher_sha256=sha(a.teacher_cache), teacher_policy=a.teacher_policy,
-                      teacher_temperature=2., teacher_loss_weight=.35)
+                      teacher_temperature=2., teacher_loss_weight=a.teacher_weight)
     if a.adapter_only:
         config.update(adapter_only=True, adapter_lr_multiplier=10.)
+    if a.last_blocks:
+        config['train_last_blocks'] = a.last_blocks
     write(a.output/'config.json', config)
     started = time.monotonic()
     if a.mode == 'ssl':
@@ -355,7 +370,7 @@ def main():
                         if perm is not None:
                             targets = targets.lerp(targets[perm], 1. - mix)
                         kl = F.kl_div(softened.log_softmax(1), targets, reduction='batchmean')
-                    loss = loss + .35 * 4 * kl
+                    loss = loss + a.teacher_weight * 4 * kl
                     teacher_sum += kl.detach() * len(y)
                 if use_alignment_loss:
                     aux = local_alignment(x, depth, ir, a.alignment, align_rng)

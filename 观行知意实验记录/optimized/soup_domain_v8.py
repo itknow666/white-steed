@@ -12,6 +12,25 @@ from videomae_model import VideoMAEClassifier
 from videomae_v8 import DomainVideoMAE
 
 
+def average_states(states):
+    keys = states[0].keys()
+    if any(state.keys() != keys for state in states):
+        raise ValueError('Checkpoint layouts differ')
+    merged = {}
+    for key in keys:
+        tensors = [state[key] for state in states]
+        first = tensors[0]
+        if any(t.shape != first.shape or t.dtype != first.dtype for t in tensors):
+            raise ValueError(f'Tensor layout differs for {key}')
+        if key in ('mean', 'std') or not first.is_floating_point():
+            if any(not torch.equal(first, t) for t in tensors[1:]):
+                raise ValueError(f'Incompatible fixed buffer {key}')
+            merged[key] = first
+        else:
+            merged[key] = torch.stack([t.float() for t in tensors]).mean(0).to(first.dtype)
+    return merged
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--v7-reference', action='store_true', help='Average the three inputs before dual adaptation')
@@ -41,21 +60,7 @@ def main():
             with torch.random.fork_rng(devices=[]):
                 torch.manual_seed(42)
                 states[0] = DomainVideoMAE(warmstart=states[0]).state_dict()
-        keys = states[0].keys()
-        if any(state.keys() != keys for state in states):
-            raise ValueError('Checkpoint layouts differ')
-        merged = {}
-        for key in keys:
-            tensors = [state[key] for state in states]
-            first = tensors[0]
-            if any(t.shape != first.shape or t.dtype != first.dtype for t in tensors):
-                raise ValueError(f'Tensor layout differs for {key}')
-            if key in ('mean', 'std') or not first.is_floating_point():
-                if any(not torch.equal(first, t) for t in tensors[1:]):
-                    raise ValueError(f'Incompatible fixed buffer {key}')
-                merged[key] = first
-            else:
-                merged[key] = torch.stack([t.float() for t in tensors]).mean(0).to(first.dtype)
+        merged = average_states(states)
         model = VideoMAEClassifier() if args.v7_reference else DomainVideoMAE()
         model.load_state_dict(merged, strict=True)
         result, probabilities, labels = evaluate(model.cuda(), loader)

@@ -1,0 +1,167 @@
+{
+  "results": {
+    "initial": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.11618033021173,
+      "mode": "kd-non-target",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "8e5dd5517e6c5ad92e01b92e03966f991a72ee8bc67948ef716fbe68ab19173a",
+      "code_sha256": "a0b37c306d909752cb87c237f6bafd3b516853161f0be22ac7e89c7956577894",
+      "linux_verified": false
+    },
+    "seed44": {
+      "accuracy": 73.17596566523605,
+      "macro_f1": 69.91215918098624,
+      "mode": "seed44",
+      "parameters": 24767544,
+      "corrected": 2,
+      "regressed": 4,
+      "error_counts": [
+        4,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "449a50e486b017a910dfa84ea35ebd19dd84e563f58d121cf4bef7971c664ef4",
+      "code_sha256": "e40ecae65827c7e416da7c578373b696197f207a9772b27ec7e0172e5e974700",
+      "linux_verified": false
+    },
+    "weight-015": {
+      "accuracy": 72.96137339055794,
+      "macro_f1": 69.67250199616709,
+      "mode": "weight-015",
+      "parameters": 24767544,
+      "corrected": 2,
+      "regressed": 5,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "cca111cbc1ccba6f570a1137b3a6efc272e257393f673350b20a1fdee454a5ba",
+      "code_sha256": "524563292e5f63121df11ba5e6286e44424e5457368abcb3d56b22f022a46eb2",
+      "linux_verified": false
+    },
+    "weight-060": {
+      "accuracy": 73.17596566523605,
+      "macro_f1": 69.76462998030613,
+      "mode": "weight-060",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 2,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "65526dfe4a67fbea206b3c09dfda0a9d48a45469f02a6bf5aff03ca69ff14e9b",
+      "code_sha256": "049c1b23f3d377c9a2a079d37ae1816157166b161feedf4a0269e5a1956041c4",
+      "linux_verified": false
+    },
+    "last-four": {
+      "accuracy": 73.17596566523605,
+      "macro_f1": 69.7689946734479,
+      "mode": "last-four",
+      "parameters": 24767544,
+      "corrected": 1,
+      "regressed": 3,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "dd58fc90e81195c88995ecdc334dc71ed1d0e4caa43aff31ede7e2e153740a38",
+      "code_sha256": "c67c7d75f739a73b4f75fd67bc832882b16acd6ac4127bf99d9e85b6b4073194",
+      "linux_verified": false
+    },
+    "average-seed42-43": {
+      "accuracy": 73.39055793991416,
+      "macro_f1": 69.92147449339751,
+      "mode": "average-seed42-43",
+      "parameters": 24767544,
+      "corrected": 1,
+      "regressed": 2,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "4a5190bf136778a674e3faf7a6ecd830adcb34c8bd058f4e788bd7c18911cb73",
+      "code_sha256": "f23054e69f39659ffcf48b69b6bf858d0750623c93aedacd1e78a4a2be9743b1",
+      "linux_verified": false
+    },
+    "average-seed42-43-44": {
+      "accuracy": 73.17596566523605,
+      "macro_f1": 69.73240974512223,
+      "mode": "average-seed42-43-44",
+      "parameters": 24767544,
+      "corrected": 1,
+      "regressed": 3,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "60ae051f3c78d46a6c0d8d7a01d83c4eeb7e0847b3f3dbffd31511fdf242b503",
+      "code_sha256": "9bd5a31fc5f789b5468df72f184b439121cdf183ec7355b66d5f4409661d1972",
+      "linux_verified": false
+    },
+    "average-anchor-42": {
+      "accuracy": 73.17596566523605,
+      "macro_f1": 69.7008761833255,
+      "mode": "average-anchor-42",
+      "parameters": 24767544,
+      "corrected": 1,
+      "regressed": 3,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        5
+      ],
+      "weights_sha256": "4239e3c27f6a9c5ccf122c0820c40cd4f3e4aa87f8f08fa2fb4c0fb2641ee306",
+      "code_sha256": "5b411431663e09f28ae94cc68a015ebb5f15e4654b1fdcc8b4c780fdeb7c2bca",
+      "linux_verified": false
+    },
+    "rescaled-three": {
+      "accuracy": 73.39055793991416,
+      "macro_f1": 69.97853714915759,
+      "mode": "rescaled-three",
+      "parameters": 24767544,
+      "corrected": 2,
+      "regressed": 3,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "52f875f7b5bef6957be2ee5317d96f79271d7caac713ee060441a0224dd7f95c",
+      "code_sha256": "a72791e5faca9430719fe2a556e2cef91ab2e143881b6ac3c2c25022a498b51a",
+      "linux_verified": false
+    }
+  },
+  "recommended": "initial"
+}

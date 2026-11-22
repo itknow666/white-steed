@@ -1,0 +1,14 @@
+{
+  "mode": "average-seed42-43-44",
+  "method": "equal checkpoint averaging",
+  "sources": [
+    "runs\\v8-teacher-transfer-20261122\\kd-non-target\\best_ema.pt",
+    "runs\\v8-teacher-transfer-20261122\\kd-non-target-seed43\\best_ema.pt",
+    "runs\\v8-distill-stability-20261122\\seed44\\best_ema.pt"
+  ],
+  "source_sha256": [
+    "de5c160925e2da71e7fd4a7be80e8ce3daaf7c9ad53a60d6d73cf7d573fa8816",
+    "d5317b70ea10faa3c1a4a40fbb944de83dfad240005a30ddc694f6040fd4b7dc",
+    "a26f75d93be3ffd65cee509c6bce6306907398315f01f19e6756b38a093ffa4d"
+  ]
+}

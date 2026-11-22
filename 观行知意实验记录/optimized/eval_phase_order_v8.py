@@ -56,15 +56,16 @@ def probe_order(folder, manifest):
     return {'samples': len(rows), 'results': result}
 
 
-def compare(runs, out, manifest, *, arms=ARMS, columns=PHASE_COLUMNS, title='时序适配', training_sources=(), report=True):
+def compare(runs, out, manifest, *, arms=ARMS, columns=PHASE_COLUMNS, title='时序适配', training_sources=(), report=True, baseline=BASE):
     out.mkdir(parents=True, exist_ok=True)
     labels = {row.get('sample_id', row['file']+'.npy'): int(row['label']) for row in manifest['samples']}
-    initial = predictions(BASE/'validation.csv')
+    initial = predictions(baseline/'validation.csv')
     if initial.keys() != labels.keys():
         raise ValueError('Starting model CSV and validation manifest differ')
     errors = Counter((labels[key], initial[key]) for key in labels if labels[key] != initial[key])
     pairs = [pair for pair, _ in errors.most_common(5)]
-    results = {'initial': read(BASE/'metrics.json')}
+    results = {'initial': read(baseline/'metrics.json')}
+    results['initial'].update(corrected=0, regressed=0, error_counts=[errors[pair] for pair in pairs])
     for name, architecture in arms.items():
         folder = out/name
         if (folder/'metrics.json').is_file():
