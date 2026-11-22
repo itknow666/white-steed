@@ -242,7 +242,17 @@ def main():
                         help='Probability of dropping one modality at the tubelet sum during training')
     parser.add_argument('--depth-attenuation', type=float, nargs=3, metavar=('PROB','START','END'),
                         help='Scale depth features with the chosen probability and a linear epoch schedule')
+    parser.add_argument('--replay-clean-teacher', type=Path,
+                        help='Retain dual-modality decisions on each current training view')
+    parser.add_argument('--replay-ir-teacher', type=Path,
+                        help='Retain IR-only decisions on half of each training batch')
     a = parser.parse_args()
+    view_replay = a.replay_clean_teacher or a.replay_ir_teacher
+    if view_replay and (not a.adapter_only or a.domain_variant != 'plain' or a.mode != 'dual'
+                        or not a.continue_dual or a.sensor_augment or a.mask_rate or a.ir_jitter
+                        or a.modality_dropout or a.depth_attenuation or a.teacher_cache
+                        or a.anchor_weight or a.teacher_view != 'offline' or a.alignment != 'none'):
+        parser.error('Clean and IR replay require plain adapter continuation with paired current views')
     if not 0. <= a.modality_dropout <= .5:
         parser.error('--modality-dropout must be between 0 and 0.5')
     if a.depth_attenuation:
@@ -392,6 +402,15 @@ def main():
         for branch, path in zip(view_teachers, (a.view_video_weights, a.view_r34_weights)):
             branch.load_state_dict(torch.load(path, map_location='cpu', weights_only=True), strict=True)
             branch.cuda().to(memory_format=torch.channels_last_3d).eval().requires_grad_(False)
+    replay_teachers = {}
+    for key,path,variant in (('clean',a.replay_clean_teacher,'plain'),('ir',a.replay_ir_teacher,'ironly')):
+        if path is None:
+            continue
+        # Preserve the matched student seed while instantiating frozen teachers.
+        with torch.random.fork_rng(devices=[]):
+            replay = DomainVideoMAE(variant=variant)
+        replay.load_state_dict(torch.load(path,map_location='cpu',weights_only=True),strict=True)
+        replay_teachers[key] = replay.cuda().eval().requires_grad_(False)
     order_head = None
     if a.order_weight:
         with torch.random.fork_rng(devices=[]):
@@ -437,6 +456,13 @@ def main():
         config.update(modality_balance_only=True, balance_lr_multiplier=10.)
     if a.local_quality_weight:
         config.update(local_quality_weight=a.local_quality_weight, quality_pos_weight=[8., 3.])
+    if view_replay:
+        config['view_replay_temperature'] = 2.
+        config['view_replay_sources'] = {}
+        if a.replay_clean_teacher:
+            config['view_replay_sources']['clean'] = {'sha256':sha(a.replay_clean_teacher),'weight':.6}
+        if a.replay_ir_teacher:
+            config['view_replay_sources']['ir'] = {'sha256':sha(a.replay_ir_teacher),'weight':.2,'batch_stride':2}
     if a.depth_attenuation:
         config.update(depth_attenuation_probability=probability,
                       depth_attenuation_start=depth_start, depth_attenuation_end=depth_end)
@@ -522,6 +548,8 @@ def main():
         repair_sum = torch.zeros((), device='cuda')
         if a.local_quality_weight or a.local_direction_weight:
             quality_sum = torch.zeros((), device='cuda')
+        if view_replay:
+            replay_sums = {key:torch.zeros((),device='cuda') for key in replay_teachers}
         if a.depth_attenuation:
             depth_scale = depth_start + (depth_end - depth_start) * (epoch - 1) / max(1, a.epochs - 1)
             attenuated = torch.zeros((), device='cuda', dtype=torch.long)
@@ -609,6 +637,21 @@ def main():
                 loss = criterion(logits, y)
                 if perm is not None:
                     loss = mix * loss + (1. - mix) * criterion(logits, y[perm])
+                if 'clean' in replay_teachers:
+                    with torch.no_grad():
+                        target_clean = (replay_teachers['clean'](x).float() / 2).softmax(1)
+                    replay_clean = F.kl_div((logits.float()/2).log_softmax(1),target_clean,reduction='batchmean')
+                    loss = loss + .6 * 4 * replay_clean
+                    replay_sums['clean'] += replay_clean.detach() * len(y)
+                if 'ir' in replay_teachers:
+                    selected_ir = x[::2]
+                    keep_ir = torch.ones(len(selected_ir),dtype=torch.bool,device=x.device)
+                    student_ir = model.forward_with_modality_mask(selected_ir,~keep_ir,keep_ir)
+                    with torch.no_grad():
+                        target_ir = (replay_teachers['ir'](selected_ir).float() / 2).softmax(1)
+                    replay_ir = F.kl_div((student_ir.float()/2).log_softmax(1),target_ir,reduction='batchmean')
+                    loss = loss + .2 * 4 * replay_ir
+                    replay_sums['ir'] += replay_ir.detach() * len(y)
                 if a.cross_repair_weight:
                     loss = loss + a.cross_repair_weight * cross_loss
                 if a.local_quality_weight or a.local_direction_weight:
@@ -696,6 +739,8 @@ def main():
         if a.local_quality_weight or a.local_direction_weight:
             key = 'direction_loss' if a.local_direction_weight else 'quality_loss'
             row[key] = float(quality_sum) / seen
+        if view_replay:
+            row['view_replay_kl'] = {key:float(value)/seen for key,value in replay_sums.items()}
         if a.depth_attenuation:
             row['depth_scale'] = depth_scale
             row['selected_depth_attenuation'] = int(attenuated)

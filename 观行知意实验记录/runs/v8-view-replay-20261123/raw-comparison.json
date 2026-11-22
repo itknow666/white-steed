@@ -1,0 +1,95 @@
+{
+  "results": {
+    "initial": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.11618033021173,
+      "mode": "kd-non-target",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "8e5dd5517e6c5ad92e01b92e03966f991a72ee8bc67948ef716fbe68ab19173a",
+      "code_sha256": "a0b37c306d909752cb87c237f6bafd3b516853161f0be22ac7e89c7956577894",
+      "linux_verified": false
+    },
+    "recovery-control": {
+      "accuracy": 72.3175965665236,
+      "macro_f1": 68.63844564904035,
+      "mode": "recovery-control",
+      "parameters": 24767544,
+      "corrected": 1,
+      "regressed": 7,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "7a3d5c377f51aee1f087cfaf7027a49487c5855e3b2e640164f1cde019708250",
+      "code_sha256": "7dc438fbb728f332d21fb236a314561cdfba6be96943110dc9ca4b7383d8708d",
+      "linux_verified": false
+    },
+    "clean-replay": {
+      "accuracy": 72.74678111587983,
+      "macro_f1": 69.07914905867969,
+      "mode": "clean-replay",
+      "parameters": 24767544,
+      "corrected": 1,
+      "regressed": 5,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "8a789d4a427130363b567322aeb6940fd7c08a5d3c7962d465544f691b9b709a",
+      "code_sha256": "48305e1fbbb1a21089733c8f6c06468c3251952bd18e079e8e4fe8362ff7ba01",
+      "linux_verified": false
+    },
+    "ir-replay": {
+      "accuracy": 72.3175965665236,
+      "macro_f1": 68.75799886123639,
+      "mode": "ir-replay",
+      "parameters": 24767544,
+      "corrected": 1,
+      "regressed": 7,
+      "error_counts": [
+        4,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "3f18890df5fe70070422492607158bda42c21ba1ce57e15b15d081d4945be938",
+      "code_sha256": "48305e1fbbb1a21089733c8f6c06468c3251952bd18e079e8e4fe8362ff7ba01",
+      "linux_verified": false
+    },
+    "both-replay": {
+      "accuracy": 72.3175965665236,
+      "macro_f1": 68.85270101974609,
+      "mode": "both-replay",
+      "parameters": 24767544,
+      "corrected": 1,
+      "regressed": 7,
+      "error_counts": [
+        4,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "3c9b48ce22f3a8fe50f285daa863bf63840ce2643394c0ccb18246d95697ca58",
+      "code_sha256": "61a511cca51e61f8bedb4c436f7562b0bf6bb3889186b7265f1e974fc1229f2b",
+      "linux_verified": false
+    }
+  },
+  "recommended": "initial"
+}

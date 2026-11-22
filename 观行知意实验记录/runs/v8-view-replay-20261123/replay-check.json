@@ -1,0 +1,5 @@
+{
+  "matching_ir_scores_exact_at_warm_start": true,
+  "clean_teacher_differs_from_warm_student": true,
+  "teacher_score_count": 40
+}
