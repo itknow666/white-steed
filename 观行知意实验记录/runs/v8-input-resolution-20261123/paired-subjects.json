@@ -1,0 +1,94 @@
+{
+  "initial -> crop224-no-training": {
+    "S1": {
+      "samples": 149,
+      "reference_correct": 105,
+      "candidate_correct": 105,
+      "corrected": 1,
+      "regressed": 1
+    },
+    "S2": {
+      "samples": 186,
+      "reference_correct": 146,
+      "candidate_correct": 143,
+      "corrected": 0,
+      "regressed": 3
+    },
+    "S3": {
+      "samples": 131,
+      "reference_correct": 92,
+      "candidate_correct": 92,
+      "corrected": 0,
+      "regressed": 0
+    }
+  },
+  "initial -> crop192-control": {
+    "S1": {
+      "samples": 149,
+      "reference_correct": 105,
+      "candidate_correct": 107,
+      "corrected": 2,
+      "regressed": 0
+    },
+    "S2": {
+      "samples": 186,
+      "reference_correct": 146,
+      "candidate_correct": 145,
+      "corrected": 1,
+      "regressed": 2
+    },
+    "S3": {
+      "samples": 131,
+      "reference_correct": 92,
+      "candidate_correct": 91,
+      "corrected": 0,
+      "regressed": 1
+    }
+  },
+  "initial -> crop224-direct": {
+    "S1": {
+      "samples": 149,
+      "reference_correct": 105,
+      "candidate_correct": 103,
+      "corrected": 1,
+      "regressed": 3
+    },
+    "S2": {
+      "samples": 186,
+      "reference_correct": 146,
+      "candidate_correct": 142,
+      "corrected": 1,
+      "regressed": 5
+    },
+    "S3": {
+      "samples": 131,
+      "reference_correct": 92,
+      "candidate_correct": 93,
+      "corrected": 1,
+      "regressed": 0
+    }
+  },
+  "crop192-control -> crop224-direct": {
+    "S1": {
+      "samples": 149,
+      "reference_correct": 107,
+      "candidate_correct": 103,
+      "corrected": 0,
+      "regressed": 4
+    },
+    "S2": {
+      "samples": 186,
+      "reference_correct": 145,
+      "candidate_correct": 142,
+      "corrected": 1,
+      "regressed": 4
+    },
+    "S3": {
+      "samples": 131,
+      "reference_correct": 91,
+      "candidate_correct": 93,
+      "corrected": 2,
+      "regressed": 0
+    }
+  }
+}

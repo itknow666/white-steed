@@ -78,6 +78,8 @@ def package(run, package_dir, winner):
         else:
             config['architecture'] = arch
             config.pop('components')
+            if 'input_size' in winner:
+                config['size'] = winner['input_size']
     torch.save(state, package_dir/'model.pt')
     additions = {'inference.py': ROOT/'optimized/inference_v7.py',
                  'videomae_v8.py': ROOT/'optimized/videomae_v8.py',

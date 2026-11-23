@@ -1,0 +1,77 @@
+{
+  "results": {
+    "initial": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.11618033021173,
+      "mode": "kd-non-target",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "8e5dd5517e6c5ad92e01b92e03966f991a72ee8bc67948ef716fbe68ab19173a",
+      "code_sha256": "a0b37c306d909752cb87c237f6bafd3b516853161f0be22ac7e89c7956577894",
+      "linux_verified": false
+    },
+    "crop192-control": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.12899918110394,
+      "mode": "crop192-control",
+      "parameters": 24767544,
+      "corrected": 3,
+      "regressed": 3,
+      "error_counts": [
+        4,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "d77ab2de4382d421cf7a1e07cb4ba2c89fb2da7bde057b144dde521750eb7c88",
+      "code_sha256": "9bd60e5582a7117c8f18913d6c0fa996c70f07314d98404cbe4516e0de93ee9e",
+      "linux_verified": false
+    },
+    "crop224-direct": {
+      "accuracy": 72.53218884120172,
+      "macro_f1": 68.41187135241819,
+      "mode": "crop224-direct",
+      "parameters": 24767544,
+      "corrected": 3,
+      "regressed": 8,
+      "error_counts": [
+        4,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "d831639324553d3eacbc04c8ede33b1791fe398a2e1b75848328c3e26daa384c",
+      "code_sha256": "d63746ff8e3167a645124689a86628a464197ab297b52ad173206602a16a4b82",
+      "linux_verified": false
+    },
+    "crop224-no-training": {
+      "accuracy": 72.96137339055794,
+      "macro_f1": 69.08313766311946,
+      "mode": "crop224-no-training",
+      "parameters": 24767544,
+      "corrected": 1,
+      "regressed": 4,
+      "error_counts": [
+        4,
+        5,
+        4,
+        3,
+        5
+      ],
+      "weights_sha256": "8e5dd5517e6c5ad92e01b92e03966f991a72ee8bc67948ef716fbe68ab19173a",
+      "code_sha256": "97b0f7e71c89e743880c707eeb7d2463f6acc9422555f3a6ee6e8a0606a69bf3",
+      "linux_verified": false
+    }
+  },
+  "recommended": "crop192-control"
+}

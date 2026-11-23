@@ -1,0 +1,23 @@
+{
+  "matched_cache_rows": 2461,
+  "fields_checked": [
+    "sample_id",
+    "label",
+    "split",
+    "subject",
+    "row",
+    "crop",
+    "detected_probe_boxes",
+    "ir_probe_paths",
+    "source_resolution",
+    "published_clip_sha256"
+  ],
+  "sizes": [
+    192,
+    224
+  ],
+  "frames": 16,
+  "detector_sha256": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1",
+  "training_person_count": 12,
+  "validation_person_count": 3
+}

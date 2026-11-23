@@ -344,8 +344,9 @@ def main():
     valid = Clips(a.cache, 'validation', frames=16)
     if (len(train), len(valid)) != (1995, 466) or {x['subject'] for x in train.rows} & {x['subject'] for x in valid.rows}:
         raise ValueError('Expected the official subject-disjoint train/validation split')
-    if train.meta['shape_per_sample'] != [4, 16, 192, 192]:
-        raise ValueError('Expected synchronized four-channel 16×192 cache')
+    input_shape = train.meta['shape_per_sample']
+    if input_shape not in ([4, 16, 192, 192], [4, 16, 224, 224]):
+        raise ValueError('Expected four channels, 16 frames and square 192 or 224 crops')
     tr = DataLoader(train, batch_size=a.batch, shuffle=True, pin_memory=True)
     va = DataLoader(valid, batch_size=a.batch, shuffle=False, pin_memory=True)
     state = torch.load(a.initial, map_location='cpu', weights_only=True)
@@ -430,7 +431,7 @@ def main():
               'keep_blocks_frozen': a.keep_blocks_frozen,
               'domain_variant': a.domain_variant, 'mask_rate': a.mask_rate, 'distill': a.distill,
               'initial_sha256': sha(a.initial), 'cache_sha256': sha(a.cache/'manifest.json'),
-              'parameters': num_params, 'initial_trainable': initial_trainable,
+              'parameters': num_params, 'initial_trainable': initial_trainable, 'input_shape': input_shape,
               'train_samples': len(train), 'validation_samples': len(valid), 'test_accessed': False}
     use_alignment_loss = a.alignment not in ('none', 'control')
     if a.alignment != 'none':
