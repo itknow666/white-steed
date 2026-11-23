@@ -1,0 +1,77 @@
+{
+  "results": {
+    "initial": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.11618033021173,
+      "mode": "kd-non-target",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "8e5dd5517e6c5ad92e01b92e03966f991a72ee8bc67948ef716fbe68ab19173a",
+      "code_sha256": "a0b37c306d909752cb87c237f6bafd3b516853161f0be22ac7e89c7956577894",
+      "linux_verified": false
+    },
+    "plain-control": {
+      "accuracy": 72.74678111587983,
+      "macro_f1": 69.15077105448614,
+      "mode": "plain-control",
+      "parameters": 24767544,
+      "corrected": 1,
+      "regressed": 5,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "410c93f029132e03b74ba134faec90b2d4ab8ac3b668afc4d7860a70016a302d",
+      "code_sha256": "0bfb3a04f22a279ec1ee9b2e36544c02a5e86e1be82ca7f9834241de1d95d6f8",
+      "linux_verified": false
+    },
+    "frozen-latepoint": {
+      "accuracy": 73.17596566523605,
+      "macro_f1": 69.45899886788321,
+      "mode": "frozen-latepoint",
+      "parameters": 24819192,
+      "corrected": 0,
+      "regressed": 2,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "5c5381c8d89114a0a451a5e0fa4334a9b67fa3b98bb482bbafdfb54baefff033",
+      "code_sha256": "5d81093777f21321b685ff3aeccde264a5d53633e08c861d69f6b732308ee352",
+      "linux_verified": false
+    },
+    "frozen-latejoint": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.08962355365495,
+      "mode": "frozen-latejoint",
+      "parameters": 24820856,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "b46abda9b6c3606d4eec4a313c7a81b28c860d6539a9794cdd95a31db58841f3",
+      "code_sha256": "765cbad1222ab99a31dc061ed4352334868c32fb26661d16b413f2ffc15df518",
+      "linux_verified": false
+    }
+  },
+  "recommended": "initial"
+}

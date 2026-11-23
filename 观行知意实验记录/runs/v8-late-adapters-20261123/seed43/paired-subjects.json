@@ -1,0 +1,236 @@
+{
+  "plain-control": {
+    "control": "plain-control",
+    "subjects": {
+      "S1": {
+        "samples": 149,
+        "control_correct": 105,
+        "candidate_correct": 105,
+        "corrected": 0,
+        "regressed": 0
+      },
+      "S2": {
+        "samples": 186,
+        "control_correct": 143,
+        "candidate_correct": 143,
+        "corrected": 0,
+        "regressed": 0
+      },
+      "S3": {
+        "samples": 131,
+        "control_correct": 91,
+        "candidate_correct": 91,
+        "corrected": 0,
+        "regressed": 0
+      }
+    }
+  },
+  "frozen-latepoint": {
+    "control": "plain-control",
+    "subjects": {
+      "S1": {
+        "samples": 149,
+        "control_correct": 105,
+        "candidate_correct": 105,
+        "corrected": 1,
+        "regressed": 1
+      },
+      "S2": {
+        "samples": 186,
+        "control_correct": 143,
+        "candidate_correct": 146,
+        "corrected": 3,
+        "regressed": 0
+      },
+      "S3": {
+        "samples": 131,
+        "control_correct": 91,
+        "candidate_correct": 92,
+        "corrected": 1,
+        "regressed": 0
+      }
+    }
+  },
+  "frozen-latespatial": {
+    "control": "frozen-latepoint",
+    "subjects": {
+      "S1": {
+        "samples": 149,
+        "control_correct": 105,
+        "candidate_correct": 105,
+        "corrected": 0,
+        "regressed": 0
+      },
+      "S2": {
+        "samples": 186,
+        "control_correct": 146,
+        "candidate_correct": 146,
+        "corrected": 0,
+        "regressed": 0
+      },
+      "S3": {
+        "samples": 131,
+        "control_correct": 92,
+        "candidate_correct": 92,
+        "corrected": 0,
+        "regressed": 0
+      }
+    }
+  },
+  "frozen-latetemporal": {
+    "control": "frozen-latepoint",
+    "subjects": {
+      "S1": {
+        "samples": 149,
+        "control_correct": 105,
+        "candidate_correct": 105,
+        "corrected": 0,
+        "regressed": 0
+      },
+      "S2": {
+        "samples": 186,
+        "control_correct": 146,
+        "candidate_correct": 146,
+        "corrected": 0,
+        "regressed": 0
+      },
+      "S3": {
+        "samples": 131,
+        "control_correct": 92,
+        "candidate_correct": 92,
+        "corrected": 0,
+        "regressed": 0
+      }
+    }
+  },
+  "frozen-latejoint": {
+    "control": "frozen-latepoint",
+    "subjects": {
+      "S1": {
+        "samples": 149,
+        "control_correct": 105,
+        "candidate_correct": 105,
+        "corrected": 0,
+        "regressed": 0
+      },
+      "S2": {
+        "samples": 186,
+        "control_correct": 146,
+        "candidate_correct": 146,
+        "corrected": 0,
+        "regressed": 0
+      },
+      "S3": {
+        "samples": 131,
+        "control_correct": 92,
+        "candidate_correct": 92,
+        "corrected": 0,
+        "regressed": 0
+      }
+    }
+  },
+  "full-latepoint": {
+    "control": "plain-control",
+    "subjects": {
+      "S1": {
+        "samples": 149,
+        "control_correct": 105,
+        "candidate_correct": 105,
+        "corrected": 0,
+        "regressed": 0
+      },
+      "S2": {
+        "samples": 186,
+        "control_correct": 143,
+        "candidate_correct": 142,
+        "corrected": 0,
+        "regressed": 1
+      },
+      "S3": {
+        "samples": 131,
+        "control_correct": 91,
+        "candidate_correct": 92,
+        "corrected": 1,
+        "regressed": 0
+      }
+    }
+  },
+  "full-latespatial": {
+    "control": "full-latepoint",
+    "subjects": {
+      "S1": {
+        "samples": 149,
+        "control_correct": 105,
+        "candidate_correct": 104,
+        "corrected": 0,
+        "regressed": 1
+      },
+      "S2": {
+        "samples": 186,
+        "control_correct": 142,
+        "candidate_correct": 142,
+        "corrected": 0,
+        "regressed": 0
+      },
+      "S3": {
+        "samples": 131,
+        "control_correct": 92,
+        "candidate_correct": 91,
+        "corrected": 0,
+        "regressed": 1
+      }
+    }
+  },
+  "full-latetemporal": {
+    "control": "full-latepoint",
+    "subjects": {
+      "S1": {
+        "samples": 149,
+        "control_correct": 105,
+        "candidate_correct": 104,
+        "corrected": 0,
+        "regressed": 1
+      },
+      "S2": {
+        "samples": 186,
+        "control_correct": 142,
+        "candidate_correct": 142,
+        "corrected": 0,
+        "regressed": 0
+      },
+      "S3": {
+        "samples": 131,
+        "control_correct": 92,
+        "candidate_correct": 92,
+        "corrected": 0,
+        "regressed": 0
+      }
+    }
+  },
+  "full-latejoint": {
+    "control": "full-latepoint",
+    "subjects": {
+      "S1": {
+        "samples": 149,
+        "control_correct": 105,
+        "candidate_correct": 104,
+        "corrected": 1,
+        "regressed": 2
+      },
+      "S2": {
+        "samples": 186,
+        "control_correct": 142,
+        "candidate_correct": 142,
+        "corrected": 0,
+        "regressed": 0
+      },
+      "S3": {
+        "samples": 131,
+        "control_correct": 92,
+        "candidate_correct": 91,
+        "corrected": 0,
+        "regressed": 1
+      }
+    }
+  }
+}

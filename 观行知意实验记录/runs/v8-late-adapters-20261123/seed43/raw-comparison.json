@@ -1,0 +1,185 @@
+{
+  "results": {
+    "initial": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.11618033021173,
+      "mode": "kd-non-target",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "8e5dd5517e6c5ad92e01b92e03966f991a72ee8bc67948ef716fbe68ab19173a",
+      "code_sha256": "a0b37c306d909752cb87c237f6bafd3b516853161f0be22ac7e89c7956577894",
+      "linux_verified": false
+    },
+    "plain-control": {
+      "accuracy": 72.74678111587983,
+      "macro_f1": 69.15077105448614,
+      "mode": "plain-control",
+      "parameters": 24767544,
+      "corrected": 1,
+      "regressed": 5,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "410c93f029132e03b74ba134faec90b2d4ab8ac3b668afc4d7860a70016a302d",
+      "code_sha256": "0bfb3a04f22a279ec1ee9b2e36544c02a5e86e1be82ca7f9834241de1d95d6f8",
+      "linux_verified": false
+    },
+    "frozen-latepoint": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.08962355365495,
+      "mode": "frozen-latepoint",
+      "parameters": 24819192,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "722821707b03533e4fd125aa672997e0a7e765f10d79cf2aac88eee37cf1b8e3",
+      "code_sha256": "59b3c1128d90b919ddac34d7e4449df5fb4145314f3a88a6c80342eaad88eae3",
+      "linux_verified": false
+    },
+    "frozen-latespatial": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.08962355365495,
+      "mode": "frozen-latespatial",
+      "parameters": 24819704,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "8c138f52d8b8ccb6a9867e143d99caec67aac765adf43205a9743262ed125622",
+      "code_sha256": "279cfb7db75fb535228ed710c05ea2b4705d2539eb88f75da591af294e3817c7",
+      "linux_verified": false
+    },
+    "frozen-latetemporal": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.08962355365495,
+      "mode": "frozen-latetemporal",
+      "parameters": 24819320,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "3f1baee39332d476e8ee344829fea5610b7b206d02ced31de511c981565236ee",
+      "code_sha256": "0f50885eea15a6ba9e4b944ba35cf0f5719a3f0cbfed0f83f90ceb2fd901cbce",
+      "linux_verified": false
+    },
+    "frozen-latejoint": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.08962355365495,
+      "mode": "frozen-latejoint",
+      "parameters": 24820856,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "25bb4a1bad73c5559e02724c3bb64901635f9eb9fb42b712c7923d10233a3c05",
+      "code_sha256": "544c5fabc0115e779883919d72660c6ac76855e1ea8920e0c6ad3cd2a90aaedd",
+      "linux_verified": false
+    },
+    "full-latepoint": {
+      "accuracy": 72.74678111587983,
+      "macro_f1": 69.03739339309821,
+      "mode": "full-latepoint",
+      "parameters": 24819192,
+      "corrected": 1,
+      "regressed": 5,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "d213459df35e8c7e1eb546de420426d0d82cb19c23b5be37ddd2aac17e042959",
+      "code_sha256": "2e556df4319cf6dacd84cd7deb25bb24f7c6a9f0f615941e5c27129e6a56edbd",
+      "linux_verified": false
+    },
+    "full-latespatial": {
+      "accuracy": 72.3175965665236,
+      "macro_f1": 68.82033306154815,
+      "mode": "full-latespatial",
+      "parameters": 24819704,
+      "corrected": 1,
+      "regressed": 7,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "9a8851e4d2c2fd65fb5a5ea6d09a095b80d88e47720f98f4beb63ec6685d2771",
+      "code_sha256": "403f6b7d98ab164096b0600a737e102d7224c44b8805a8f6f155cb3d0b1b7001",
+      "linux_verified": false
+    },
+    "full-latetemporal": {
+      "accuracy": 72.53218884120172,
+      "macro_f1": 68.88442792763274,
+      "mode": "full-latetemporal",
+      "parameters": 24819320,
+      "corrected": 1,
+      "regressed": 6,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "cbb88ef9c443d837fb40d085b435190ec0f70aa26a527f3d1659c994fa8e26b0",
+      "code_sha256": "75a68a41a4c2c48157f68432a75d82359323445f57591729e384b1f4f10a6a31",
+      "linux_verified": false
+    },
+    "full-latejoint": {
+      "accuracy": 72.3175965665236,
+      "macro_f1": 68.91089582250567,
+      "mode": "full-latejoint",
+      "parameters": 24820856,
+      "corrected": 1,
+      "regressed": 7,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "a9299af385517aa3d88b44235a9a8a392b5e2eae1045c83bce23987d234e367b",
+      "code_sha256": "2069fd1d3f48428fa0ff245ab7e466e10b937e70db482bb453326c5e71f7b282",
+      "linux_verified": false
+    }
+  },
+  "recommended": "initial"
+}

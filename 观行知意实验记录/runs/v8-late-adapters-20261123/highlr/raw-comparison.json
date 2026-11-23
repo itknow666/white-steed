@@ -1,0 +1,77 @@
+{
+  "results": {
+    "initial": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.11618033021173,
+      "mode": "kd-non-target",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "8e5dd5517e6c5ad92e01b92e03966f991a72ee8bc67948ef716fbe68ab19173a",
+      "code_sha256": "a0b37c306d909752cb87c237f6bafd3b516853161f0be22ac7e89c7956577894",
+      "linux_verified": false
+    },
+    "original-kd-control": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.12899918110394,
+      "mode": "crop192-control",
+      "parameters": 24767544,
+      "corrected": 3,
+      "regressed": 3,
+      "error_counts": [
+        4,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "d77ab2de4382d421cf7a1e07cb4ba2c89fb2da7bde057b144dde521750eb7c88",
+      "code_sha256": "9bd60e5582a7117c8f18913d6c0fa996c70f07314d98404cbe4516e0de93ee9e",
+      "linux_verified": false
+    },
+    "frozen-latepoint": {
+      "accuracy": 73.39055793991416,
+      "macro_f1": 69.82252953656094,
+      "mode": "frozen-latepoint",
+      "parameters": 24819192,
+      "corrected": 0,
+      "regressed": 1,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "8c62e3a0338dca8df2d679bc52c63498a7d7c43175a6ce625502111568542e41",
+      "code_sha256": "7ddc95d54efd221f0602b4047ebe7eea77c860dadff3181f17b176551c4ada26",
+      "linux_verified": false
+    },
+    "frozen-latejoint": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.08962355365495,
+      "mode": "frozen-latejoint",
+      "parameters": 24820856,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "82483026382eaca1cd8c5611500dab67208706ceb82ba2404db7c2e8bf41fef7",
+      "code_sha256": "4386769d051fd56615e6346bd4d1abbf7b45eba832e1e86aa906ba301a1bd205",
+      "linux_verified": false
+    }
+  },
+  "recommended": "original-kd-control"
+}

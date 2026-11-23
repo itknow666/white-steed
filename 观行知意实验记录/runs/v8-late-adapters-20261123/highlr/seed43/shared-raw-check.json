@@ -1,0 +1,8 @@
+{
+  "samples": 466,
+  "candidates": [
+    "frozen-latepoint",
+    "frozen-latejoint"
+  ],
+  "single_api_exact_comparisons_per_candidate": 3
+}

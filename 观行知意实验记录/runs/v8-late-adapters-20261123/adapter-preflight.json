@@ -1,0 +1,49 @@
+{
+  "clips": 3,
+  "dtypes": [
+    "float16",
+    "bfloat16"
+  ],
+  "variants": {
+    "latepoint": {
+      "kernel": [
+        1,
+        1,
+        1
+      ],
+      "exact_outputs": true,
+      "finite_adapter_gradients": true,
+      "patch_parameters": 51648
+    },
+    "latespatial": {
+      "kernel": [
+        1,
+        3,
+        3
+      ],
+      "exact_outputs": true,
+      "finite_adapter_gradients": true,
+      "patch_parameters": 52160
+    },
+    "latetemporal": {
+      "kernel": [
+        3,
+        1,
+        1
+      ],
+      "exact_outputs": true,
+      "finite_adapter_gradients": true,
+      "patch_parameters": 51776
+    },
+    "latejoint": {
+      "kernel": [
+        3,
+        3,
+        3
+      ],
+      "exact_outputs": true,
+      "finite_adapter_gradients": true,
+      "patch_parameters": 53312
+    }
+  }
+}

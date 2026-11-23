@@ -159,13 +159,21 @@ class QVLoRA(nn.Module):
         return a.proj(value.transpose(1, 2).reshape(batch, tokens, dim))
 
 
+LATE_ADAPTER_KERNELS = {
+    'latepoint': (1, 1, 1),
+    'latespatial': (1, 3, 3),
+    'latetemporal': (3, 1, 1),
+    'latejoint': (3, 3, 3),
+}
+
+
 class TemporalAdapter(nn.Module):
     """Local motion correction on the 8×14×14 VideoMAE tubelet grid."""
-    def __init__(self, dim, width=32):
+    def __init__(self, dim, width=32, kernel=(3, 1, 1)):
         super().__init__()
         self.norm = nn.LayerNorm(dim)
         self.down = nn.Linear(dim, width)
-        self.motion = nn.Conv3d(width, width, (3, 1, 1), padding=(1, 0, 0), groups=width)
+        self.motion = nn.Conv3d(width, width, kernel, padding=tuple(k//2 for k in kernel), groups=width)
         self.up = nn.Linear(width, dim)
         nn.init.zeros_(self.up.weight)
         nn.init.zeros_(self.up.bias)
@@ -184,6 +192,7 @@ class DomainVideoMAE(VideoMAEClassifier):
             self.load_state_dict(warmstart, strict=True)
         single = {'depthonly': 'depth', 'ironly': 'ir'}.get(variant)
         self.encoder.patch_embed = DualPatchEmbed(self.encoder.patch_embed, single_modality=single)
+        self.late_adapters = variant in LATE_ADAPTER_KERNELS
         # Adding an optional module must not change the data shuffle or Mixup stream.
         with torch.random.fork_rng(devices=[]):
             if variant in ('balance', 'film'):
@@ -202,6 +211,13 @@ class DomainVideoMAE(VideoMAEClassifier):
             if variant == 'temporal':
                 for i in (3, 7, 11):
                     self.encoder.blocks[i].temporal_adapter = TemporalAdapter(self.encoder.num_features)
+            if self.late_adapters:
+                kernel = LATE_ADAPTER_KERNELS[variant]
+                seed = torch.initial_seed()
+                for i in (9, 11):
+                    # Match the bottleneck initialization in each block across kernel sizes.
+                    torch.random.default_generator.manual_seed(seed + i)
+                    self.encoder.blocks[i].temporal_adapter = TemporalAdapter(self.encoder.num_features, kernel=kernel)
             if variant == 'phase':
                 self.phase_head = nn.Linear(3 * self.encoder.num_features, 40, bias=False)
                 nn.init.zeros_(self.phase_head.weight)
@@ -219,9 +235,10 @@ class DomainVideoMAE(VideoMAEClassifier):
 
     def forward(self, x):
         x = self.normalized_clip(x)
-        if not hasattr(self.encoder.blocks[3], 'temporal_adapter') and not hasattr(self, 'phase_head'):
+        if not hasattr(self.encoder.blocks[-1], 'temporal_adapter') and not hasattr(self, 'phase_head'):
             return self.head(self.encoder(x))
-        return self.classify_tokens(self.encoder.patch_embed(x))
+        position_dtype = x.dtype if self.late_adapters else None
+        return self.classify_tokens(self.encoder.patch_embed(x), position_dtype=position_dtype)
 
     def forward_with_modality_mask(self, x, keep_depth, keep_ir):
         normalized = self.normalized_clip(x)

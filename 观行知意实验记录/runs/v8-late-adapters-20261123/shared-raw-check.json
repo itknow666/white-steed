@@ -1,0 +1,14 @@
+{
+  "samples": 466,
+  "candidates": [
+    "frozen-latepoint",
+    "frozen-latespatial",
+    "frozen-latetemporal",
+    "frozen-latejoint",
+    "full-latepoint",
+    "full-latespatial",
+    "full-latetemporal",
+    "full-latejoint"
+  ],
+  "single_api_exact_comparisons_per_candidate": 3
+}

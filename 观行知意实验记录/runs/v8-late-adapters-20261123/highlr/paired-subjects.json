@@ -1,0 +1,54 @@
+{
+  "frozen-latepoint": {
+    "control": "original-kd-control",
+    "subjects": {
+      "S1": {
+        "samples": 149,
+        "control_correct": 107,
+        "candidate_correct": 105,
+        "corrected": 0,
+        "regressed": 2
+      },
+      "S2": {
+        "samples": 186,
+        "control_correct": 145,
+        "candidate_correct": 145,
+        "corrected": 2,
+        "regressed": 2
+      },
+      "S3": {
+        "samples": 131,
+        "control_correct": 91,
+        "candidate_correct": 92,
+        "corrected": 1,
+        "regressed": 0
+      }
+    }
+  },
+  "frozen-latejoint": {
+    "control": "frozen-latepoint",
+    "subjects": {
+      "S1": {
+        "samples": 149,
+        "control_correct": 105,
+        "candidate_correct": 105,
+        "corrected": 0,
+        "regressed": 0
+      },
+      "S2": {
+        "samples": 186,
+        "control_correct": 145,
+        "candidate_correct": 146,
+        "corrected": 1,
+        "regressed": 0
+      },
+      "S3": {
+        "samples": 131,
+        "control_correct": 92,
+        "candidate_correct": 92,
+        "corrected": 0,
+        "regressed": 0
+      }
+    }
+  }
+}

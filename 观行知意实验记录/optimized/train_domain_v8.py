@@ -15,7 +15,7 @@ from torch.utils.data import DataLoader
 
 from train_videomae import Clips, RawModel, evaluate, save, sha, write
 from videomae_model import VideoMAEClassifier
-from videomae_v8 import DomainVideoMAE
+from videomae_v8 import DomainVideoMAE, LATE_ADAPTER_KERNELS
 from sensor_corruption_v8 import corrupt_training_clip, local_sensor_coverage
 
 
@@ -209,7 +209,8 @@ def main():
     parser.add_argument('--class-power', type=float, default=.25)
     parser.add_argument('--ir-jitter', action='store_true', help='Training-only clip-consistent IR gain and offset')
     parser.add_argument('--domain-variant', choices=['plain', 'gate', 'temporal', 'phase', 'balance', 'film', 'local',
-                                                        'localcontrast', 'localrepair', 'depthonly', 'ironly'], default='plain')
+                                                        'localcontrast', 'localrepair', 'depthonly', 'ironly',
+                                                        *LATE_ADAPTER_KERNELS], default='plain')
     parser.add_argument('--mask-rate', type=float, default=0.)
     parser.add_argument('--distill', type=float, default=0., help='KL weight for frozen clean-view V8 teacher')
     parser.add_argument('--alignment', choices=['none', 'control', 'uniform', 'motion', 'motion-stratified'], default='none')
@@ -224,6 +225,7 @@ def main():
     parser.add_argument('--teacher-weight', type=float, default=.35, help='Weight on temperature-scaled offline KL')
     parser.add_argument('--teacher-top-k', type=int, default=0, help='Keep K individual non-target classes and aggregate the rest')
     parser.add_argument('--adapter-only', action='store_true', help='Train only the two input residual adapters')
+    parser.add_argument('--late-adapters-only', action='store_true', help='Train only the two new late convolution adapters')
     parser.add_argument('--last-blocks', type=int, default=0, help='Train only the last N encoder blocks, normalization and head')
     parser.add_argument('--sensor-augment', action='store_true', help='Darken IR or hide a local depth patch')
     parser.add_argument('--sensor-consistency', action='store_true', help='Match a frozen clean-view teacher on perturbed samples')
@@ -303,8 +305,16 @@ def main():
         parser.error('Auxiliary direction prediction requires an unmasked phase head')
     if a.phase_head_only and (a.mode != 'dual' or a.domain_variant != 'phase' or a.order_weight):
         parser.error('Phase-only fitting requires phase classification without auxiliary direction prediction')
-    if (a.teacher_cache or a.adapter_only) and (not a.continue_dual or a.mode != 'dual' or a.domain_variant != 'plain' or a.mask_rate):
-        parser.error('Offline teacher and input-only trials require an unmasked plain dual checkpoint')
+    uses_late_adapters = a.domain_variant in LATE_ADAPTER_KERNELS
+    if a.teacher_cache and (not a.continue_dual or a.mode != 'dual'
+                            or (a.domain_variant != 'plain' and not uses_late_adapters) or a.mask_rate):
+        parser.error('Offline teachers require an unmasked V8 dual checkpoint')
+    if a.adapter_only and (not a.continue_dual or a.mode != 'dual' or a.domain_variant != 'plain' or a.mask_rate):
+        parser.error('Input-only trials require an unmasked plain dual checkpoint')
+    if a.late_adapters_only and (not uses_late_adapters or a.adapter_only or a.last_blocks):
+        parser.error('--late-adapters-only requires a late adapter variant as the sole training scope')
+    if uses_late_adapters and (a.mode != 'dual' or a.mask_rate or a.distill):
+        parser.error('Late adapter variants require ordinary unmasked dual training')
     if a.teacher_policy != 'fusion' and not (a.teacher_cache or use_view_teachers):
         parser.error('--teacher-policy requires --teacher-cache')
     if not 0 <= a.teacher_top_k <= 38 or (a.teacher_top_k and a.teacher_policy != 'non-target'):
@@ -380,6 +390,11 @@ def main():
         model.requires_grad_(False)
         model.encoder.patch_embed.depth_adapter.requires_grad_(True)
         model.encoder.patch_embed.ir_adapter.requires_grad_(True)
+    if a.late_adapters_only:
+        model.requires_grad_(False)
+        for block in model.encoder.blocks:
+            if hasattr(block, 'temporal_adapter'):
+                block.temporal_adapter.requires_grad_(True)
     if fit_balance:
         model.requires_grad_(False)
         balance = model.encoder.patch_embed.modality_balance
@@ -458,6 +473,9 @@ def main():
                       teacher_temperature=2., teacher_loss_weight=a.teacher_weight, teacher_top_k=a.teacher_top_k)
     if a.adapter_only:
         config.update(adapter_only=True, adapter_lr_multiplier=10.)
+    if uses_late_adapters:
+        config.update(late_adapter_blocks=[9, 11], late_adapter_kernel=LATE_ADAPTER_KERNELS[a.domain_variant],
+                      late_adapters_only=a.late_adapters_only, late_adapter_lr_multiplier=2.5)
     if fit_balance:
         config.update(modality_balance_only=True, balance_lr_multiplier=10.)
     if a.local_quality_weight:
@@ -544,7 +562,8 @@ def main():
         if epoch == 2:
             for q in delayed:
                 q.requires_grad_(True)
-        model.train(not (a.phase_head_only or a.adapter_only or fit_balance or a.patch_only or a.anchor_eval_student))
+        model.train(not (a.phase_head_only or a.adapter_only or a.late_adapters_only
+                         or fit_balance or a.patch_only or a.anchor_eval_student))
         seen, loss_sum = 0, 0.
         alignment_sum = torch.zeros((), device='cuda')
         order_sum = torch.zeros((), device='cuda')
