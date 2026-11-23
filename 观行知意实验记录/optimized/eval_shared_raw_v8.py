@@ -14,20 +14,20 @@ from package_domain_v8 import ROOT, package
 from train_videomae import sha, write
 
 
-def stage_package(runs, out, name, architecture):
+def stage_package(runs, out, name, architecture, options=None):
     folder = out / name
     if not folder.is_dir():
         with TemporaryDirectory(dir=out) as temporary:
             staged = Path(temporary) / name
-            package(runs, staged, {'mode': name, 'architecture': architecture, 'fusion': False})
+            package(runs, staged, {'mode': name, 'architecture': architecture, 'fusion': False, **(options or {})})
             staged.rename(folder)
     return folder
 
 
 @torch.inference_mode()
-def shared_raw(runs, out, dataset, manifest, arms, baseline):
+def shared_raw(runs, out, dataset, manifest, arms, baseline, *, input_options=None):
     out.mkdir(parents=True, exist_ok=True)
-    pending = {name: stage_package(runs, out, name, arch) for name, arch in arms.items()
+    pending = {name: stage_package(runs, out, name, arch, (input_options or {}).get(name)) for name, arch in arms.items()
                if not (out/name/'metrics.json').is_file()}
     if not pending:
         return
@@ -35,6 +35,8 @@ def shared_raw(runs, out, dataset, manifest, arms, baseline):
     reference_dir = next(iter(pending.values()))/'code'
     sys.path.insert(0, str(reference_dir))
     from inference import Model
+    if input_options is not None:
+        from build_spacetime_v8 import render_paths
 
     samples = manifest['samples']
     sample_ids = [sample.get('sample_id', sample['file']+'.npy') for sample in samples]
@@ -46,7 +48,7 @@ def shared_raw(runs, out, dataset, manifest, arms, baseline):
     pairs = [pair for pair, _ in errors.most_common(5)]
 
     common_config = None
-    models, probes = {}, {}
+    models, probes, specs = {}, {}, {}
     for name, folder in pending.items():
         code = folder/'code'
         for file in ('inference.py','depth_ir_io.py','build_cache.py','crop_policy.py','videomae_v8.py'):
@@ -55,7 +57,16 @@ def shared_raw(runs, out, dataset, manifest, arms, baseline):
                 raise ValueError(f'Shared preprocessing source differs for {name}')
         config = read(code/'config.json')
         detector_hash = sha(code/config['detector_file']) if config.get('person_crop') else None
-        signature = ({key: value for key, value in config.items() if key != 'architecture'}, detector_hash)
+        options = {'architecture'}
+        if input_options is not None:
+            expected = input_options[name]
+            specs[name] = (config['frames'], config['size'], config.get('geometry', 'stretch'))
+            if specs[name] != (expected['input_frames'], expected['input_size'], expected['input_geometry']):
+                raise ValueError(f'Unexpected packaged settings in {name}')
+            if config.get('depth_mode') != 'color' or config.get('ir_contrast'):
+                raise ValueError('Shared frame decoding requires unchanged depth and IR channels')
+            options.update(('frames', 'size', 'geometry'))
+        signature = ({key: value for key, value in config.items() if key not in options}, detector_hash)
         if common_config is None:
             common_config = signature
         if signature != common_config or config.get('architecture') != arms[name]:
@@ -78,9 +89,14 @@ def shared_raw(runs, out, dataset, manifest, arms, baseline):
         path = (dataset / sample['file']).resolve()
         if not path.is_relative_to(dataset.resolve()):
             raise ValueError('Sample path escapes dataset')
-        pixels = shared_preprocessor.prepare(path)
+        if input_options is None:
+            pixels = shared_preprocessor.prepare(path)
+        else:
+            depth, infrared, crop = shared_preprocessor._paths_crop(path)
+            frames = render_paths(depth, infrared, crop, tuple(dict.fromkeys(specs.values())))
         for name, model in models.items():
-            prediction = model._scores(model.model, pixels, bool(model.config.get('flip_tta', False)))
+            clip = pixels if input_options is None else frames[specs[name]].astype(np.float32) / 255.0
+            prediction = model._scores(model.model, clip, bool(model.config.get('flip_tta', False)))
             values = prediction.cpu().numpy()
             if index < 3:
                 np.testing.assert_array_equal(values, np.asarray(model.predict(path), dtype=values.dtype))

@@ -80,8 +80,14 @@ def package(run, package_dir, winner):
             config.pop('components')
             if 'input_size' in winner:
                 config['size'] = winner['input_size']
+            if 'input_frames' in winner:
+                config['frames'] = winner['input_frames']
+            if 'input_geometry' in winner:
+                config['geometry'] = winner['input_geometry']
     torch.save(state, package_dir/'model.pt')
     additions = {'inference.py': ROOT/'optimized/inference_v7.py',
+                 'depth_ir_io.py': ROOT/'baseline/depth_ir_io.py',
+                 'videomae_model.py': ROOT/'optimized/videomae_model.py',
                  'videomae_v8.py': ROOT/'optimized/videomae_v8.py',
                  'optimized/train_domain_v8.py': ROOT/'optimized/train_domain_v8.py',
                  'optimized/sensor_corruption_v8.py': ROOT/'optimized/sensor_corruption_v8.py',

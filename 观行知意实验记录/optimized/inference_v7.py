@@ -117,7 +117,8 @@ class Model:
 
     def _input(self, depth, ir, crop, spec):
         x = read_frame_lists(depth, ir, frames=int(spec.get('frames',16)), size=int(spec.get('size',128)),
-                             crop=crop, depth_mode='color', include_ir=True)
+                             crop=crop, depth_mode='color', include_ir=True,
+                             geometry=spec.get('geometry', 'stretch'))
         if spec.get('ir_contrast',False):
             from ir_contrast import enhance
             x = enhance(np.rint(x*255).astype(np.uint8)).astype(np.float32)/255.

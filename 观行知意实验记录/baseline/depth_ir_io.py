@@ -35,21 +35,32 @@ def uniform_indices(length, frames):
     return np.linspace(0, length - 1, frames).round().astype(np.int64)
 
 
-def _read(paths, frames, size, mode, crop):
+def resize_frame(image, size, crop, geometry='stretch'):
+    if crop is not None:
+        x0, y0, x1, y1 = map(float, crop)
+        if not 0 <= x0 < x1 <= 1 or not 0 <= y0 < y1 <= 1:
+            raise ValueError('crop must be normalized x0,y0,x1,y1')
+        w, h = image.size
+        image = image.crop((round(x0*w), round(y0*h), round(x1*w), round(y1*h)))
+    if geometry == 'stretch':
+        return image.resize((size, size), Image.Resampling.BILINEAR)
+    if geometry != 'letterbox':
+        raise ValueError('Unknown resize geometry')
+    scale = size / max(image.size)
+    w, h = (max(1, round(axis * scale)) for axis in image.size)
+    resized = image.resize((w, h), Image.Resampling.BILINEAR)
+    canvas = Image.new(image.mode, (size, size))
+    canvas.paste(resized, ((size-w)//2, (size-h)//2))
+    return canvas
+
+
+def _read(paths, frames, size, mode, crop, geometry):
     result = []
     for index in uniform_indices(len(paths), frames):
         with Image.open(paths[index]) as source:
             if source.mode.startswith('I') or source.mode == 'F':
                 raise ValueError('This loader expects published 8-bit Depth_Color/IR; specify scaling for numeric depth')
-            image = source.convert(mode)
-            if crop is not None:
-                x0, y0, x1, y1 = map(float, crop)
-                if not 0 <= x0 < x1 <= 1 or not 0 <= y0 < y1 <= 1:
-                    raise ValueError('crop must be normalized x0,y0,x1,y1')
-                w, h = image.size
-                box = (round(x0*w), round(y0*h), round(x1*w), round(y1*h))
-                image = image.crop(box)
-            image = image.resize((size, size), Image.Resampling.BILINEAR)
+            image = resize_frame(source.convert(mode), size, crop, geometry)
             # uint8的0—255转为float32的0—1，模型内部还会标准化。
             value = np.asarray(image, dtype=np.float32) / 255.0
             if value.ndim == 2:
@@ -75,20 +86,21 @@ def synchronized_paths(depth_paths, ir_paths):
         raise ValueError('Depth/IR frames must have identical ordered frame numbers')
 
 
-def read_frame_lists(depth_paths, ir_paths=None, *, frames=16, size=128, crop=None, depth_mode='color', include_ir=True):
+def read_frame_lists(depth_paths, ir_paths=None, *, frames=16, size=128, crop=None, depth_mode='color',
+                     include_ir=True, geometry='stretch'):
     if size < 1 or depth_mode not in ('color', 'gray'):
         raise ValueError('size must be positive; depth_mode is color or gray')
     if include_ir:
         if not ir_paths:
             raise ValueError('IR frames are required')
         synchronized_paths(depth_paths, ir_paths)
-    depth = _read(depth_paths, frames, size, 'RGB' if depth_mode == 'color' else 'L', crop)
+    depth = _read(depth_paths, frames, size, 'RGB' if depth_mode == 'color' else 'L', crop, geometry)
     if depth_mode == 'gray':
         depth = np.repeat(depth, 3, axis=0)
     if include_ir:
         if not ir_paths:
             raise ValueError('IR frames are required for depth+IR input')
-        ir = _read(ir_paths, frames, size, 'L', crop)
+        ir = _read(ir_paths, frames, size, 'L', crop, geometry)
         depth = np.concatenate([depth, ir], axis=0)
     return np.ascontiguousarray(depth, dtype=np.float32)
 

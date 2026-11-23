@@ -1,0 +1,16 @@
+{
+  "samples": 466,
+  "candidates": [
+    "f16-s192-letterbox",
+    "f16-s224-letterbox",
+    "f24-s192-stretch",
+    "f24-s192-letterbox",
+    "f24-s224-stretch",
+    "f24-s224-letterbox",
+    "f32-s192-stretch",
+    "f32-s192-letterbox",
+    "f32-s224-stretch",
+    "f32-s224-letterbox"
+  ],
+  "single_api_exact_comparisons_per_candidate": 3
+}

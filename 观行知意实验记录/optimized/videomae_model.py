@@ -74,14 +74,27 @@ class VideoMAEEncoder(nn.Module):
     def __init__(self, dim=384, depth=12, heads=6, frames=16, size=224, drop_path=.1):
         super().__init__()
         self.patch_embed = PatchEmbed(dim)
-        n = (frames // 2) * (size // 16) ** 2
+        self.spatial_tokens = (size // 16) ** 2
+        n = (frames // 2) * self.spatial_tokens
         self.register_buffer('pos_embed', sinusoid_table(n, dim), persistent=False)
         rates = [float(v) for v in torch.linspace(0, drop_path, depth)]
         self.blocks = nn.ModuleList([Block(dim, heads, r) for r in rates])
         self.fc_norm = nn.LayerNorm(dim, eps=1e-6)
         self.num_features = dim
+    def positions(self, tokens):
+        if tokens.shape[1] == self.pos_embed.shape[1]:
+            return self.pos_embed
+        temporal, extra = divmod(tokens.shape[1], self.spatial_tokens)
+        if extra or temporal < 1:
+            raise ValueError('Tokens must occupy a whole number of temporal positions')
+        source = self.pos_embed.reshape(1, -1, self.spatial_tokens * self.num_features)
+        # Interpolate time separately for each of the original spatial positions.
+        positions = F.interpolate(source.transpose(1, 2), size=temporal, mode='linear', align_corners=True)
+        return positions.transpose(1, 2).reshape(1, tokens.shape[1], self.num_features)
+
     def forward(self, x):
-        x = self.patch_embed(x) + self.pos_embed.to(x.dtype)
+        tokens = self.patch_embed(x)
+        x = tokens + self.positions(tokens).to(x.dtype)
         for blk in self.blocks: x = blk(x)
         return self.fc_norm(x.mean(1))
 

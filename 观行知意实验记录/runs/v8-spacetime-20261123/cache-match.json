@@ -1,0 +1,106 @@
+{
+  "source_sha256": "b3f92fd6952b07fa0a88e53131bd663a3e39ba573b44ed26261c6819acf6be26",
+  "matched_samples_per_cache": 2461,
+  "results": {
+    "f16-s192-letterbox": {
+      "shape": [
+        4,
+        16,
+        192,
+        192
+      ],
+      "geometry": "letterbox",
+      "seconds": 185.73500000000013
+    },
+    "f16-s224-letterbox": {
+      "shape": [
+        4,
+        16,
+        224,
+        224
+      ],
+      "geometry": "letterbox",
+      "seconds": 218.0930000000003
+    },
+    "f24-s192-letterbox": {
+      "shape": [
+        4,
+        24,
+        192,
+        192
+      ],
+      "geometry": "letterbox",
+      "seconds": 278.125
+    },
+    "f24-s192-stretch": {
+      "shape": [
+        4,
+        24,
+        192,
+        192
+      ],
+      "geometry": "stretch",
+      "seconds": 278.78099999999995
+    },
+    "f24-s224-letterbox": {
+      "shape": [
+        4,
+        24,
+        224,
+        224
+      ],
+      "geometry": "letterbox",
+      "seconds": 319.2029999999995
+    },
+    "f24-s224-stretch": {
+      "shape": [
+        4,
+        24,
+        224,
+        224
+      ],
+      "geometry": "stretch",
+      "seconds": 319.59400000000005
+    },
+    "f32-s192-letterbox": {
+      "shape": [
+        4,
+        32,
+        192,
+        192
+      ],
+      "geometry": "letterbox",
+      "seconds": 398.7960000000003
+    },
+    "f32-s192-stretch": {
+      "shape": [
+        4,
+        32,
+        192,
+        192
+      ],
+      "geometry": "stretch",
+      "seconds": 397.375
+    },
+    "f32-s224-letterbox": {
+      "shape": [
+        4,
+        32,
+        224,
+        224
+      ],
+      "geometry": "letterbox",
+      "seconds": 438.3130000000001
+    },
+    "f32-s224-stretch": {
+      "shape": [
+        4,
+        32,
+        224,
+        224
+      ],
+      "geometry": "stretch",
+      "seconds": 438.70300000000043
+    }
+  }
+}

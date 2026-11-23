@@ -1,0 +1,810 @@
+{
+  "recommended": "f16-s192-stretch",
+  "results": {
+    "initial": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.11618033021173,
+      "mode": "kd-non-target",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        3,
+        5,
+        5,
+        4,
+        3
+      ],
+      "weights_sha256": "8e5dd5517e6c5ad92e01b92e03966f991a72ee8bc67948ef716fbe68ab19173a",
+      "code_sha256": "a0b37c306d909752cb87c237f6bafd3b516853161f0be22ac7e89c7956577894",
+      "linux_verified": false,
+      "by_subject": {
+        "S1": {
+          "samples": 149,
+          "correct": 105,
+          "corrected": 0,
+          "regressed": 0
+        },
+        "S2": {
+          "samples": 186,
+          "correct": 146,
+          "corrected": 0,
+          "regressed": 0
+        },
+        "S3": {
+          "samples": 131,
+          "correct": 92,
+          "corrected": 0,
+          "regressed": 0
+        }
+      },
+      "by_published_frames": {
+        "1-15": {
+          "samples": 89,
+          "correct": 67
+        },
+        "16-23": {
+          "samples": 92,
+          "correct": 70
+        },
+        "24-31": {
+          "samples": 87,
+          "correct": 65
+        },
+        "32-32": {
+          "samples": 198,
+          "correct": 141
+        }
+      }
+    },
+    "f16-s192-stretch": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.12899918110394,
+      "mode": "crop192-control",
+      "parameters": 24767544,
+      "corrected": 3,
+      "regressed": 3,
+      "error_counts": [
+        4,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "d77ab2de4382d421cf7a1e07cb4ba2c89fb2da7bde057b144dde521750eb7c88",
+      "code_sha256": "9bd60e5582a7117c8f18913d6c0fa996c70f07314d98404cbe4516e0de93ee9e",
+      "linux_verified": false,
+      "by_subject": {
+        "S1": {
+          "samples": 149,
+          "correct": 107,
+          "corrected": 2,
+          "regressed": 0
+        },
+        "S2": {
+          "samples": 186,
+          "correct": 145,
+          "corrected": 1,
+          "regressed": 2
+        },
+        "S3": {
+          "samples": 131,
+          "correct": 91,
+          "corrected": 0,
+          "regressed": 1
+        }
+      },
+      "by_published_frames": {
+        "1-15": {
+          "samples": 89,
+          "correct": 68
+        },
+        "16-23": {
+          "samples": 92,
+          "correct": 69
+        },
+        "24-31": {
+          "samples": 87,
+          "correct": 64
+        },
+        "32-32": {
+          "samples": 198,
+          "correct": 142
+        }
+      }
+    },
+    "f16-s192-letterbox": {
+      "accuracy": 71.45922746781116,
+      "macro_f1": 68.02607848091029,
+      "mode": "f16-s192-letterbox",
+      "parameters": 24767544,
+      "corrected": 4,
+      "regressed": 14,
+      "error_counts": [
+        5,
+        5,
+        4,
+        5,
+        4
+      ],
+      "weights_sha256": "4fdf42462a642e960c4502152f969a906e65780dfe00ab14137b038e5a0b89ce",
+      "code_sha256": "d9a9da3ffa5eaee65d42fe37563dc22dba0039d5857bec5574cba87eea595efb",
+      "linux_verified": false,
+      "by_subject": {
+        "S1": {
+          "samples": 149,
+          "correct": 101,
+          "corrected": 2,
+          "regressed": 6
+        },
+        "S2": {
+          "samples": 186,
+          "correct": 142,
+          "corrected": 1,
+          "regressed": 5
+        },
+        "S3": {
+          "samples": 131,
+          "correct": 90,
+          "corrected": 1,
+          "regressed": 3
+        }
+      },
+      "by_published_frames": {
+        "1-15": {
+          "samples": 89,
+          "correct": 64
+        },
+        "16-23": {
+          "samples": 92,
+          "correct": 69
+        },
+        "24-31": {
+          "samples": 87,
+          "correct": 64
+        },
+        "32-32": {
+          "samples": 198,
+          "correct": 136
+        }
+      }
+    },
+    "f16-s224-stretch": {
+      "accuracy": 72.53218884120172,
+      "macro_f1": 68.41187135241819,
+      "mode": "crop224-direct",
+      "parameters": 24767544,
+      "corrected": 3,
+      "regressed": 8,
+      "error_counts": [
+        4,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "d831639324553d3eacbc04c8ede33b1791fe398a2e1b75848328c3e26daa384c",
+      "code_sha256": "d63746ff8e3167a645124689a86628a464197ab297b52ad173206602a16a4b82",
+      "linux_verified": false,
+      "by_subject": {
+        "S1": {
+          "samples": 149,
+          "correct": 103,
+          "corrected": 1,
+          "regressed": 3
+        },
+        "S2": {
+          "samples": 186,
+          "correct": 142,
+          "corrected": 1,
+          "regressed": 5
+        },
+        "S3": {
+          "samples": 131,
+          "correct": 93,
+          "corrected": 1,
+          "regressed": 0
+        }
+      },
+      "by_published_frames": {
+        "1-15": {
+          "samples": 89,
+          "correct": 67
+        },
+        "16-23": {
+          "samples": 92,
+          "correct": 70
+        },
+        "24-31": {
+          "samples": 87,
+          "correct": 64
+        },
+        "32-32": {
+          "samples": 198,
+          "correct": 137
+        }
+      }
+    },
+    "f16-s224-letterbox": {
+      "accuracy": 70.60085836909872,
+      "macro_f1": 67.5243801837681,
+      "mode": "f16-s224-letterbox",
+      "parameters": 24767544,
+      "corrected": 4,
+      "regressed": 18,
+      "error_counts": [
+        4,
+        5,
+        4,
+        6,
+        3
+      ],
+      "weights_sha256": "1b7b140e6861d83dd2afa60ea7d42bf4403537c7f8a2f3fcc0c0da053a63596c",
+      "code_sha256": "00534cf1b4f543e453b9c1b297dabe45837aeb2d0f2e4c32c2403aa0528635e5",
+      "linux_verified": false,
+      "by_subject": {
+        "S1": {
+          "samples": 149,
+          "correct": 97,
+          "corrected": 2,
+          "regressed": 10
+        },
+        "S2": {
+          "samples": 186,
+          "correct": 142,
+          "corrected": 2,
+          "regressed": 6
+        },
+        "S3": {
+          "samples": 131,
+          "correct": 90,
+          "corrected": 0,
+          "regressed": 2
+        }
+      },
+      "by_published_frames": {
+        "1-15": {
+          "samples": 89,
+          "correct": 64
+        },
+        "16-23": {
+          "samples": 92,
+          "correct": 63
+        },
+        "24-31": {
+          "samples": 87,
+          "correct": 66
+        },
+        "32-32": {
+          "samples": 198,
+          "correct": 136
+        }
+      }
+    },
+    "f24-s192-stretch": {
+      "accuracy": 70.3862660944206,
+      "macro_f1": 66.54770820492801,
+      "mode": "f24-s192-stretch",
+      "parameters": 24767544,
+      "corrected": 11,
+      "regressed": 26,
+      "error_counts": [
+        1,
+        6,
+        3,
+        3,
+        4
+      ],
+      "weights_sha256": "80a345c8f62396de8602a9918b48bb0d4baf9604e751882bfeae7ef394cb1038",
+      "code_sha256": "f42c031d27658e95ffd5daddd795d277c5c46692136c56840708d51373cd34df",
+      "linux_verified": false,
+      "by_subject": {
+        "S1": {
+          "samples": 149,
+          "correct": 98,
+          "corrected": 5,
+          "regressed": 12
+        },
+        "S2": {
+          "samples": 186,
+          "correct": 140,
+          "corrected": 3,
+          "regressed": 9
+        },
+        "S3": {
+          "samples": 131,
+          "correct": 90,
+          "corrected": 3,
+          "regressed": 5
+        }
+      },
+      "by_published_frames": {
+        "1-15": {
+          "samples": 89,
+          "correct": 63
+        },
+        "16-23": {
+          "samples": 92,
+          "correct": 67
+        },
+        "24-31": {
+          "samples": 87,
+          "correct": 61
+        },
+        "32-32": {
+          "samples": 198,
+          "correct": 137
+        }
+      }
+    },
+    "f24-s192-letterbox": {
+      "accuracy": 68.88412017167381,
+      "macro_f1": 65.25604641695506,
+      "mode": "f24-s192-letterbox",
+      "parameters": 24767544,
+      "corrected": 9,
+      "regressed": 31,
+      "error_counts": [
+        1,
+        6,
+        3,
+        3,
+        4
+      ],
+      "weights_sha256": "9208fdaa7ba83f1346059a4dfaafaac758af135008c4361e470e2306905efb07",
+      "code_sha256": "d055d136200bdba22e34f7875d7faf33cf42ef6b03ad1e6afb5052879e66d36b",
+      "linux_verified": false,
+      "by_subject": {
+        "S1": {
+          "samples": 149,
+          "correct": 96,
+          "corrected": 4,
+          "regressed": 13
+        },
+        "S2": {
+          "samples": 186,
+          "correct": 138,
+          "corrected": 3,
+          "regressed": 11
+        },
+        "S3": {
+          "samples": 131,
+          "correct": 87,
+          "corrected": 2,
+          "regressed": 7
+        }
+      },
+      "by_published_frames": {
+        "1-15": {
+          "samples": 89,
+          "correct": 64
+        },
+        "16-23": {
+          "samples": 92,
+          "correct": 64
+        },
+        "24-31": {
+          "samples": 87,
+          "correct": 60
+        },
+        "32-32": {
+          "samples": 198,
+          "correct": 133
+        }
+      }
+    },
+    "f24-s224-stretch": {
+      "accuracy": 70.1716738197425,
+      "macro_f1": 66.33897811708718,
+      "mode": "f24-s224-stretch",
+      "parameters": 24767544,
+      "corrected": 10,
+      "regressed": 26,
+      "error_counts": [
+        1,
+        6,
+        3,
+        3,
+        3
+      ],
+      "weights_sha256": "6b56ef91f24434884c52544e259935309045de5e2355ced53e0a4a71b282fbef",
+      "code_sha256": "3283549eca2524728bac5f111d0abd9040b71a9ca50d834053b4a92cb04b9b81",
+      "linux_verified": false,
+      "by_subject": {
+        "S1": {
+          "samples": 149,
+          "correct": 99,
+          "corrected": 5,
+          "regressed": 11
+        },
+        "S2": {
+          "samples": 186,
+          "correct": 140,
+          "corrected": 3,
+          "regressed": 9
+        },
+        "S3": {
+          "samples": 131,
+          "correct": 88,
+          "corrected": 2,
+          "regressed": 6
+        }
+      },
+      "by_published_frames": {
+        "1-15": {
+          "samples": 89,
+          "correct": 64
+        },
+        "16-23": {
+          "samples": 92,
+          "correct": 65
+        },
+        "24-31": {
+          "samples": 87,
+          "correct": 60
+        },
+        "32-32": {
+          "samples": 198,
+          "correct": 138
+        }
+      }
+    },
+    "f24-s224-letterbox": {
+      "accuracy": 70.3862660944206,
+      "macro_f1": 65.94526230476218,
+      "mode": "f24-s224-letterbox",
+      "parameters": 24767544,
+      "corrected": 12,
+      "regressed": 27,
+      "error_counts": [
+        1,
+        5,
+        3,
+        3,
+        4
+      ],
+      "weights_sha256": "53cec886224cc03090baa2bac458657326a3c1d4d79213bfabfe1b634feacfe9",
+      "code_sha256": "832c84f12184e9033cdce13e45cbb55292dede19094e185783d6db505a309c41",
+      "linux_verified": false,
+      "by_subject": {
+        "S1": {
+          "samples": 149,
+          "correct": 98,
+          "corrected": 3,
+          "regressed": 10
+        },
+        "S2": {
+          "samples": 186,
+          "correct": 140,
+          "corrected": 6,
+          "regressed": 12
+        },
+        "S3": {
+          "samples": 131,
+          "correct": 90,
+          "corrected": 3,
+          "regressed": 5
+        }
+      },
+      "by_published_frames": {
+        "1-15": {
+          "samples": 89,
+          "correct": 65
+        },
+        "16-23": {
+          "samples": 92,
+          "correct": 67
+        },
+        "24-31": {
+          "samples": 87,
+          "correct": 60
+        },
+        "32-32": {
+          "samples": 198,
+          "correct": 136
+        }
+      }
+    },
+    "f32-s192-stretch": {
+      "accuracy": 69.31330472103004,
+      "macro_f1": 64.21800554348279,
+      "mode": "f32-s192-stretch",
+      "parameters": 24767544,
+      "corrected": 10,
+      "regressed": 30,
+      "error_counts": [
+        2,
+        6,
+        3,
+        3,
+        5
+      ],
+      "weights_sha256": "9b209c66b5025e0308f3e2aa7e17a9623026e176cea93f12b98b42fb27800ae9",
+      "code_sha256": "12b9d9d48bafb33082dbc384b11c6b8d9dd912c826b4fc19c12c24f772f6ffcb",
+      "linux_verified": false,
+      "by_subject": {
+        "S1": {
+          "samples": 149,
+          "correct": 97,
+          "corrected": 4,
+          "regressed": 12
+        },
+        "S2": {
+          "samples": 186,
+          "correct": 138,
+          "corrected": 4,
+          "regressed": 12
+        },
+        "S3": {
+          "samples": 131,
+          "correct": 88,
+          "corrected": 2,
+          "regressed": 6
+        }
+      },
+      "by_published_frames": {
+        "1-15": {
+          "samples": 89,
+          "correct": 65
+        },
+        "16-23": {
+          "samples": 92,
+          "correct": 70
+        },
+        "24-31": {
+          "samples": 87,
+          "correct": 55
+        },
+        "32-32": {
+          "samples": 198,
+          "correct": 133
+        }
+      }
+    },
+    "f32-s192-letterbox": {
+      "accuracy": 68.45493562231759,
+      "macro_f1": 63.57574153824586,
+      "mode": "f32-s192-letterbox",
+      "parameters": 24767544,
+      "corrected": 10,
+      "regressed": 34,
+      "error_counts": [
+        1,
+        4,
+        3,
+        4,
+        4
+      ],
+      "weights_sha256": "ff905c1729468b8c7f4ea3620acd34440ca5df93de9807eb7c3bfbcdaeb289c7",
+      "code_sha256": "e5f91237b3291e16e3f7f03dca2a0ca18d23df2326ebc7849d551fe6a2066265",
+      "linux_verified": false,
+      "by_subject": {
+        "S1": {
+          "samples": 149,
+          "correct": 97,
+          "corrected": 4,
+          "regressed": 12
+        },
+        "S2": {
+          "samples": 186,
+          "correct": 135,
+          "corrected": 4,
+          "regressed": 15
+        },
+        "S3": {
+          "samples": 131,
+          "correct": 87,
+          "corrected": 2,
+          "regressed": 7
+        }
+      },
+      "by_published_frames": {
+        "1-15": {
+          "samples": 89,
+          "correct": 63
+        },
+        "16-23": {
+          "samples": 92,
+          "correct": 69
+        },
+        "24-31": {
+          "samples": 87,
+          "correct": 58
+        },
+        "32-32": {
+          "samples": 198,
+          "correct": 129
+        }
+      }
+    },
+    "f32-s224-stretch": {
+      "accuracy": 68.6695278969957,
+      "macro_f1": 63.75020066425019,
+      "mode": "f32-s224-stretch",
+      "parameters": 24767544,
+      "corrected": 7,
+      "regressed": 30,
+      "error_counts": [
+        0,
+        6,
+        3,
+        3,
+        4
+      ],
+      "weights_sha256": "236f52a896bf778db8a83552e117b8dc2ccba014029bb3318672030a748ff998",
+      "code_sha256": "df0ef3cf8f251f26e599e63b145b176b6b2937d99046b8b6d00c1ecd75ebc8e6",
+      "linux_verified": false,
+      "by_subject": {
+        "S1": {
+          "samples": 149,
+          "correct": 96,
+          "corrected": 3,
+          "regressed": 12
+        },
+        "S2": {
+          "samples": 186,
+          "correct": 137,
+          "corrected": 3,
+          "regressed": 12
+        },
+        "S3": {
+          "samples": 131,
+          "correct": 87,
+          "corrected": 1,
+          "regressed": 6
+        }
+      },
+      "by_published_frames": {
+        "1-15": {
+          "samples": 89,
+          "correct": 63
+        },
+        "16-23": {
+          "samples": 92,
+          "correct": 69
+        },
+        "24-31": {
+          "samples": 87,
+          "correct": 56
+        },
+        "32-32": {
+          "samples": 198,
+          "correct": 132
+        }
+      }
+    },
+    "f32-s224-letterbox": {
+      "accuracy": 66.95278969957081,
+      "macro_f1": 61.97264601936514,
+      "mode": "f32-s224-letterbox",
+      "parameters": 24767544,
+      "corrected": 10,
+      "regressed": 41,
+      "error_counts": [
+        1,
+        4,
+        3,
+        4,
+        3
+      ],
+      "weights_sha256": "a22d003efe9462694a9815a4e96dbd89cd62ac3f08505dc4b000b98702f515ea",
+      "code_sha256": "70afa35180f57896efa7d397014eede9a5881d9a1ae916a978f7d6078ca7b737",
+      "linux_verified": false,
+      "by_subject": {
+        "S1": {
+          "samples": 149,
+          "correct": 90,
+          "corrected": 3,
+          "regressed": 18
+        },
+        "S2": {
+          "samples": 186,
+          "correct": 136,
+          "corrected": 5,
+          "regressed": 15
+        },
+        "S3": {
+          "samples": 131,
+          "correct": 86,
+          "corrected": 2,
+          "regressed": 8
+        }
+      },
+      "by_published_frames": {
+        "1-15": {
+          "samples": 89,
+          "correct": 61
+        },
+        "16-23": {
+          "samples": 92,
+          "correct": 66
+        },
+        "24-31": {
+          "samples": 87,
+          "correct": 57
+        },
+        "32-32": {
+          "samples": 198,
+          "correct": 128
+        }
+      }
+    }
+  },
+  "settings": {
+    "f16-s192-stretch": {
+      "input_frames": 16,
+      "input_size": 192,
+      "input_geometry": "stretch"
+    },
+    "f16-s192-letterbox": {
+      "input_frames": 16,
+      "input_size": 192,
+      "input_geometry": "letterbox"
+    },
+    "f16-s224-stretch": {
+      "input_frames": 16,
+      "input_size": 224,
+      "input_geometry": "stretch"
+    },
+    "f16-s224-letterbox": {
+      "input_frames": 16,
+      "input_size": 224,
+      "input_geometry": "letterbox"
+    },
+    "f24-s192-stretch": {
+      "input_frames": 24,
+      "input_size": 192,
+      "input_geometry": "stretch"
+    },
+    "f24-s192-letterbox": {
+      "input_frames": 24,
+      "input_size": 192,
+      "input_geometry": "letterbox"
+    },
+    "f24-s224-stretch": {
+      "input_frames": 24,
+      "input_size": 224,
+      "input_geometry": "stretch"
+    },
+    "f24-s224-letterbox": {
+      "input_frames": 24,
+      "input_size": 224,
+      "input_geometry": "letterbox"
+    },
+    "f32-s192-stretch": {
+      "input_frames": 32,
+      "input_size": 192,
+      "input_geometry": "stretch"
+    },
+    "f32-s192-letterbox": {
+      "input_frames": 32,
+      "input_size": 192,
+      "input_geometry": "letterbox"
+    },
+    "f32-s224-stretch": {
+      "input_frames": 32,
+      "input_size": 224,
+      "input_geometry": "stretch"
+    },
+    "f32-s224-letterbox": {
+      "input_frames": 32,
+      "input_size": 224,
+      "input_geometry": "letterbox"
+    }
+  },
+  "reused_controls": [
+    "f16-s192-stretch",
+    "f16-s224-stretch"
+  ],
+  "recipe": {
+    "seed": 42,
+    "batch": 8,
+    "epochs": 2,
+    "base_lr": 6e-06,
+    "initial_sha256": "de5c160925e2da71e7fd4a7be80e8ce3daaf7c9ad53a60d6d73cf7d573fa8816",
+    "offline_teacher_sha256": "1b92bd667d075aa045307fe7bcf7c7823055fec728961c21f7c8aad6ac6c1114",
+    "teacher_policy": "non-target",
+    "teacher_temperature": 2.0,
+    "teacher_loss_weight": 0.35
+  }
+}
