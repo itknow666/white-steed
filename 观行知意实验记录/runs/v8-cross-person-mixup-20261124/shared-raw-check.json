@@ -1,0 +1,9 @@
+{
+  "samples": 466,
+  "candidates": [
+    "random",
+    "distinct",
+    "cross-person"
+  ],
+  "single_api_exact_comparisons_per_candidate": 3
+}

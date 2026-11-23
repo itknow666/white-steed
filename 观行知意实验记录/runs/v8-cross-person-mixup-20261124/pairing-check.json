@@ -1,0 +1,6 @@
+{
+  "batch_patterns": 9840,
+  "max_batch": 8,
+  "maximum_cross_person_pairs": true,
+  "no_self_for_batch_over_one": true
+}

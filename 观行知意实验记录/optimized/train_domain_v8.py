@@ -61,6 +61,25 @@ def non_target_kl(softened, labels, targets, top_k):
     return F.kl_div(student, targets, reduction='batchmean')
 
 
+def mixup_partner_indices(random_order, subjects, policy):
+    """Reuse the sampled order to make a one-to-one batch pairing."""
+    if policy == 'random' or len(subjects) < 2:
+        return random_order
+    if policy == 'distinct':
+        order = random_order
+        offset = 1
+    else:
+        # Keeping each person's rows contiguous makes the largest group
+        # determine the minimum unavoidable number of same-person pairs.
+        order = random_order[np.argsort(subjects[random_order], kind='stable')]
+        offset = int(np.bincount(subjects).max())
+        if offset == len(subjects):
+            offset = 1
+    partners = np.empty_like(order)
+    partners[order] = np.roll(order, -offset)
+    return partners
+
+
 @torch.no_grad()
 def shared_view_logits(models, clips):
     video, r34 = models
@@ -217,6 +236,9 @@ def main():
     parser.add_argument('--order-weight', type=float, default=0., help='Auxiliary before/after prediction weight')
     parser.add_argument('--phase-head-only', action='store_true', help='Freeze the starting model and train only the phase residual')
     parser.add_argument('--pace-jitter', action='store_true', help='Synchronized monotonic time warp during training')
+    parser.add_argument('--mixup-partners', choices=('random','distinct','cross-person'), default='random',
+                        help='Random permutation, no-self cycle, or maximal cross-person pairing within a batch')
+    parser.add_argument('--audit-mixup', action='store_true', help='Record batch pairing counts and Mixup strength')
     parser.add_argument('--teacher-cache', type=Path, help='Frozen VideoMAE and R34 logits for the training split')
     parser.add_argument('--teacher-view', choices=['offline', 'augmented', 'mixed'], default='offline')
     parser.add_argument('--view-video-weights', type=Path)
@@ -354,6 +376,10 @@ def main():
     valid = Clips(a.cache, 'validation')
     if (len(train), len(valid)) != (1995, 466) or {x['subject'] for x in train.rows} & {x['subject'] for x in valid.rows}:
         raise ValueError('Expected the official subject-disjoint train/validation split')
+    audit_mixup = a.audit_mixup or a.mixup_partners != 'random'
+    if audit_mixup:
+        _, train_subjects = np.unique([row['subject'] for row in train.rows], return_inverse=True)
+        train_labels = np.asarray([row['label'] for row in train.rows])
     input_shape = train.meta['shape_per_sample']
     if input_shape not in ([4, frames, size, size] for frames in (16, 24, 32) for size in (192, 224)):
         raise ValueError('Expected four channels, 16/24/32 frames and square 192/224 crops')
@@ -453,6 +479,8 @@ def main():
               'parameters': num_params, 'initial_trainable': initial_trainable, 'input_shape': input_shape,
               'input_geometry': geometry,
               'train_samples': len(train), 'validation_samples': len(valid), 'test_accessed': False}
+    if audit_mixup:
+        config.update(mixup_partners=a.mixup_partners, mixup_probability=.5, mixup_beta=.2)
     use_alignment_loss = a.alignment not in ('none', 'control')
     if a.alignment != 'none':
         config['alignment'] = a.alignment
@@ -565,6 +593,9 @@ def main():
         model.train(not (a.phase_head_only or a.adapter_only or a.late_adapters_only
                          or fit_balance or a.patch_only or a.anchor_eval_student))
         seen, loss_sum = 0, 0.
+        if audit_mixup:
+            mixing = dict(batches=0, pairs=0, self_pairs=0, cross_person=0, different_label=0,
+                          partner_weight=0., cross_person_weight=0.)
         alignment_sum = torch.zeros((), device='cuda')
         order_sum = torch.zeros((), device='cuda')
         teacher_sum = torch.zeros((), device='cuda')
@@ -602,6 +633,21 @@ def main():
             optimizer.zero_grad(set_to_none=True)
             perm = torch.randperm(len(y), device='cuda') if random.random() < .5 else None
             mix = float(np.random.beta(.2, .2)) if perm is not None else 1.
+            if audit_mixup and perm is not None:
+                subjects = train_subjects[indices.numpy()]
+                labels_in_batch = train_labels[indices.numpy()]
+                order = perm.cpu().numpy()
+                selected = mixup_partner_indices(order, subjects, a.mixup_partners)
+                if a.mixup_partners != 'random':
+                    perm = torch.as_tensor(selected, device=x.device)
+                cross = int(np.count_nonzero(subjects != subjects[selected]))
+                mixing['batches'] += 1
+                mixing['pairs'] += len(y)
+                mixing['self_pairs'] += int(np.count_nonzero(selected == np.arange(len(y))))
+                mixing['cross_person'] += cross
+                mixing['different_label'] += int(np.count_nonzero(labels_in_batch != labels_in_batch[selected]))
+                mixing['partner_weight'] += (1. - mix) * len(y)
+                mixing['cross_person_weight'] += (1. - mix) * cross
             if a.teacher_view == 'augmented':
                 online_logits = shared_view_logits(view_teachers, x)
             if perm is not None:
@@ -757,6 +803,8 @@ def main():
             row['order_loss'] = float(order_sum) / seen
         if offline_targets is not None or view_teachers is not None:
             row['teacher_kl'] = float(teacher_sum) / seen
+        if audit_mixup:
+            row['mixup'] = mixing
         if a.sensor_consistency:
             row['sensor_kl'] = float(consistency_sum) / seen
         if a.anchor_weight:

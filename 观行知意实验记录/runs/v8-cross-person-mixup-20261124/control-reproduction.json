@@ -1,0 +1,7 @@
+{
+  "sample_count": 466,
+  "same_predictions_as_historical": {
+    "42": 458,
+    "43": 462
+  }
+}
