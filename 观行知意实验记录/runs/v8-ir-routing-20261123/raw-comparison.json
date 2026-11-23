@@ -1,0 +1,95 @@
+{
+  "results": {
+    "initial": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.11618033021173,
+      "mode": "kd-non-target",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 0,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "8e5dd5517e6c5ad92e01b92e03966f991a72ee8bc67948ef716fbe68ab19173a",
+      "code_sha256": "a0b37c306d909752cb87c237f6bafd3b516853161f0be22ac7e89c7956577894",
+      "linux_verified": false
+    },
+    "original-kd-control": {
+      "accuracy": 73.60515021459227,
+      "macro_f1": 70.12899918110394,
+      "mode": "crop192-control",
+      "parameters": 24767544,
+      "corrected": 3,
+      "regressed": 3,
+      "error_counts": [
+        4,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "d77ab2de4382d421cf7a1e07cb4ba2c89fb2da7bde057b144dde521750eb7c88",
+      "code_sha256": "9bd60e5582a7117c8f18913d6c0fa996c70f07314d98404cbe4516e0de93ee9e",
+      "linux_verified": false
+    },
+    "ir-uniform": {
+      "accuracy": 72.53218884120172,
+      "macro_f1": 68.75182949747855,
+      "mode": "ir-uniform",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 5,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "c4174259c340e93c85c47b1c361d34cb5dad11bd92f3bc1fa9e6159185559ad2",
+      "code_sha256": "5a01456b5b50823fd541203a499c76d43acb29147ba08d5660f0449b601d2a13",
+      "linux_verified": false
+    },
+    "ir-class-random": {
+      "accuracy": 73.17596566523605,
+      "macro_f1": 69.57396029145755,
+      "mode": "ir-class-random",
+      "parameters": 24767544,
+      "corrected": 0,
+      "regressed": 2,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        3
+      ],
+      "weights_sha256": "1354000f04bade4a5ff65ff8cbd2202cd954e23f89326d4256f5887cc8e7f196",
+      "code_sha256": "5a01456b5b50823fd541203a499c76d43acb29147ba08d5660f0449b601d2a13",
+      "linux_verified": false
+    },
+    "ir-routed": {
+      "accuracy": 73.17596566523605,
+      "macro_f1": 69.84453812596182,
+      "mode": "ir-routed",
+      "parameters": 24767544,
+      "corrected": 2,
+      "regressed": 4,
+      "error_counts": [
+        5,
+        5,
+        4,
+        3,
+        4
+      ],
+      "weights_sha256": "0fec25a6148304a1312d9a9ad4d5a2172529a13a5321dda669a788111a5ee8c8",
+      "code_sha256": "d4dd6c5096a8afc96b11c270c645c205959616068303258be6cb2e583055d333",
+      "linux_verified": false
+    }
+  },
+  "recommended": "original-kd-control"
+}

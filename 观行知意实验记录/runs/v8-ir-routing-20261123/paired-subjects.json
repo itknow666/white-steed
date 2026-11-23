@@ -1,0 +1,71 @@
+{
+  "ir-uniform": {
+    "S1": {
+      "samples": 149,
+      "control_correct": 107,
+      "candidate_correct": 103,
+      "corrected": 0,
+      "regressed": 4
+    },
+    "S2": {
+      "samples": 186,
+      "control_correct": 145,
+      "candidate_correct": 144,
+      "corrected": 1,
+      "regressed": 2
+    },
+    "S3": {
+      "samples": 131,
+      "control_correct": 91,
+      "candidate_correct": 91,
+      "corrected": 1,
+      "regressed": 1
+    }
+  },
+  "ir-class-random": {
+    "S1": {
+      "samples": 149,
+      "control_correct": 107,
+      "candidate_correct": 104,
+      "corrected": 0,
+      "regressed": 3
+    },
+    "S2": {
+      "samples": 186,
+      "control_correct": 145,
+      "candidate_correct": 145,
+      "corrected": 1,
+      "regressed": 1
+    },
+    "S3": {
+      "samples": 131,
+      "control_correct": 91,
+      "candidate_correct": 92,
+      "corrected": 1,
+      "regressed": 0
+    }
+  },
+  "ir-routed": {
+    "S1": {
+      "samples": 149,
+      "control_correct": 107,
+      "candidate_correct": 105,
+      "corrected": 0,
+      "regressed": 2
+    },
+    "S2": {
+      "samples": 186,
+      "control_correct": 145,
+      "candidate_correct": 145,
+      "corrected": 0,
+      "regressed": 0
+    },
+    "S3": {
+      "samples": 131,
+      "control_correct": 91,
+      "candidate_correct": 91,
+      "corrected": 0,
+      "regressed": 0
+    }
+  }
+}

@@ -1,0 +1,232 @@
+{
+  "split": "train",
+  "samples": 1995,
+  "class_target_cap_fraction": 0.2,
+  "source_sha256": {
+    "original": "1b92bd667d075aa045307fe7bcf7c7823055fec728961c21f7c8aad6ac6c1114",
+    "experts": "370ac226c1e19a9a8cad51cb785dc19031ae6fe87fa03401cf9efdd408bd12d8"
+  },
+  "routed_correct_when_dual_wrong": 12,
+  "random_correct_when_dual_wrong": 2,
+  "available_ir_rescues": 12,
+  "shared_selected_rows": 98,
+  "per_class": {
+    "0": {
+      "clips": 35,
+      "ir_correct": 32,
+      "selected": 7
+    },
+    "1": {
+      "clips": 36,
+      "ir_correct": 34,
+      "selected": 8
+    },
+    "2": {
+      "clips": 33,
+      "ir_correct": 29,
+      "selected": 7
+    },
+    "3": {
+      "clips": 26,
+      "ir_correct": 25,
+      "selected": 6
+    },
+    "4": {
+      "clips": 51,
+      "ir_correct": 46,
+      "selected": 11
+    },
+    "5": {
+      "clips": 39,
+      "ir_correct": 39,
+      "selected": 8
+    },
+    "6": {
+      "clips": 77,
+      "ir_correct": 73,
+      "selected": 16
+    },
+    "7": {
+      "clips": 99,
+      "ir_correct": 96,
+      "selected": 20
+    },
+    "8": {
+      "clips": 69,
+      "ir_correct": 52,
+      "selected": 14
+    },
+    "9": {
+      "clips": 85,
+      "ir_correct": 82,
+      "selected": 17
+    },
+    "10": {
+      "clips": 77,
+      "ir_correct": 63,
+      "selected": 16
+    },
+    "11": {
+      "clips": 71,
+      "ir_correct": 65,
+      "selected": 15
+    },
+    "12": {
+      "clips": 39,
+      "ir_correct": 34,
+      "selected": 8
+    },
+    "13": {
+      "clips": 35,
+      "ir_correct": 35,
+      "selected": 7
+    },
+    "14": {
+      "clips": 24,
+      "ir_correct": 22,
+      "selected": 5
+    },
+    "15": {
+      "clips": 32,
+      "ir_correct": 31,
+      "selected": 7
+    },
+    "16": {
+      "clips": 18,
+      "ir_correct": 18,
+      "selected": 4
+    },
+    "17": {
+      "clips": 56,
+      "ir_correct": 52,
+      "selected": 12
+    },
+    "18": {
+      "clips": 31,
+      "ir_correct": 19,
+      "selected": 7
+    },
+    "19": {
+      "clips": 34,
+      "ir_correct": 31,
+      "selected": 7
+    },
+    "20": {
+      "clips": 67,
+      "ir_correct": 59,
+      "selected": 14
+    },
+    "21": {
+      "clips": 55,
+      "ir_correct": 45,
+      "selected": 11
+    },
+    "22": {
+      "clips": 47,
+      "ir_correct": 38,
+      "selected": 10
+    },
+    "23": {
+      "clips": 49,
+      "ir_correct": 47,
+      "selected": 10
+    },
+    "24": {
+      "clips": 39,
+      "ir_correct": 28,
+      "selected": 8
+    },
+    "25": {
+      "clips": 6,
+      "ir_correct": 6,
+      "selected": 2
+    },
+    "26": {
+      "clips": 23,
+      "ir_correct": 23,
+      "selected": 5
+    },
+    "27": {
+      "clips": 27,
+      "ir_correct": 27,
+      "selected": 6
+    },
+    "28": {
+      "clips": 29,
+      "ir_correct": 29,
+      "selected": 6
+    },
+    "29": {
+      "clips": 44,
+      "ir_correct": 44,
+      "selected": 9
+    },
+    "30": {
+      "clips": 32,
+      "ir_correct": 32,
+      "selected": 7
+    },
+    "31": {
+      "clips": 64,
+      "ir_correct": 64,
+      "selected": 13
+    },
+    "32": {
+      "clips": 57,
+      "ir_correct": 57,
+      "selected": 12
+    },
+    "33": {
+      "clips": 21,
+      "ir_correct": 21,
+      "selected": 5
+    },
+    "34": {
+      "clips": 90,
+      "ir_correct": 88,
+      "selected": 18
+    },
+    "35": {
+      "clips": 12,
+      "ir_correct": 12,
+      "selected": 3
+    },
+    "36": {
+      "clips": 232,
+      "ir_correct": 231,
+      "selected": 47
+    },
+    "37": {
+      "clips": 51,
+      "ir_correct": 45,
+      "selected": 11
+    },
+    "38": {
+      "clips": 45,
+      "ir_correct": 40,
+      "selected": 9
+    },
+    "39": {
+      "clips": 38,
+      "ir_correct": 37,
+      "selected": 8
+    }
+  },
+  "caches": {
+    "ir-uniform": {
+      "sha256": "4723fa6bfb35ee322ed20c09b62a730e1e40f973c40250e9bc31769ab6d8884a",
+      "nonzero": 1995,
+      "mean_ir_weight": 0.08340852130325818
+    },
+    "ir-class-random": {
+      "sha256": "ccf1822706e34c46480fd2447a1cb948095fced84733462d2d25b45a946f79a7",
+      "nonzero": 416,
+      "mean_ir_weight": 0.08340852130325817
+    },
+    "ir-routed": {
+      "sha256": "ec77169bb4daa73f5e6ee41de1571c6eef0832c0f422f13b0bbda1b94df618d4",
+      "nonzero": 416,
+      "mean_ir_weight": 0.08340852130325817
+    }
+  }
+}

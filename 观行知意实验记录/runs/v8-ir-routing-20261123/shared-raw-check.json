@@ -1,0 +1,9 @@
+{
+  "samples": 466,
+  "candidates": [
+    "ir-uniform",
+    "ir-class-random",
+    "ir-routed"
+  ],
+  "single_api_exact_comparisons_per_candidate": 3
+}
