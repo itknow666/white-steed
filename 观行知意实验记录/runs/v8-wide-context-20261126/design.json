@@ -1,0 +1,50 @@
+{
+  "components_order": [
+    "16f-192-standard-crop",
+    "32f-192-standard-crop",
+    "16f-192-wide-crop",
+    "X3D-M-16f-192-standard-crop"
+  ],
+  "plans": {
+    "baseline": [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "two-timescales": [
+      0.65,
+      0.35,
+      0.0,
+      0.0
+    ],
+    "transformer-plus-cnn": [
+      0.8,
+      0.0,
+      0.0,
+      0.2
+    ],
+    "wider-context": [
+      0.65,
+      0.0,
+      0.35,
+      0.0
+    ],
+    "joint": [
+      0.5,
+      0.2,
+      0.15,
+      0.15
+    ]
+  },
+  "crop_scales": [
+    1.4,
+    1.65
+  ],
+  "main_sha256": "d77ab2de4382d421cf7a1e07cb4ba2c89fb2da7bde057b144dde521750eb7c88",
+  "cnn_sha256": "220d3a0ca77786fa85b325828763b28be889d2ed513fa978b205d3eed2e1babf",
+  "cnn_run": "x3d_m-v6-20261106",
+  "cnn_pretrain": "Kinetics-400",
+  "main_parameters": 24767544,
+  "combined_parameters": 27824394
+}

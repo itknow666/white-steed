@@ -1,0 +1,41 @@
+{
+  "arms": {
+    "baseline": {
+      "correct": 343,
+      "macro_f1": 0.7012899918110396,
+      "fixed": 0,
+      "regressed": 0
+    },
+    "two-timescales": {
+      "correct": 335,
+      "macro_f1": 0.6740660060468833,
+      "fixed": 1,
+      "regressed": 9
+    },
+    "transformer-plus-cnn": {
+      "correct": 340,
+      "macro_f1": 0.6843123203605981,
+      "fixed": 1,
+      "regressed": 4
+    },
+    "wider-context": {
+      "correct": 344,
+      "macro_f1": 0.7032815415543487,
+      "fixed": 4,
+      "regressed": 3
+    },
+    "joint": {
+      "correct": 337,
+      "macro_f1": 0.6782140495524046,
+      "fixed": 1,
+      "regressed": 7
+    }
+  },
+  "mean_ms_detection_and_components": [
+    74.83678731196736,
+    112.28967311837296,
+    138.07870408598964,
+    115.19332150534366,
+    26.115851828045155
+  ]
+}

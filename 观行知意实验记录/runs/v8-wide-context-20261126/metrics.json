@@ -1,0 +1,20 @@
+{
+  "metrics": {
+    "accuracy": 73.81974248927038,
+    "macro_f1": 70.32815415543487
+  },
+  "parameters": 24767544,
+  "offline_check": {
+    "passed": true,
+    "python_network_connections_blocked": true,
+    "score_count": 40,
+    "finite": true,
+    "parameters": 24767544,
+    "device": "cuda",
+    "predicted_class": 0,
+    "linux_verified": false,
+    "scope": "Windows Python连接拦截回归检查；非系统级网络隔离"
+  },
+  "weights_sha256": "d77ab2de4382d421cf7a1e07cb4ba2c89fb2da7bde057b144dde521750eb7c88",
+  "code_sha256": "dee993b1e73865bd3eb5b1d45d48332023f47ac7f878b55edc72fc00781273d1"
+}

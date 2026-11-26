@@ -1,0 +1,20 @@
+{
+  "num_classes": 40,
+  "input_version": 2,
+  "channels": 4,
+  "depth_mode": "color",
+  "frames": 16,
+  "size": 192,
+  "weights_file": "model.pt",
+  "weights_format": "pytorch",
+  "person_crop": true,
+  "flip_tta": false,
+  "amp": true,
+  "channels_last_3d": false,
+  "crop_scale": 1.4,
+  "architecture": "videomae2_dual_v8",
+  "ir_contrast": false,
+  "detector_file": "yolo11n.pt",
+  "context_scale": 1.65,
+  "context_weight": 0.35
+}
